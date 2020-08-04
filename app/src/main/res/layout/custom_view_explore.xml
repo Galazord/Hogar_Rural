@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="340dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/CardGaleryImage"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:src="@drawable/ic_launcher_background"/>
+
+        <ImageView
+            android:id="@+id/iconFavorite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_favo_off" />
+
+        <RelativeLayout
+            android:id="@+id/ExploreCardLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_below="@id/CardGaleryImage">
+
+            <TextView
+                android:id="@+id/txtPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Lugar de la casa"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtRental"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/txtPlace"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:text="Alquiler: tipo"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_sub"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtPeople"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/txtRental"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:text="nº personas"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_sub"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/txtPlace"
+                android:layout_marginStart="40dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="-105dp"
+                android:paddingTop="10dp"
+                android:text="Precio €"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtNumOpinions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/txtPlace"
+                android:layout_below="@id/txtPrice"
+                android:layout_marginStart="40dp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:text="nº opiniones"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_sub"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtValorations"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Valoraciones"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/boxIconsValor"
+                android:layout_width="110dp"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/txtValorations"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp">
+
+                <ImageView
+                    android:id="@+id/iconTemp"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_leaf_on" />
+                <ImageView
+                    android:id="@+id/iconTemp2"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_leaf_on" />
+                <ImageView
+                    android:id="@+id/iconTemp3"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_leaf_on" />
+                <ImageView
+                    android:id="@+id/iconTemp4"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_leaf_on" />
+                <ImageView
+                    android:id="@+id/iconTemp5"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_leaf_on" />
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

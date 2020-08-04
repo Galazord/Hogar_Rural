@@ -1,0 +1,5 @@
+<resources>
+    <!-- Contenido de texto de la toolbar -->
+    <string name="app_name">Hogar Rural</string>
+    <string name="app_sub">0 resultados</string>
+</resources>

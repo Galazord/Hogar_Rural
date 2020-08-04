@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/explorePanelRelative"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ExplorerActivity">
+
+    <!-- Contenido central
+    <ListView
+        android:id="@+id/myList"
+        android:layout_width="match_parent"
+        android:layout_height="588dp" />-->
+
+    <LinearLayout
+        android:id="@+id/exploreLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/green_icon">
+
+        <Button
+            android:id="@+id/btnFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/green_strong"
+            android:drawableStart="@drawable/ic_filter"
+            android:drawableLeft="@drawable/ic_filter"
+            android:paddingLeft="30dp"
+            android:text="FILTROS"
+            android:textColor="@color/green_icon" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1" />
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/green_strong"
+            android:drawableStart="@drawable/ic_map"
+            android:drawableLeft="@drawable/ic_map"
+            android:paddingLeft="30dp"
+            android:text="MAPA"
+            android:textColor="@color/green_icon" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/exploreRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/exploreLinearLayout"
+        android:layout_above="@id/bottom_navegation"/>
+
+
+    <!-- Menú de navegación -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navegation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/green_light_background"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_navegation" />
+
+
+</RelativeLayout>

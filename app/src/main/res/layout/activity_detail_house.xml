@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailHouseActivity"
+    android:background="@color/background_grey">
+
+    <ScrollView
+        android:id="@+id/detailScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/detailRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Galería de fotos -->
+            <ImageView
+                android:id="@+id/CardDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:src="@drawable/ic_launcher_background"/>
+
+            <!-- Botón de Favorito -->
+            <Button
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ic_favo_off"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="15dp"/>
+
+            <!-- ************** DATOS PRINCIPALES ************** -->
+            <RelativeLayout
+                android:id="@+id/DetailCardLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@id/CardDetailImage">
+
+                <!-- Nombre de la casa -->
+                <TextView
+                    android:id="@+id/DetailPlace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Lugar de la casa"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Tipo de renta: íntegra/ habitaciones -->
+                <TextView
+                    android:id="@+id/DetailRental"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/DetailPlace"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:text="Alquiler: tipo"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_sub"
+                    android:textSize="14sp" />
+
+                <!-- Número máximo de personas -->
+                <TextView
+                    android:id="@+id/DetailPeople"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@id/DetailRental"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="nº personas"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_sub"
+                    android:textSize="14sp" />
+
+                <!-- Precio persona/noche -->
+                <TextView
+                    android:id="@+id/DetailPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/DetailPlace"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="-105dp"
+                    android:paddingTop="10dp"
+                    android:text="Precio €"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <!-- Número de opiniones -->
+                <TextView
+                    android:id="@+id/DetailNumOpinions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/DetailPlace"
+                    android:layout_below="@id/DetailPrice"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:text="nº opiniones"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_sub"
+                    android:textSize="14sp" />
+
+                <!-- Título valoraciones -->
+                <TextView
+                    android:id="@+id/DetailValorations"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Valoraciones"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Iconos valoraciones -->
+                <LinearLayout
+                    android:id="@+id/boxDetailIconsValor"
+                    android:layout_width="110dp"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/DetailValorations"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:layout_marginEnd="10dp">
+
+                    <ImageView
+                        android:id="@+id/iconTemp"
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp2"
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp3"
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp4"
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp5"
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!-- ************** MAPA Y DISPONIBILIDAD ************** -->
+            <LinearLayout
+                android:id="@+id/DetailMapLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/DetailCardLinearLayout">
+
+                <!-- Titulo de cómo llegar -->
+                <TextView
+                    android:id="@+id/DetailHowArrive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:text="Cómo llegar:"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- Mapa de cómo llegar -->
+
+
+                <!-- Botón disponibilidad -->
+                <Button
+                    android:id="@+id/btnDisponibility"
+                    android:layout_width="370dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/DetailCardLinearLayout"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="Consulta precios y disponibilidad"
+                    android:textAllCaps="false"
+                    android:textSize="14sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text"
+                    android:drawableLeft="@drawable/ic_calendar"
+                    android:drawableStart="@drawable/ic_calendar"
+                    android:paddingLeft="30dp"/>
+
+            </LinearLayout>
+
+            <!-- **************** 1º BLOOUE ****************-->
+            <!-- Panel Título 1 -->
+            <ImageView
+                android:id="@+id/DetailPanelTitle1"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:src="@drawable/hr_panel_title"
+                android:layout_below="@+id/DetailMapLinearLayout"
+                android:layout_marginTop="15dp"
+                android:alpha="0.7"/>
+
+            <!-- Título 1: CARACTERÍSTICAS DEL ALOJAMIENTO -->
+            <TextView
+                android:id="@+id/DetailTitleCaracter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/DetailMapLinearLayout"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/lemon"
+                android:text="CARACTERÍSTICAS DEL ALOJAMIENTO"
+                android:textColor="@color/green_icon" />
+
+            <!-- Texto 1 -->
+            <EditText
+                android:id="@+id/DetailTextMultiLine1"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="65dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:layout_below="@+id/DetailPanelTitle1"
+                android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500."
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp" />
+
+            <!-- Botón Ver más: 1 -->
+            <Button
+                android:id="@+id/btnShowMore1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver más"
+                android:layout_above="@+id/DetailPanelTitle2"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="65dp"
+                android:layout_alignParentRight="true"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:background="?android:attr/selectableItemBackground"/>
+
+            <!-- **************** 2º BLOOUE **************** -->
+            <!-- Panel Título 2 -->
+            <ImageView
+                android:id="@+id/DetailPanelTitle2"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:src="@drawable/hr_panel_title"
+                android:layout_below="@+id/DetailTextMultiLine1"
+                android:layout_marginTop="15dp"
+                android:alpha="0.7"/>
+
+            <!-- Título 2: ACTIVIDADES -->
+            <TextView
+                android:id="@+id/DetailTitleActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/DetailTextMultiLine1"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/lemon"
+                android:text="ACTIVIDADES"
+                android:textColor="@color/green_icon" />
+
+            <!-- Texto 2 -->
+            <EditText
+                android:id="@+id/DetailTextMultiLine2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="65dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:layout_below="@+id/DetailPanelTitle2"
+                android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500."
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp" />
+
+            <!-- Botón Ver más: 2 -->
+            <Button
+                android:id="@+id/btnShowMore2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver más"
+                android:layout_above="@+id/DetailPanelTitle3"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="65dp"
+                android:layout_alignParentRight="true"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:background="?android:attr/selectableItemBackground"/>
+
+            <!-- **************** 3º BLOOUE **************** -->
+            <!-- Panel Título 3 -->
+            <ImageView
+                android:id="@+id/DetailPanelTitle3"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:src="@drawable/hr_panel_title"
+                android:layout_below="@+id/DetailTextMultiLine2"
+                android:layout_marginTop="15dp"
+                android:alpha="0.7"/>
+
+            <!-- Título 3: LUGARES DE INTERÉS -->
+            <TextView
+                android:id="@+id/DetailTitleInterest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/DetailTextMultiLine2"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/lemon"
+                android:text="LUGARES DE INTERÉS"
+                android:textColor="@color/green_icon" />
+
+            <!-- Texto 3 -->
+            <EditText
+                android:id="@+id/DetailTextMultiLine3"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="65dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:layout_below="@+id/DetailPanelTitle3"
+                android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500."
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp" />
+
+            <!-- Botón Ver más: 3 -->
+            <Button
+                android:id="@+id/btnShowMore3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ver más"
+                android:layout_above="@+id/DetailPanelTitle4"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="65dp"
+                android:layout_alignParentRight="true"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:background="?android:attr/selectableItemBackground"/>
+
+            <!-- **************** 4º BLOOUE **************** -->
+            <!-- Panel Título 4 -->
+            <ImageView
+                android:id="@+id/DetailPanelTitle4"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:src="@drawable/hr_panel_title"
+                android:layout_below="@+id/DetailTextMultiLine3"
+                android:layout_marginTop="15dp"
+                android:alpha="0.7"/>
+
+            <!-- Título 4: CARACTERÍSTICAS Y SERVICIOS -->
+            <TextView
+                android:id="@+id/DetailTitleServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/DetailTextMultiLine3"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/lemon"
+                android:text="CARACTERÍSTICAS Y SERVICIOS"
+                android:textColor="@color/green_icon"/>
+
+            <!-- Listado de iconos de servicios -->
+            <EditText
+                android:id="@+id/DetailTextMultiLine4"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="65dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:layout_below="@+id/DetailPanelTitle4"
+                android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500."
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

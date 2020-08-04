@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!-- Colores propios de Hogar Rural -->
+    <color name="green_very_light">#f6fad9</color>
+    <color name="green_light">#028c00</color>
+    <color name="green_dark">#004d03</color>
+    <color name="green_hint">#728059</color>
+    <color name="white_text">#e6ecdb</color>
+    <color name="green_sub">#769D5D</color>
+    <color name="background_grey">#d9d9d9</color>
+
+    <!-- Menu barra inferior -->
+    <color name="green_icon">#309700</color>
+    <color name="green_light_icon">#a1c783</color>
+    <color name="yellow_icon">#eeff8d</color>
+    <color name="green_light_background">#EDEFE6</color>
+
+    <!-- Color de las pestañas superiores -->
+    <color name="green_strong">#bee56a</color>
+
+</resources>

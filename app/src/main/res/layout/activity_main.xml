@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/hr_main_background"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/etInputDestiny"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/btnAccess"
+        android:layout_marginBottom="10dp"
+        android:alpha="0.6"
+        android:background="@drawable/background_light_corners"
+        android:ems="10"
+        android:fontFamily="@font/roboto_medium"
+        android:hint="Introduce un destino..."
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="@color/green_dark"
+        android:textColorHint="@color/green_hint"
+        android:textSize="20sp"
+        android:drawableLeft="@drawable/ic_location"
+        android:drawableStart="@drawable/ic_location"
+        android:paddingLeft="40dp"
+        android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/btnAccess"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/gradient_green"
+        android:fontFamily="@font/kanit_semibold"
+        android:text="EXPLORAR"
+        android:textSize="20sp"
+        android:textScaleX="1.2"
+        android:textColor="@color/white_text" />
+</RelativeLayout>
