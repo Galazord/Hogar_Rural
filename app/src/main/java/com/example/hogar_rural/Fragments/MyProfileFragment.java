@@ -1,4 +1,4 @@
-package com.example.hogar_rural.Controller;
+package com.example.hogar_rural.Fragments;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import com.example.hogar_rural.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MyHousesFragment#newInstance} factory method to
+ * Use the {@link MyProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyHousesFragment extends Fragment {
+public class MyProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class MyHousesFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MyHousesFragment() {
+    public MyProfileFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class MyHousesFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MyHousesFragment.
+     * @return A new instance of fragment MyProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MyHousesFragment newInstance(String param1, String param2) {
-        MyHousesFragment fragment = new MyHousesFragment();
+    public static MyProfileFragment newInstance(String param1, String param2) {
+        MyProfileFragment fragment = new MyProfileFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class MyHousesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_houses, container, false);
+        return inflater.inflate(R.layout.fragment_my_profile, container, false);
     }
 }

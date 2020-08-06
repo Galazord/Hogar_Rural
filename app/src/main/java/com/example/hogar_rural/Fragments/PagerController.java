@@ -1,6 +1,4 @@
-package com.example.hogar_rural.Controller;
-
-import android.widget.Switch;
+package com.example.hogar_rural.Fragments;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
