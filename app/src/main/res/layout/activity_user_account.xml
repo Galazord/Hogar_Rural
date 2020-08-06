@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserAccountActivity"
+    android:background="@color/background_grey"
+    android:orientation="vertical">
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoutAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green_icon"
+        app:tabTextColor="@color/yellow_icon">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMyProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mi perfil"
+            android:icon="@drawable/ic_icon_tab_profile" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMyHouses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mis casas"
+            android:icon="@drawable/ic_icon_tab_houses"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Barra de navegación inferior -->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPagerAccount"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navegation">
+
+    </androidx.viewpager.widget.ViewPager>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navegation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/green_light_background"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="@drawable/selector"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_navegation" />
+
+</RelativeLayout>

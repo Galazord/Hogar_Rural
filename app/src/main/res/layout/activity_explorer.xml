@@ -5,7 +5,8 @@
     android:id="@+id/explorePanelRelative"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExplorerActivity">
+    tools:context=".ExplorerActivity"
+    android:background="@color/background_grey">
 
     <!-- Contenido central
     <ListView

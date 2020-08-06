@@ -49,10 +49,6 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine4 = (TextView) findViewById(R.id.DetailTextMultiLine4);
         CardDetailImage = (ImageView) findViewById(R.id.CardDetailImage);
 
-        // Establecer botón de ir atrás
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Detalle de la casa");
-
         // Recibir los parámetros del intent procedente de Adapter.java
         Intent i = getIntent();
         String idHouse = i.getStringExtra("idHouse");

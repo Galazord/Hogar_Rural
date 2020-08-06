@@ -2,4 +2,7 @@
     <!-- Contenido de texto de la toolbar -->
     <string name="app_name">Hogar Rural</string>
     <string name="app_sub">0 resultados</string>
+    <string name="title_activity_user_account">UserAccountActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

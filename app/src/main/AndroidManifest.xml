@@ -12,8 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DetailHouseActivity"
-            android:parentActivityName=".ExplorerActivity"></activity>
+        <activity android:name=".UserAccountActivity"></activity>
+        <activity
+            android:name=".LoginFormActivity"
+            android:parentActivityName=".MyProfileActivity" />
+        <activity
+            android:name=".DetailHouseActivity"
+            android:parentActivityName=".ExplorerActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

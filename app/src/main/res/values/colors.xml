@@ -9,6 +9,9 @@
     <color name="green_light">#028c00</color>
     <color name="green_dark">#004d03</color>
     <color name="green_hint">#728059</color>
+    <color name="green_hint2">#E5F3BD</color>
+    <color name="green_bg1">#9eb58f</color>
+    <color name="green_bg2">#8ca17f</color>
     <color name="white_text">#e6ecdb</color>
     <color name="green_sub">#769D5D</color>
     <color name="background_grey">#d9d9d9</color>
