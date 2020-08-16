@@ -9,7 +9,7 @@
     android:background="@color/background_grey"
     android:orientation="vertical">
 
-
+    <!-- Barra de tabbed con los apartados -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutAccount"
         android:layout_width="match_parent"
@@ -33,15 +33,17 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-    <!-- Barra de navegación inferior -->
+    <!-- Cuerpo del contenido de cada apartado -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPagerAccount"
+        android:layout_below="@id/tabLayoutAccount"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_navegation">
 
     </androidx.viewpager.widget.ViewPager>
 
+    <!-- Barra de navegación inferior -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navegation"
         android:layout_width="match_parent"

@@ -1,0 +1,996 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HouseUpActivity"
+    android:background="@color/background_grey">
+
+    <ScrollView
+        android:id="@+id/SVHouse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/RLHouse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Descripción 1 -->
+            <TextView
+                android:id="@+id/tvHouse_description_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="20dp"
+                android:text="Rellena el siguiente formulario para dar de alta la casa que deseas ofertar."
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"/>
+
+            <!-- LinearLayout: Subir la imagen -->
+            <LinearLayout
+                android:id="@+id/LLHouse_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/tvHouse_description_1"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:layout_gravity="center_vertical">
+
+                <!-- Imagen de la casa-->
+                <ImageView
+                    android:id="@+id/ivUser_avatar"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/icon_missing_house"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_vertical"/>
+
+                <!-- LinearLayout: Texto y botón de la imagen -->
+                <LinearLayout
+                    android:id="@+id/LLHouse_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Descripción 1 -->
+                    <TextView
+                        android:id="@+id/tvHouse_description_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:text="Elija una foto o varias del aspecto de la vivienda.\nMostrar fotos ayudará muchísimo a interesarse por el lugar."
+                        android:fontFamily="@font/roboto_medium"
+                        android:textColor="@color/green_dark"
+                        android:textSize="16sp"/>
+
+                    <!-- Botón de seleccionar imagen-->
+                    <Button
+                        android:id="@+id/btnUpAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/gradient_green"
+                        android:fontFamily="@font/kanit_semibold"
+                        android:text="Seleccionar imagen"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"
+                        android:textScaleX="1.2"
+                        android:textColor="@color/white_text" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Introducir el nombre del lugar -->
+            <EditText
+                android:id="@+id/etHouse_input_name"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/LLHouse_1"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textColorHint="@color/green_hint2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="Introduce el nombre del lugar"/>
+
+            <!-- Preguntar tipo de casa -->
+            <TextView
+                android:id="@+id/tvHouse_description_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:layout_below="@+id/etHouse_input_name"
+                android:text="¿Qué tipo de vivienda quieres ofrecer?"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"/>
+
+            <RadioGroup
+                android:id="@+id/RGHouse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:layout_below="@+id/tvHouse_description_3">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Íntegro"
+                    android:onClick="CheckButtonTypeHouse"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="Habitaciones"
+                    android:onClick="CheckButtonTypeHouse"/>
+
+            </RadioGroup>
+
+            <!-- Contador del número de inquilinos -->
+            <TextView
+                android:id="@+id/tvCounter_textCapMax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/RGHouse"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Introduzca la capacidad máxima de inquilinos:"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp" />
+
+            <!-- Controlador de la capacidad máxima de inquilinos -->
+            <LinearLayout
+                android:id="@+id/LLHouse_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/tvCounter_textCapMax"
+                android:orientation="horizontal">
+
+                <!-- Botón disminuir número de inquilinos-->
+                <Button
+                    android:id="@+id/btnCapMax_less"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="-"
+                    android:textAllCaps="false"
+                    android:textSize="40sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+                <!-- Contador del número de inquilinos -->
+                <TextView
+                    android:id="@+id/tvCounter_capMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="1 personas"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="20sp"/>
+
+                <!-- Botón incrementar número de inquilinos-->
+                <Button
+                    android:id="@+id/btnCapMax_plus"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="+"
+                    android:textAllCaps="false"
+                    android:textSize="40sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+            </LinearLayout>
+
+            <!-- Cantidad del precio por día -->
+            <TextView
+                android:id="@+id/tvCounter_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/LLHouse_3"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Introduzca la capacidad máxima de inquilinos:"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp" />
+
+            <!-- Controlador del precio en euros/día de la estancia -->
+            <LinearLayout
+                android:id="@+id/LLHouse_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:gravity="center_horizontal"
+                android:layout_below="@id/tvCounter_price"
+                android:orientation="horizontal">
+
+                <!-- Botón disminuir precio -->
+                <Button
+                    android:id="@+id/btnPrice_less"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="-"
+                    android:textAllCaps="false"
+                    android:textSize="40sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+                <!-- Contador del precio -->
+                <TextView
+                    android:id="@+id/tvPrice_capMax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="0 €/día"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="20sp"/>
+
+                <!-- Botón incrementar precio -->
+                <Button
+                    android:id="@+id/btnPrice_plus"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="+"
+                    android:textAllCaps="false"
+                    android:textSize="40sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+            </LinearLayout>
+
+            <!-- Introducir la dirección postal -->
+            <EditText
+                android:id="@+id/etHouse_input_address"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/LLHouse_4"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textColorHint="@color/green_hint2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="Introduzca la dirección postal"/>
+
+            <!-- Introducir la código postal -->
+            <EditText
+                android:id="@+id/etHouse_input_code"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/etHouse_input_address"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textColorHint="@color/green_hint2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="Introduzca el código postal"/>
+
+            <!-- Introducir el municipio -->
+            <EditText
+                android:id="@+id/etHouse_input_municipaly"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/etHouse_input_code"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textColorHint="@color/green_hint2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="Introduzca el municipio"/>
+
+            <!-- Introducir la provincia -->
+            <EditText
+                android:id="@+id/etHouse_input_province"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/etHouse_input_municipaly"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textColorHint="@color/green_hint2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="Introduzca la provincia"/>
+
+            <!-- Botón de fechas de disponibilidad de la vivienda-->
+            <Button
+                android:id="@+id/btnDateAvailable"
+                android:layout_width="370dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etHouse_input_province"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/gradient_green"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="FECHAS DISPONIBLES \nPARA LA VIVIENDA"
+                android:textSize="14sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text"
+                android:drawableLeft="@drawable/ic_calendar"
+                android:drawableStart="@drawable/ic_calendar"
+                android:paddingStart="30dp"/>
+
+            <!-- Texto: Descripción características principales -->
+            <TextView
+                android:id="@+id/tvHouse_features"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnDateAvailable"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:text="Escribe una breve descripción de la casa y sus característicasprincipales:"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"/>
+
+            <!-- Campo texto: Descripción características principales -->
+            <EditText
+                android:id="@+id/etHouse_input_features"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@id/tvHouse_features"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium" />
+
+            <!-- Texto: Actividades -->
+            <TextView
+                android:id="@+id/tvHouse_activities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etHouse_input_features"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:text="Escribe las actividades qeu se pueden realizar en la casa y/o alrededores del lugar:"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"/>
+
+            <!-- Campo texto: Actividades -->
+            <EditText
+                android:id="@+id/etHouse_input_activities"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@id/tvHouse_activities"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium" />
+
+            <!-- Texto: Lugares de interés -->
+            <TextView
+                android:id="@+id/tvHouse_interest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etHouse_input_activities"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:text="Escribe los lugares de interés que se pueden disfrutar por la zona:"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"/>
+
+            <!-- Campo texto: Lugares de interés -->
+            <EditText
+                android:id="@+id/etHouse_input_interest"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@id/tvHouse_interest"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/green_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium" />
+
+            <!-- Texto: Lugares de interés -->
+            <TextView
+                android:id="@+id/tvHouse_services"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etHouse_input_interest"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:text="Selecciona los servicios que ofrece la vivienda:"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="16sp"/>
+
+
+            <!-- Iconos seleccionables de servicios-->
+            <GridLayout
+                android:id="@+id/GLHouse_services"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvHouse_services"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:columnCount="4"
+                android:rowCount="6">
+
+                <!-- Botón Toggle Discapacitados -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_adapted"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_adapted" />
+
+                <!-- Botón Toggle Aire acondicionado -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_air"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_air"/>
+
+                <!-- Botón Toggle barbacoa -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_barbecue"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_barbecue"/>
+
+                <!-- Botón Toggle baño en habitación -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_bath"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_bath"/>
+
+                <!-- Texto: Minusválidos -->
+                <TextView
+                    android:id="@+id/tvFilter_txtAdapted"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Adaptado"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Aire acondicionado -->
+                <TextView
+                    android:id="@+id/tvFilter_txtAir"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Aire \nacondicionado"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Barbacoa -->
+                <TextView
+                    android:id="@+id/tvFilter_txtBarbacue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Barbacoa"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Baño en habitación -->
+                <TextView
+                    android:id="@+id/tvFilter_txtBath"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Baño en \nhabitación"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Botón Toggle piscina -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_pool"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_pool"/>
+
+                <!-- Botón Toggle piscina climatizada -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_climatized"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_climatized_pool"/>
+
+                <!-- Botón Toggle jardín -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_garden"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_garden"/>
+
+                <!-- Botón Toggle calefacción -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_heating"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_heatingi"/>
+
+                <!-- Texto: piscina -->
+                <TextView
+                    android:id="@+id/tvFilter_txtPool"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Piscina"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: piscina climatizada -->
+                <TextView
+                    android:id="@+id/tvFilter_txtClimatized"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Piscina \nclimatizada"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Jardín -->
+                <TextView
+                    android:id="@+id/tvFilter_txtGarden"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Jardín"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Calefacción -->
+                <TextView
+                    android:id="@+id/tvFilter_txtHeating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Calefacción"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Botón Toggle jacuzzi -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_jacuzzi"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_jacuzzi"/>
+
+                <!-- Botón Toggle cocina incluida -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_kitchen"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_kitchen"/>
+
+                <!-- Botón Toggle Montañas-->
+                <ToggleButton
+                    android:id="@+id/tbFilter_mountain"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_mountain"/>
+
+                <!-- Botón Toggle parking -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_parking"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_parking"/>
+
+                <!-- Texto: Jacuzzi -->
+                <TextView
+                    android:id="@+id/tvFilter_txtJacuzzi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Jacuzzi"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Cocina integrada -->
+                <TextView
+                    android:id="@+id/tvFilter_txtKitchen"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Cocina \nintegrada"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Montaña -->
+                <TextView
+                    android:id="@+id/tvFilter_txtMountain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Montaña"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Parking -->
+                <TextView
+                    android:id="@+id/tvFilter_txtParking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Parking"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Botón Toggle playa -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_beach"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_beach"/>
+
+                <!-- Botón Toggle desayuno incluido -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_breakfast"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_breakfast"/>
+
+                <!-- Botón Toggle zona para niños -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_children"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_children"/>
+
+                <!-- Botón Toggle chimenea -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_fireplace"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_fireplacei"/>
+
+                <!-- Texto: playa -->
+                <TextView
+                    android:id="@+id/tvFilter_txtBeach"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Playa"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: desayuno incluido -->
+                <TextView
+                    android:id="@+id/tvFilter_txtBreakfast"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Desayuno \nincluido"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: zona infantil -->
+                <TextView
+                    android:id="@+id/tvFilter_txtChildren"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Zona \ninfantil"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: chimenea -->
+                <TextView
+                    android:id="@+id/tvFilter_txtFireplace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Chimenea"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Botón Toggle mascotas -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_pets"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_pets"/>
+
+                <!-- Botón Toggle spa -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_spa"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_spa"/>
+
+                <!-- Botón Toggle television -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_tv"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_tv"/>
+
+                <!-- Botón Toggle wifi -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_wifi"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/ic_service_wifi"/>
+
+                <!-- Texto: Permite mascotas -->
+                <TextView
+                    android:id="@+id/tvFilter_txtPets"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Permite \nmascotas"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Spa -->
+                <TextView
+                    android:id="@+id/tvFilter_txtSpa"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Spa"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Televisión -->
+                <TextView
+                    android:id="@+id/tvFilter_txtTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Televisión"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Texto: Wifi -->
+                <TextView
+                    android:id="@+id/tvFilter_txtWifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="center"
+                    android:text="Wifi"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+            </GridLayout>
+
+            <!-- Botón de publicar la oferta de la vivienda-->
+            <Button
+                android:id="@+id/btnPublishHouse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/GLHouse_services"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/gradient_green"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="PUBLICAR OFERTA"
+                android:textSize="14sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,13 +7,990 @@
     tools:context=".FiltersActivity"
     android:background="@color/background_grey">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="264dp"
-        android:text="Filtrar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:id="@+id/FilterScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/FilterRelativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--**************** BLOQUE 1 -> Selector de número de personas - ****************-->
+            <LinearLayout
+                android:id="@+id/LLFilter_num_person"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="30dp">
+
+                <!-- Botón Nº personas - -->
+                <Button
+                    android:id="@+id/btnLessPerson"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="-"
+                    android:textSize="36sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+                <!-- Indicador de número de personas -->
+                <TextView
+                    android:id="@+id/tvFilter_nPersons"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="- Número de personas -"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- Botón Nº personas + -->
+                <Button
+                    android:id="@+id/btnPlusPerson"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="+"
+                    android:textSize="36sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+            </LinearLayout>
+
+            <!--**************** BLOQUE 2 -> Seleccionar fecha de entrada/salida - ****************-->
+            <RelativeLayout
+                android:id="@+id/RLFilter_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/LLFilter_num_person"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="30dp">
+
+                <!-- Texto ENTRADA-->
+                <TextView
+                    android:id="@+id/tvFilter_entrance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="ENTRADA"
+                    android:fontFamily="@font/lemon"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_icon"/>
+
+                <!-- Indicador la fecha de entrada-->
+                <TextView
+                    android:id="@+id/tvFilter_input_entrance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvFilter_entrance"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textColor="@color/green_icon"
+                    android:hint="- elegir -"
+                    android:textColorHint="@color/green_light_icon"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp" />
+
+                <!-- Icono de flecha separatoria-->
+                <ImageView
+                    android:id="@+id/ivFilter_arrow"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_arrow"/>
+
+                <!-- Texto SALIDA-->
+                <TextView
+                    android:id="@+id/tvFilter_exit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="SALIDA"
+                    android:fontFamily="@font/lemon"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_icon"/>
+
+                <!-- Indicador la fecha de salida-->
+                <TextView
+                    android:id="@+id/tvFilter_input_exit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvFilter_exit"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textColor="@color/green_icon"
+                    android:hint="- elegir -"
+                    android:textColorHint="@color/green_light_icon"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <!--**************** BLOQUE 3 -> Selector de valoraciones - ****************-->
+
+            <!-- Texto VALORACIONES-->
+            <TextView
+                android:id="@+id/tvFilter_txtValoration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/RLFilter_calendar"
+                android:layout_marginTop="20dp"
+                android:text="VALORACIONES"
+                android:fontFamily="@font/lemon"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/green_icon"/>
+
+            <LinearLayout
+                android:id="@+id/LLFilter_valorations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@+id/tvFilter_txtValoration"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginHorizontal="30dp">
+
+                <!-- Botón valoraciones - -->
+                <Button
+                    android:id="@+id/btnLessValoration"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="-"
+                    android:textSize="36sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+                <!-- Iconos valoraciones -->
+                <LinearLayout
+                    android:id="@+id/boxDetailIconsValor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iconTemp"
+                        android:layout_width="22dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp2"
+                        android:layout_width="22dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp3"
+                        android:layout_width="22dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp4"
+                        android:layout_width="22dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+                    <ImageView
+                        android:id="@+id/iconTemp5"
+                        android:layout_width="22dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_leaf_on" />
+
+
+                </LinearLayout>
+
+                <!-- Botón valoraciones + -->
+                <Button
+                    android:id="@+id/btnPlusValoration"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/gradient_green"
+                    android:fontFamily="@font/kanit_semibold"
+                    android:text="+"
+                    android:textSize="36sp"
+                    android:textScaleX="1.2"
+                    android:textColor="@color/white_text" />
+
+            </LinearLayout>
+
+            <!--**************** BLOQUE 4 -> Tipo de habitaciones - ****************-->
+            <!-- Iconos del tipo de casa -->
+            <LinearLayout
+                android:id="@+id/LLFilter_rooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_below="@+id/LLFilter_valorations"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="30dp">
+
+                <!-- Botón Toggle Íntegro -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_complete"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/toggle_selector_complete"/>
+
+                <!-- Botón Toggle Habitaciones -->
+                <ToggleButton
+                    android:id="@+id/tbFilter_room"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:onClick="OnDefaultToggleClickComplete"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/toggle_selector_room"/>
+
+            </LinearLayout>
+
+            <!-- Texto información del tipo de casa -->
+            <LinearLayout
+                android:id="@+id/LLFilter_txtRooms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_below="@+id/LLFilter_rooms"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginBottom="10dp">
+
+                <!-- Texto ÍNTEGRO-->
+                <TextView
+                    android:id="@+id/tvFilter_txtComplete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="35dp"
+                    android:text="ÍNTEGRO"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="@color/green_icon"/>
+
+                <!-- Texto HABITACIONES-->
+                <TextView
+                    android:id="@+id/tvFilter_txtRooms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:text="HABITACIONES"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textColor="@color/green_icon"/>
+
+            </LinearLayout>
+
+            <!--**************** BLOQUE 5 -> Precios - ****************-->
+            <LinearLayout
+                android:id="@+id/LLFilter_prices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_below="@+id/LLFilter_txtRooms"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="30dp">
+
+                <!-- Texto PRECIOS -->
+                <TextView
+                    android:id="@+id/tvFilter_txtPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PRECIOS"
+                    android:fontFamily="@font/lemon"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_icon"/>
+
+                <!-- Indicador de número de personas -->
+                <TextView
+                    android:id="@+id/tvFilter_priceIndicator"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="- euros por persona -"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_light_icon" />
+
+                <!-- SeekBar: barra selectora de precios -->
+                <SeekBar
+                    android:id="@+id/sbFilter_priceSelector"
+                    android:layout_width="300dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:min="0"
+                    android:progress="50"
+                    android:progressDrawable="@drawable/track_progress_bar"
+                    android:thumb="@drawable/thumb_progress_bar" />
+
+            </LinearLayout>
+
+            <!--**************** BLOQUE 6 -> Iconos de servicios - ****************-->
+            <LinearLayout
+                android:id="@+id/LLFilter_services"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_below="@+id/LLFilter_prices"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="30dp">
+
+                <!-- Texto SERVICIOS -->
+                <TextView
+                    android:id="@+id/tvFilter_txtServices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="SERVICIOS"
+                    android:fontFamily="@font/lemon"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_icon"/>
+
+                <!-- Iconos seleccionables -->
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:rowCount="6">
+
+                    <!-- Botón Toggle Discapacitados -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_adapted"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_adapted" />
+
+                    <!-- Botón Toggle Aire acondicionado -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_air"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginHorizontal="30dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_air"/>
+
+                    <!-- Botón Toggle barbacoa -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_barbecue"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_barbecue"/>
+
+                    <!-- Botón Toggle baño en habitación -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_bath"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_bath"/>
+
+                    <!-- Texto: Minusválidos -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtAdapted"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Adaptado"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Aire acondicionado -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtAir"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Aire \nacondicionado"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Barbacoa -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtBarbacue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Barbacoa"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Baño en habitación -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtBath"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Baño en \nhabitación"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Botón Toggle piscina -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_pool"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_pool"/>
+
+                    <!-- Botón Toggle piscina climatizada -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_climatized"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_climatized_pool"/>
+
+                    <!-- Botón Toggle jardín -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_garden"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_garden"/>
+
+                    <!-- Botón Toggle calefacción -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_heating"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_heatingi"/>
+
+                    <!-- Texto: piscina -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtPool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Piscina"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: piscina climatizada -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtClimatized"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Piscina \nclimatizada"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Jardín -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtGarden"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Jardín"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Calefacción -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtHeating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Calefacción"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Botón Toggle jacuzzi -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_jacuzzi"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_jacuzzi"/>
+
+                    <!-- Botón Toggle cocina incluida -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_kitchen"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_kitchen"/>
+
+                    <!-- Botón Toggle Montañas-->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_mountain"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_mountain"/>
+
+                    <!-- Botón Toggle parking -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_parking"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_parking"/>
+
+                    <!-- Texto: Jacuzzi -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtJacuzzi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Jacuzzi"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Cocina integrada -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtKitchen"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Cocina \nintegrada"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Montaña -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtMountain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Montaña"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Parking -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtParking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Parking"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Botón Toggle playa -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_beach"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_beach"/>
+
+                    <!-- Botón Toggle desayuno incluido -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_breakfast"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_breakfast"/>
+
+                    <!-- Botón Toggle zona para niños -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_children"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_children"/>
+
+                    <!-- Botón Toggle chimenea -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_fireplace"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_fireplacei"/>
+
+                    <!-- Texto: playa -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtBeach"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Playa"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: desayuno incluido -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtBreakfast"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Desayuno \nincluido"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: zona infantil -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtChildren"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Zona \ninfantil"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: chimenea -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtFireplace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Chimenea"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Botón Toggle mascotas -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_pets"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_pets"/>
+
+                    <!-- Botón Toggle spa -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_spa"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_spa"/>
+
+                    <!-- Botón Toggle television -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_tv"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_tv"/>
+
+                    <!-- Botón Toggle wifi -->
+                    <ToggleButton
+                        android:id="@+id/tbFilter_wifi"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:onClick="OnDefaultToggleClickComplete"
+                        android:textOn=""
+                        android:textOff=""
+                        android:background="@drawable/ic_service_wifi"/>
+
+                    <!-- Texto: Permite mascotas -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtPets"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Permite \nmascotas"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Spa -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtSpa"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Spa"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Televisión -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Televisión"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                    <!-- Texto: Wifi -->
+                    <TextView
+                        android:id="@+id/tvFilter_txtWifi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_gravity="center"
+                        android:text="Wifi"
+                        android:fontFamily="@font/roboto_medium"
+                        android:textSize="10sp"
+                        android:gravity="center"
+                        android:textColor="@color/green_light_icon" />
+
+                </GridLayout>
+
+            </LinearLayout>
+
+            <!--**************** BLOQUE 7 -> Ordenar por... - ****************-->
+            <LinearLayout
+                android:id="@+id/LLFilter_OrderTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/LLFilter_services"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="30dp">
+
+                <!-- Texto ORDENAR POR -->
+                <TextView
+                    android:id="@+id/tvFilter_txtOrder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="ORDENAR POR"
+                    android:fontFamily="@font/lemon"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/green_icon"/>
+
+                <!-- Checkbox: Precios más baratos -->
+                <CheckBox
+                    android:id="@+id/cbFilter_cheaper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
+                    android:paddingStart="10dp"
+                    android:text="Precios más baratos"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <!-- Checkbox: Precios más caros -->
+                <CheckBox
+                    android:id="@+id/cbFilter_expensive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
+                    android:paddingStart="10dp"
+                    android:text="Precios más caros"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <!-- Checkbox: Mejor valorados -->
+                <CheckBox
+                    android:id="@+id/cbFilter_MoreValor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
+                    android:paddingStart="10dp"
+                    android:text="Mejor valorados"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <!-- Checkbox: Número de comentarios -->
+                <CheckBox
+                    android:id="@+id/cbFilter_Comentary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_marginVertical="10dp"
+                    android:paddingStart="10dp"
+                    android:text="Número de comentarios"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
+
+            <!-- Botón para confirmar los filtros -->
+            <Button
+                android:id="@+id/btnFilterConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LLFilter_OrderTo"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/gradient_green"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="COMPROBAR"
+                android:textSize="16sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text" />
+
+            <!-- Botón para volver -->
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnFilterConfirm"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/gradient_grey"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="VOLVER"
+                android:textSize="16sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text" />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

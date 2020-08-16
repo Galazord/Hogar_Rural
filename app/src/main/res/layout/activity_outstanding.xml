@@ -8,13 +8,39 @@
     tools:context=".OutstandingActivity"
     android:background="@color/background_grey">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Barra de tabbed con los apartados -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayoututstanding"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Destacados"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+        android:background="@color/green_icon"
+        app:tabTextColor="@color/yellow_icon">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMyNews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Novedades"
+            android:icon="@drawable/ic_icon_tab_news" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMyLowPrices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bajan de precio"
+            android:icon="@drawable/ic_icon_tab_lowprices"/>
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Cuerpo del contenido de cada apartado -->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPagerOutstanding"
+        android:layout_below="@id/tabLayoututstanding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navegation">
+
+    </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

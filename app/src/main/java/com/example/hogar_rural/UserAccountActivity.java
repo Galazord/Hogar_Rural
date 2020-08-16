@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.hogar_rural.Fragments.PagerController;
+import com.example.hogar_rural.Fragments.PagerControllerAccount;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -19,7 +19,7 @@ public class UserAccountActivity extends AppCompatActivity {
     TabLayout tabLayoutAccount;
     ViewPager viewPagerAccount;
     TabItem tabMyProfile, tabMyHouses;
-    PagerController pagerAdapter;
+    PagerControllerAccount pagerAdapter;
     BottomNavigationView bottomNavigationView;
 
     @Override
@@ -35,7 +35,7 @@ public class UserAccountActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navegation);
 
         // Seleccionar y gestionar los diferentes tabs (Mi perfil y Mis casas)
-        pagerAdapter = new PagerController(getSupportFragmentManager(), tabLayoutAccount.getTabCount());
+        pagerAdapter = new PagerControllerAccount(getSupportFragmentManager(), tabLayoutAccount.getTabCount());
         viewPagerAccount.setAdapter(pagerAdapter);
         tabLayoutAccount.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

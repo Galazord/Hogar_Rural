@@ -13,8 +13,10 @@
     <color name="green_bg1">#9eb58f</color>
     <color name="green_bg2">#8ca17f</color>
     <color name="white_text">#e6ecdb</color>
+    <color name="white_background">#F1F3ED</color>
     <color name="green_sub">#769D5D</color>
     <color name="background_grey">#d9d9d9</color>
+    <color name="yellow_background">#ECFA9E</color>
 
     <!-- Menu barra inferior -->
     <color name="green_icon">#309700</color>

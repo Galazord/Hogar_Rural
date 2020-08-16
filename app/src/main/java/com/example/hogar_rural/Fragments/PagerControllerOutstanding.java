@@ -5,13 +5,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-public class PagerController extends FragmentPagerAdapter {
+public class PagerControllerOutstanding extends FragmentPagerAdapter {
 
     // VARIABLES
     int numsOfTabs;
 
     // CONSTRUCTOR
-    public PagerController(@NonNull FragmentManager fm, int behavior) {
+    public PagerControllerOutstanding(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
         this.numsOfTabs = behavior;
     }
@@ -24,9 +24,9 @@ public class PagerController extends FragmentPagerAdapter {
         switch(position){
 
             case 0:
-                return new MyProfileFragment();
+                return new MyNewsFragment();
             case 1:
-                return new MyHousesFragment();
+                return new MylowpricesFragment();
             default:
                 return null;
         }
