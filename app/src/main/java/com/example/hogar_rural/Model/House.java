@@ -1,7 +1,7 @@
 package com.example.hogar_rural.Model;
 
 public class House {
-
+    //Hola
     // VARIABLES (mismo nombre que en las bases de datos)
     private String idHouse, name, rental, personMax, price, numOpinion, valoration, galleryImg;
 
