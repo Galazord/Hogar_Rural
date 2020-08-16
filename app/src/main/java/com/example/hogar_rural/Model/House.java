@@ -9,7 +9,7 @@ public class House {
     // Constructor Vacío
     public House(){}
 
-    // GET & SET
+    // GET & SET hola
     public String getIdHouse() {
         return idHouse;
     }
