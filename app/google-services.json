@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "47655967982",
+    "firebase_url": "https://hogarapp-77df0.firebaseio.com",
+    "project_id": "hogarapp-77df0",
+    "storage_bucket": "hogarapp-77df0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47655967982:android:85366daba941938d4067ff",
+        "android_client_info": {
+          "package_name": "com.example.hogar_rural"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47655967982-77ae0aaneplu1cb17q948k5ids8pr8dv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrRw3dDDoBSQivm01Khl5ohrzQ51GCH5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47655967982-77ae0aaneplu1cb17q948k5ids8pr8dv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

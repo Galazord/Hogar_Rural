@@ -12,10 +12,10 @@ import com.example.hogar_rural.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MylowpricesFragment#newInstance} factory method to
+ * Use the {@link MyLowpricesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MylowpricesFragment extends Fragment {
+public class MyLowpricesFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class MylowpricesFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MylowpricesFragment() {
+    public MyLowpricesFragment() {
         // Required empty public constructor
     }
 
@@ -39,8 +39,8 @@ public class MylowpricesFragment extends Fragment {
      * @return A new instance of fragment MylowpricesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MylowpricesFragment newInstance(String param1, String param2) {
-        MylowpricesFragment fragment = new MylowpricesFragment();
+    public static MyLowpricesFragment newInstance(String param1, String param2) {
+        MyLowpricesFragment fragment = new MyLowpricesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class MylowpricesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_mylowprices, container, false);
+        return inflater.inflate(R.layout.fragment_my_Lowprices, container, false);
     }
 }

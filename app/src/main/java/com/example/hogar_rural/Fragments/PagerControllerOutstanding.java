@@ -26,7 +26,7 @@ public class PagerControllerOutstanding extends FragmentPagerAdapter {
             case 0:
                 return new MyNewsFragment();
             case 1:
-                return new MylowpricesFragment();
+                return new MyLowpricesFragment();
             default:
                 return null;
         }
