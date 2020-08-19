@@ -84,6 +84,7 @@
                 android:fontFamily="@font/kanit_semibold"
                 android:text="INICIAR SESIÓN"
                 android:textSize="16sp"
+                android:onClick="clickBtnLogIn"
                 android:textScaleX="1.2"
                 android:textColor="@color/white_text" />
 

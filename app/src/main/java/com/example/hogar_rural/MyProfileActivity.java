@@ -6,13 +6,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MyProfileActivity extends AppCompatActivity {
 
@@ -20,12 +26,39 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView tv_infoProfile;
     private Button btnLogin, btnRegister;
     private EditText et_input_user, et_input_passw;
+    private FirebaseAuth mAuth;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
+        initComponent();
+    }
+
+    private void logIn(String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            // Acceder a la sección de usuario
+                            Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+
+                            Toast.makeText(getApplicationContext(),"No se ha podido acceder", Toast.LENGTH_LONG).show();
+
+                        }
+
+                    }
+                });
+    }
+    private void initComponent(){
+        //Iniciamos FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
 
         // Relacionar variables con la parte gráfica
         tv_infoProfile = (TextView) findViewById(R.id.tv_infoProfile);
@@ -37,15 +70,7 @@ public class MyProfileActivity extends AppCompatActivity {
         et_input_user = (EditText) findViewById(R.id.et_input_user);
         et_input_passw = (EditText) findViewById(R.id.et_input_passw);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                // Acceder al menu de la app
-                Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
-                startActivity(intent);
-            }
-        });
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,5 +115,18 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    public void clickBtnLogIn(View view) {
+
+        String email = et_input_user.getText().toString();
+        String pass = et_input_passw.getText().toString();
+
+        if(TextUtils.isEmpty(et_input_passw.getText()) || TextUtils.isEmpty(et_input_user.getText())){
+            Toast.makeText(getApplicationContext(),"No se ha podido acceder", Toast.LENGTH_LONG).show();
+        }else{
+            logIn(email,pass);
+        }
     }
 }

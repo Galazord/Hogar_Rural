@@ -142,6 +142,7 @@
                 android:background="@drawable/gradient_green"
                 android:fontFamily="@font/kanit_semibold"
                 android:text="Seleccionar imagen"
+                android:onClick="clickBtnUploadImage"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
@@ -267,7 +268,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce una dirección de domicilio"/>
+                android:hint="Introduce un email"/>
 
             <!-- Introducir el código postal -->
             <EditText
@@ -357,6 +358,7 @@
                 android:text="Deseo recibir ofertas e información por email"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
+
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
@@ -372,6 +374,7 @@
                 android:background="@drawable/gradient_green"
                 android:fontFamily="@font/kanit_semibold"
                 android:text="REGISTRARSE"
+                android:onClick="clickBtnRegister"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
                 android:textColor="@color/white_text" />

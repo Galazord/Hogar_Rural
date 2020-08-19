@@ -12,21 +12,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HouseUpActivity"></activity>
+        <activity android:name=".SplashScreenActivity"></activity>
+        <activity android:name=".HouseUpActivity" />
         <activity android:name=".UserAccountActivity" />
         <activity
             android:name=".LoginFormActivity"
-            android:parentActivityName=".MyProfileActivity" />
-        <activity
-            android:name=".DetailHouseActivity"
-            android:parentActivityName=".ExplorerActivity" />
-        <activity android:name=".MainActivity">
+            android:parentActivityName=".MyProfileActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- EXPLORAR -->
+        </activity>
+        <activity
+            android:name=".DetailHouseActivity"
+            android:parentActivityName=".ExplorerActivity" />
+        <activity android:name=".MainActivity"></activity> <!-- EXPLORAR -->
         <activity android:name=".ExplorerActivity" />
         <activity
             android:name=".MapActivity"
@@ -36,7 +37,9 @@
             android:parentActivityName=".ExplorerActivity" /> <!-- MI PERFIL -->
         <activity
             android:name=".MyProfileActivity"
-            android:parentActivityName=".ExplorerActivity" /> <!-- DESTACADOS -->
+            android:parentActivityName=".ExplorerActivity">
+
+        </activity> <!-- DESTACADOS -->
         <activity
             android:name=".OutstandingActivity"
             android:parentActivityName=".ExplorerActivity" /> <!-- FAVORITOS -->

@@ -1,5 +1,6 @@
 package com.example.hogar_rural;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +14,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,6 +34,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.hogar_rural.Model.Users;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,11 +69,23 @@ public class LoginFormActivity extends AppCompatActivity {
     private String KEY_IMAGE = "photo";
     private String KEY_NAME = "name";
 
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_form);
+        initComponent();
 
+    }
+
+
+    private void initComponent(){
+        //Instanciamos el auth
+        mAuth = FirebaseAuth.getInstance();
+        //Init firestore
+        mFirestore = FirebaseFirestore.getInstance();
         // Establecer Titular en el action bar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Formulario para darse de alta como usuario");
@@ -84,23 +112,10 @@ public class LoginFormActivity extends AppCompatActivity {
 
         // Buscar la imagen
         btnUpAvatar = (Button) findViewById(R.id.btnUpAvatar);
-        btnUpAvatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFileChooser();
-            }
-        });
 
         // Realizar el registro del formulario
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                // Subir la imagen
-                uploadImage();
-            }
-        });
 
         // Volver atrás
         btnBack = (Button) findViewById(R.id.btnBack);
@@ -112,9 +127,7 @@ public class LoginFormActivity extends AppCompatActivity {
         });
 
         activateCalendar();
-
     }
-
     // Activar el efecto para mostrar un calendario e introducir una fecha
     private void activateCalendar() {
 
@@ -168,82 +181,79 @@ public class LoginFormActivity extends AppCompatActivity {
 
     }
 
-    // Convierte la imagen en un string
-    public String getStringImage(Bitmap bmp){
+    private void registerUser(final Users user){
+        final String emailUser = user.getEmail();
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        mAuth.createUserWithEmailAndPassword(emailUser, user.getPassword())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            //Aquí guardaríamos el usuario en base de datos.
+                            user.setId(mAuth.getCurrentUser().getUid());
+                            registerUserFirestore(user);
 
-        return encodedImage;
+                            //saveUserDB(user);
+                            //UtilMethod.showToast(TypeToast.SUCCESS, getParent().getParent(), getString(R.string.msg_success_register));
+                        } else {
+                            // If sign in fails, display a message to the user.
 
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthWeakPasswordException e) {
+                                Toast.makeText(getApplicationContext(),"Password erronea", Toast.LENGTH_LONG).show();
+                            } catch(FirebaseAuthInvalidCredentialsException e) {
+                                Toast.makeText(getApplicationContext(),"Email erroneo", Toast.LENGTH_LONG).show();
+                            } catch(FirebaseAuthUserCollisionException e) {
+                                Toast.makeText(getApplicationContext(),"Ya existe", Toast.LENGTH_LONG).show();
+                            } catch(Exception e) {
+                                Toast.makeText(getApplicationContext(),"Error general", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+
+                    }
+                });
+    }
+    private void registerUserFirestore(Users user){
+        mFirestore.collection("users")
+                .document(user.getId())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(),"Usuario creado en bd", Toast.LENGTH_LONG).show();
+                       // singIn();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(),"Error general", Toast.LENGTH_LONG).show();
+                        Log.e("ERROR FIRESTORE USER", e.getMessage());
+                    }
+                });
     }
 
-    // Subir imagen al servidor
-    public void uploadImage(){
+    public void clickBtnRegister(View view) {
+        String name = etForm_input_name.getText().toString();
+        String nickname =etForm_input_user.getText().toString();
+        String email = etForm_input_email.getText().toString();
+        String password = etForm_input_passw.getText().toString();
 
-        final ProgressDialog loading = ProgressDialog.show(this, "Subiendo...", "Espere por favor");
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_UPLOAD, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                loading.dismiss();
-                Toast.makeText(LoginFormActivity.this, response, Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loading.dismiss();
-                Toast.makeText(LoginFormActivity.this, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError{
+        if(TextUtils.isEmpty(etForm_input_name.getText()) || TextUtils.isEmpty(etForm_input_email.getText()) ){
+            Toast.makeText(getApplicationContext(),"Debes de rellenar todos los camposr", Toast.LENGTH_LONG).show();
+        }else{
+            Users user = new Users(email, nickname, password, name, "apellido", "imagen.png","dni","fecha_nac","telefono","direccion","11400","municipio","provincia");
 
-                String image = getStringImage(bitmap);
-                String name = "miFoto";
-
-                Map<String, String> params = new Hashtable<String, String>();
-                params.put(KEY_IMAGE, image);
-                params.put(KEY_NAME, name);
-
-                return params;
-            }
-        };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
-
-    // Para seleccionar una imagen
-    private void showFileChooser(){
-
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PICK_IMAGE_REQUEST);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
-
-            Uri filePath = data.getData();
-
-            try {
-
-                // Cómo obtener el mapa de bits de la galería
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                // Configuración del mapa de bits en el ImageView
-                ivForm_avatar.setImageBitmap(bitmap);
-                
-            }catch (IOException e){
-
-                e.printStackTrace();
-            }
-
+            registerUser(user);
         }
+
+
+    }
+
+    public void clickBtnUploadImage(View view) {
+
     }
 }
