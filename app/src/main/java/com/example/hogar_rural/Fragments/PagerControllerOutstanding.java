@@ -7,16 +7,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class PagerControllerOutstanding extends FragmentPagerAdapter {
 
-    // VARIABLES
+    //--> VARIABLES
     int numsOfTabs;
 
-    // CONSTRUCTOR
+    //--> CONSTRUCTOR
     public PagerControllerOutstanding(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
         this.numsOfTabs = behavior;
     }
 
-    // MÉTODOS
+    //--> MÉTODOS
     @NonNull
     @Override
     public Fragment getItem(int position) {

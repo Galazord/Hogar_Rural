@@ -19,11 +19,11 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    // Declarar VARIABLES
+    //--> VARIABLES
     private LayoutInflater inflater;
     private ArrayList<House> model;
 
-    // CONSTRCUTOR
+    //--> CONSTRCUTOR
     public Adapter(Context context, ArrayList<House> model) {
         this.inflater = LayoutInflater.from(context);
         this.model = model;

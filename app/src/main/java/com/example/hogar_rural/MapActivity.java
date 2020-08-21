@@ -10,5 +10,17 @@ public class MapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        // Inciar componentes
+        initComponent();
+
+    }
+
+    //--> MÉTODOS
+    // Inciar componentes
+    private void initComponent() {
+
+
+
     }
 }

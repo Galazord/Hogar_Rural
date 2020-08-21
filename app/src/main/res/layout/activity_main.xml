@@ -19,15 +19,14 @@
         android:background="@drawable/background_light_corners"
         android:ems="10"
         android:fontFamily="@font/roboto_medium"
-        android:hint="Introduce un destino..."
+        android:hint="@string/main_destiny"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textColor="@color/green_dark"
         android:textColorHint="@color/green_hint"
         android:textSize="20sp"
-        android:drawableLeft="@drawable/ic_location"
         android:drawableStart="@drawable/ic_location"
-        android:paddingLeft="40dp"
+        android:paddingStart="40dp"
         android:textStyle="bold"/>
 
     <Button
@@ -39,8 +38,9 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/gradient_green"
         android:fontFamily="@font/kanit_semibold"
-        android:text="EXPLORAR"
+        android:text="@string/main_btnExplore"
         android:textSize="20sp"
         android:textScaleX="1.2"
-        android:textColor="@color/white_text" />
+        android:textColor="@color/white_text"
+        android:onClick="clickGoExplorer"/>
 </RelativeLayout>

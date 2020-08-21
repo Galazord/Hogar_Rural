@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="15dp"
-                android:text="DARSE DE ALTA COMO USUARIO"
+                android:text="@string/formUser_title"
                 android:fontFamily="@font/lemon"
                 android:textSize="20sp"
                 android:gravity="center"
@@ -38,7 +38,7 @@
                 android:layout_below="@+id/tvForm_title"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
-                android:text="Rellena el siguiente formulario, acepta los terminos de uso y pulsa el boton de registrarse."
+                android:text="@string/formUser_info"
                 android:fontFamily="@font/roboto_medium"
                 android:textSize="16sp"
                 android:textColor="@color/green_dark"/>
@@ -47,6 +47,7 @@
             <EditText
                 android:id="@+id/etForm_input_user"
                 android:layout_width="match_parent"
+                android:inputType="text"
                 android:layout_height="50dp"
                 android:layout_below="@id/tvForm_info"
                 android:textAlignment="center"
@@ -61,14 +62,13 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce el nombre de usuario"/>
+                android:hint="@string/formUser_nick"/>
 
-            <!-- Introducir la contraseña -->
             <EditText
-                android:id="@+id/etForm_input_passw"
+                android:id="@+id/etForm_input_email"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:inputType="textPassword"
+                android:inputType="textEmailAddress"
                 android:layout_below="@id/etForm_input_user"
                 android:textAlignment="center"
                 android:layout_marginHorizontal="30dp"
@@ -82,7 +82,28 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce la contraseña"/>
+                android:hint="@string/formUser_mail"/>
+
+            <!-- Introducir la contraseña -->
+            <EditText
+                android:id="@+id/etForm_input_passw"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:inputType="textPassword"
+                android:layout_below="@id/etForm_input_email"
+                android:textAlignment="center"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:textColor="@color/green_dark"
+                android:textColorHint="@color/green_hint2"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry"
+                android:alpha="0.6"
+                android:background="@drawable/background_corners_2"
+                android:ems="10"
+                android:fontFamily="@font/roboto_medium"
+                android:hint="@string/formUser_passw"/>
 
             <!-- Repetir la contraseña -->
             <EditText
@@ -103,7 +124,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Repite la contraseña"/>
+                android:hint="@string/formUser_repitPassw"/>
 
             <!-- Imgamen del avatar-->
             <ImageView
@@ -124,7 +145,7 @@
                 android:layout_marginStart="150dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginTop="10dp"
-                android:text="Selecciona una imagen de perfil de usuario"
+                android:text="@string/formUser_avatar"
                 android:fontFamily="@font/roboto_medium"
                 android:textSize="18sp"
                 android:gravity="center"
@@ -141,17 +162,18 @@
                 android:layout_marginTop="60dp"
                 android:background="@drawable/gradient_green"
                 android:fontFamily="@font/kanit_semibold"
-                android:text="Seleccionar imagen"
-                android:onClick="clickBtnUploadImage"
+                android:text="@string/formUser_selectImage"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
-                android:textColor="@color/white_text" />
+                android:textColor="@color/white_text"
+                android:onClick="clickBtnUploadImage" />
 
             <!-- Introducir el nombre real -->
             <EditText
                 android:id="@+id/etForm_input_name"
                 android:layout_width="match_parent"
+                android:inputType="text"
                 android:layout_height="50dp"
                 android:layout_below="@id/ivForm_avatar"
                 android:textAlignment="center"
@@ -166,13 +188,14 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce el nombre real"/>
+                android:hint="@string/formUser_name"/>
 
             <!-- Introducir los apellidos -->
             <EditText
                 android:id="@+id/etForm_input_lastname"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:inputType="text"
                 android:layout_below="@id/etForm_input_name"
                 android:textAlignment="center"
                 android:layout_marginHorizontal="30dp"
@@ -186,13 +209,14 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce los apellidos"/>
+                android:hint="@string/formUser_lastname"/>
 
             <!-- Introducir el DNI -->
             <EditText
                 android:id="@+id/etForm_input_dni"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:inputType="text"
                 android:layout_below="@id/etForm_input_lastname"
                 android:textAlignment="center"
                 android:layout_marginHorizontal="30dp"
@@ -206,7 +230,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce el DNI con su letra"/>
+                android:hint="@string/formUser_dni"/>
 
             <!-- Introducir la fecha de nacimiento -->
             <TextView
@@ -227,7 +251,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce la fecha de nacimiento"/>
+                android:hint="@string/formUser_birthday"/>
 
             <!-- Introducir el teléfono -->
             <EditText
@@ -248,13 +272,14 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce un número de teléfono"/>
+                android:hint="@string/formUser_phone"/>
 
             <!-- Introducir la dirección de domicilio -->
             <EditText
-                android:id="@+id/etForm_input_email"
+                android:id="@+id/etForm_input_address"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:inputType="text"
                 android:layout_below="@id/etForm_input_phone"
                 android:textAlignment="center"
                 android:layout_marginHorizontal="30dp"
@@ -268,7 +293,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce un email"/>
+                android:hint="@string/formUser_address"/>
 
             <!-- Introducir el código postal -->
             <EditText
@@ -276,7 +301,7 @@
                 android:layout_width="match_parent"
                 android:inputType="number"
                 android:layout_height="50dp"
-                android:layout_below="@id/etForm_input_email"
+                android:layout_below="@id/etForm_input_address"
                 android:textAlignment="center"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
@@ -289,13 +314,14 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce el código postal"/>
+                android:hint="@string/formUser_postal"/>
 
             <!-- Introducir el municipio -->
             <EditText
                 android:id="@+id/etForm_input_municipality"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:inputType="text"
                 android:layout_below="@id/etForm_input_postal"
                 android:textAlignment="center"
                 android:layout_marginHorizontal="30dp"
@@ -309,13 +335,14 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce el municipio"/>
+                android:hint="@string/formUser_municipatily"/>
 
             <!-- Introducir la dirección de domicilio -->
             <EditText
                 android:id="@+id/etForm_input_province"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:inputType="text"
                 android:layout_below="@id/etForm_input_municipality"
                 android:textAlignment="center"
                 android:layout_marginHorizontal="30dp"
@@ -329,7 +356,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce la provincia"/>
+                android:hint="@string/formUser_province"/>
 
             <!-- Checkbox de términos y condiciones de uso -->
             <CheckBox
@@ -340,7 +367,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
                 android:paddingStart="10dp"
-                android:text="Aceptar los términos y condiciones de uso"
+                android:text="@string/formUser_terms"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"
@@ -355,10 +382,9 @@
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
                 android:paddingStart="10dp"
-                android:text="Deseo recibir ofertas e información por email"
+                android:text="@string/formUser_advertising"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
-
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
@@ -373,11 +399,11 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/gradient_green"
                 android:fontFamily="@font/kanit_semibold"
-                android:text="REGISTRARSE"
-                android:onClick="clickBtnRegister"
+                android:text="@string/formUser_register"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
-                android:textColor="@color/white_text" />
+                android:textColor="@color/white_text"
+                android:onClick="clickBtnRegister" />
 
             <!-- Botón para volver -->
             <Button
@@ -390,10 +416,11 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/gradient_grey"
                 android:fontFamily="@font/kanit_semibold"
-                android:text="VOLVER"
+                android:text="@string/btnBack"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
-                android:textColor="@color/white_text" />
+                android:textColor="@color/white_text"
+                android:onClick="clickBtnBackRegister" />
 
 
         </RelativeLayout>

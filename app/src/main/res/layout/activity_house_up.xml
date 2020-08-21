@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="20dp"
-                android:text="Rellena el siguiente formulario para dar de alta la casa que deseas ofertar."
+                android:text="@string/houseUp_info"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"/>
@@ -63,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
-                        android:text="Elija una foto o varias del aspecto de la vivienda.\nMostrar fotos ayudará muchísimo a interesarse por el lugar."
+                        android:text="@string/houseUp_info2"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/green_dark"
                         android:textSize="16sp"/>
@@ -76,7 +76,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/gradient_green"
                         android:fontFamily="@font/kanit_semibold"
-                        android:text="Seleccionar imagen"
+                        android:text="@string/formUser_selectImage"
                         android:textAllCaps="false"
                         android:textSize="16sp"
                         android:textScaleX="1.2"
@@ -104,7 +104,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduce el nombre del lugar"/>
+                android:hint="@string/houseUp_namePlace"/>
 
             <!-- Preguntar tipo de casa -->
             <TextView
@@ -114,7 +114,7 @@
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
                 android:layout_below="@+id/etHouse_input_name"
-                android:text="¿Qué tipo de vivienda quieres ofrecer?"
+                android:text="@string/houseUp_type"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"/>
@@ -133,14 +133,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Íntegro"
+                    android:text="@string/houseUp_complete"
                     android:onClick="CheckButtonTypeHouse"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:text="Habitaciones"
+                    android:text="@string/houseUp_rooms"
                     android:onClick="CheckButtonTypeHouse"/>
 
             </RadioGroup>
@@ -154,7 +154,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
                 android:fontFamily="@font/roboto_medium"
-                android:text="Introduzca la capacidad máxima de inquilinos:"
+                android:text="@string/houseUp_txtPeople"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp" />
 
@@ -177,7 +177,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
-                    android:text="-"
+                    android:text="@string/filters_symbol_less"
                     android:textAllCaps="false"
                     android:textSize="40sp"
                     android:textScaleX="1.2"
@@ -189,7 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:text="1 personas"
+                    android:text="@string/houseUp_nPersons"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="20sp"/>
@@ -202,7 +202,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
-                    android:text="+"
+                    android:text="@string/filters_symbol_plus"
                     android:textAllCaps="false"
                     android:textSize="40sp"
                     android:textScaleX="1.2"
@@ -219,7 +219,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
                 android:fontFamily="@font/roboto_medium"
-                android:text="Introduzca la capacidad máxima de inquilinos:"
+                android:text="@string/houseUp_amount"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp" />
 
@@ -242,7 +242,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
-                    android:text="-"
+                    android:text="@string/filters_symbol_less"
                     android:textAllCaps="false"
                     android:textSize="40sp"
                     android:textScaleX="1.2"
@@ -254,7 +254,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:text="0 €/día"
+                    android:text="@string/houseUp_eurosDay"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="20sp"/>
@@ -267,7 +267,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
-                    android:text="+"
+                    android:text="@string/filters_symbol_plus"
                     android:textAllCaps="false"
                     android:textSize="40sp"
                     android:textScaleX="1.2"
@@ -293,7 +293,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduzca la dirección postal"/>
+                android:hint="@string/formUser_address"/>
 
             <!-- Introducir la código postal -->
             <EditText
@@ -313,7 +313,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduzca el código postal"/>
+                android:hint="@string/formUser_postal"/>
 
             <!-- Introducir el municipio -->
             <EditText
@@ -333,7 +333,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduzca el municipio"/>
+                android:hint="@string/formUser_municipatily"/>
 
             <!-- Introducir la provincia -->
             <EditText
@@ -353,7 +353,7 @@
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium"
-                android:hint="Introduzca la provincia"/>
+                android:hint="@string/formUser_province"/>
 
             <!-- Botón de fechas de disponibilidad de la vivienda-->
             <Button
@@ -365,11 +365,10 @@
                 android:layout_marginHorizontal="30dp"
                 android:background="@drawable/gradient_green"
                 android:fontFamily="@font/kanit_semibold"
-                android:text="FECHAS DISPONIBLES \nPARA LA VIVIENDA"
+                android:text="@string/houseUp_btnDateDisponibility"
                 android:textSize="14sp"
                 android:textScaleX="1.2"
                 android:textColor="@color/white_text"
-                android:drawableLeft="@drawable/ic_calendar"
                 android:drawableStart="@drawable/ic_calendar"
                 android:paddingStart="30dp"/>
 
@@ -381,7 +380,7 @@
                 android:layout_below="@+id/btnDateAvailable"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
-                android:text="Escribe una breve descripción de la casa y sus característicasprincipales:"
+                android:text="@string/houseUp_features"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"/>
@@ -412,7 +411,7 @@
                 android:layout_below="@+id/etHouse_input_features"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
-                android:text="Escribe las actividades qeu se pueden realizar en la casa y/o alrededores del lugar:"
+                android:text="@string/houseUp_activities"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"/>
@@ -443,7 +442,7 @@
                 android:layout_below="@+id/etHouse_input_activities"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
-                android:text="Escribe los lugares de interés que se pueden disfrutar por la zona:"
+                android:text="@string/houseUp_placeInterest"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"/>
@@ -466,7 +465,7 @@
                 android:ems="10"
                 android:fontFamily="@font/roboto_medium" />
 
-            <!-- Texto: Lugares de interés -->
+            <!-- Texto: Servicios -->
             <TextView
                 android:id="@+id/tvHouse_services"
                 android:layout_width="match_parent"
@@ -474,7 +473,7 @@
                 android:layout_below="@+id/etHouse_input_interest"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
-                android:text="Selecciona los servicios que ofrece la vivienda:"
+                android:text="@string/houseUp_services"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"/>
@@ -540,7 +539,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Adaptado"
+                    android:text="@string/filters_adapted"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -554,7 +553,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Aire \nacondicionado"
+                    android:text="@string/filters_air"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -568,7 +567,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Barbacoa"
+                    android:text="@string/filters_barbacue"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -582,7 +581,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Baño en \nhabitación"
+                    android:text="@string/filters_bath"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -636,7 +635,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Piscina"
+                    android:text="@string/filters_pool"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -650,7 +649,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Piscina \nclimatizada"
+                    android:text="@string/filters_climatized"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -664,7 +663,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Jardín"
+                    android:text="@string/filters_garden"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -678,7 +677,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Calefacción"
+                    android:text="@string/filters_heating"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -732,7 +731,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Jacuzzi"
+                    android:text="@string/filters_jacuzzi"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -746,7 +745,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Cocina \nintegrada"
+                    android:text="@string/filters_kitchen"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -760,7 +759,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Montaña"
+                    android:text="@string/filters_mountain"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -774,7 +773,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Parking"
+                    android:text="@string/filters_parking"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -828,7 +827,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Playa"
+                    android:text="@string/filters_beach"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -842,7 +841,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Desayuno \nincluido"
+                    android:text="@string/filters_breakfast"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -856,7 +855,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Zona \ninfantil"
+                    android:text="@string/filters_children"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -870,7 +869,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Chimenea"
+                    android:text="@string/filters_fireplace"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -924,7 +923,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Permite \nmascotas"
+                    android:text="@string/filters_pets"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -938,7 +937,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Spa"
+                    android:text="@string/filters_spa"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -952,7 +951,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Televisión"
+                    android:text="@string/filters_tv"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -966,7 +965,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_gravity="center"
-                    android:text="Wifi"
+                    android:text="@string/filters_wifi"
                     android:fontFamily="@font/roboto_medium"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -984,10 +983,11 @@
                 android:layout_marginHorizontal="30dp"
                 android:background="@drawable/gradient_green"
                 android:fontFamily="@font/kanit_semibold"
-                android:text="PUBLICAR OFERTA"
+                android:text="@string/houseUp_publish"
                 android:textSize="14sp"
                 android:textScaleX="1.2"
-                android:textColor="@color/white_text" />
+                android:textColor="@color/white_text"
+                android:onClick="clickPublishHouse"/>
 
         </RelativeLayout>
 

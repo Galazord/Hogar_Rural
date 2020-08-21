@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,18 +24,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailHouseActivity extends AppCompatActivity {
 
-    // VARIABLES
+    //--> VARIABLES
     private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4;
     private ImageView CardDetailImage;
     private DbRetrofitApi dbRetrofitApi;
 
-    // VARIABLES FIJAS
+    //--> VARIABLES FIJAS
     private final String URL_PHP = "https://hogarruralapp.000webhostapp.com/hogarRural/php/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_house);
+
+        // Iniciar componentes
+        initComponent();
+
+    }
+
+    //--> MÉTODOS
+    // Iniciar componentes
+    private void initComponent() {
 
         // Relaccionar las variables con la parte gráfica
         DetailPlace = (TextView) findViewById(R.id.DetailPlace);
@@ -63,9 +73,9 @@ public class DetailHouseActivity extends AppCompatActivity {
 
         // Mostrar la información de la base de datos en la vista final
         showDetailList(idHouse);
-
     }
 
+    // Mostrar los detalles de la lista en el RecyclerView
     private void showDetailList(String idHouse) {
 
         Call<List<HouseDetail>> call = dbRetrofitApi.getDetailHouse(Integer.parseInt(idHouse));
@@ -111,6 +121,54 @@ public class DetailHouseActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    //--> CLICK BOTONES
+    // Botón de disponibilidad de fechas
+    public void clickShowDisponibility(View view) {
+
+
+    }
+
+    // Ver más información de las características
+    public void clickShowMoreFeatures(View view) {
+
+
+    }
+
+    // Ver más información de las actividades
+    public void clickShowMoreActivities(View view) {
+
+
+    }
+
+    // Ver más información de los lugares de interés
+    public void clickShowMorePlaceInterest(View view) {
+
+
+    }
+
+    // Ver más información de los comentarios
+    public void clickShowMoreComments(View view) {
+
+
+    }
+
+    // Botón OK para enviar el comentario
+    public void clickSendComment(View view) {
+
+
+    }
+
+    // Botón para llamar al propietario de la casa
+    public void clickCallOwner(View view) {
+
+
+    }
+
+    // Botón para enviar un email al propietario de la casa
+    public void clickEmailOwner(View view) {
+
 
     }
 }

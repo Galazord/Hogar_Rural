@@ -12,40 +12,45 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SplashScreenActivity"></activity>
-        <activity android:name=".HouseUpActivity" />
-        <activity android:name=".UserAccountActivity" />
-        <activity
-            android:name=".LoginFormActivity"
-            android:parentActivityName=".MyProfileActivity">
+        <activity android:name=".SplashScreenActivity"> <!-- SPLASH -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".MainActivity"/> <!-- MAIN ACTIVITY -->
+
+        <activity android:name=".ExplorerActivity" /> <!-- EXPLORAR -->
         <activity
             android:name=".DetailHouseActivity"
-            android:parentActivityName=".ExplorerActivity" />
-        <activity android:name=".MainActivity"></activity> <!-- EXPLORAR -->
-        <activity android:name=".ExplorerActivity" />
-        <activity
-            android:name=".MapActivity"
-            android:parentActivityName=".ExplorerActivity" />
+            android:parentActivityName=".ExplorerActivity" /> <!-- DETALLE DE LA CASA -->
         <activity
             android:name=".FiltersActivity"
-            android:parentActivityName=".ExplorerActivity" /> <!-- MI PERFIL -->
+            android:parentActivityName=".ExplorerActivity" /> <!-- FILTROS -->
+        <activity
+            android:name=".MapActivity"
+            android:parentActivityName=".ExplorerActivity" /> <!-- MAPA -->
+
         <activity
             android:name=".MyProfileActivity"
-            android:parentActivityName=".ExplorerActivity">
+            android:parentActivityName=".ExplorerActivity"> <!-- MI PERFIL -->
+        </activity>
+        <activity
+            android:name=".LoginFormActivity"
+            android:parentActivityName=".MyProfileActivity"> <!-- FORMULARIO PARA REGISTRARSE -->
+        </activity>
+        <activity android:name=".UserAccountActivity" /> <!-- PERFIL DE USUARIO -->
+        <activity android:name=".HouseUpActivity" /> <!-- SUBIR UNA OFERTA DE CASA -->
 
-        </activity> <!-- DESTACADOS -->
         <activity
             android:name=".OutstandingActivity"
-            android:parentActivityName=".ExplorerActivity" /> <!-- FAVORITOS -->
+            android:parentActivityName=".ExplorerActivity" /> <!-- DESTACADOS -->
+
         <activity
             android:name=".FavoriteActivity"
-            android:parentActivityName=".ExplorerActivity" />
+            android:parentActivityName=".ExplorerActivity" /> <!-- FAVORITOS -->
 
         <meta-data
             android:name="preloaded_fonts"

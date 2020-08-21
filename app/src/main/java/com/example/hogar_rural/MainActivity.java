@@ -27,18 +27,19 @@ public class MainActivity extends AppCompatActivity {
         // Ocultar en esta vista la toolbar
         getSupportActionBar().hide();
 
+        // Inicializar componentes
+        initComponent();
+
+    }
+
+    //--> MÉTODOS
+    // Inicializar componentes
+    private void initComponent() {
+
         // Asignar VARIABLES a la parte gráfica
         etInputDestiny = (EditText) findViewById(R.id.etInputDestiny);
         btnAccess = (Button) findViewById(R.id.btnAccess);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
-
-        // Acción botón de explorar
-        btnAccess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startExplorer();
-            }
-        });
 
     }
 
@@ -80,4 +81,14 @@ public class MainActivity extends AppCompatActivity {
         return false;
 
     }
+
+    //--> CLICK BOTONES
+    // Recoger el dato del destino e ir a la vista de explorar
+    public void clickGoExplorer(View view) {
+
+        startExplorer();
+
+    }
+
+
 }

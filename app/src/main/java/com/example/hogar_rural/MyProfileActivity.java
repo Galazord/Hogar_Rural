@@ -22,20 +22,25 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MyProfileActivity extends AppCompatActivity {
 
-    // VARIABLES
+    //--> VARIABLES
     private TextView tv_infoProfile;
     private Button btnLogin, btnRegister;
     private EditText et_input_user, et_input_passw;
     private FirebaseAuth mAuth;
+    private BottomNavigationView bottomNavigationView;
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
+
+        // Inicializar componentes
         initComponent();
     }
 
+    //--> MÉTODOS
+    // Acceder al login por una clave de usuario y mail
     private void logIn(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -43,19 +48,21 @@ public class MyProfileActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            // Acceder a la sección de usuario
+                            // Acceder a la sección de usuario (UserAccountActivity)
                             Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
-
-                            Toast.makeText(getApplicationContext(),"No se ha podido acceder", Toast.LENGTH_LONG).show();
+                            // Error de acceso a la cuenta de usuario.
+                            Toast.makeText(getApplicationContext(),"ERROR. No se ha podido acceder.", Toast.LENGTH_LONG).show();
 
                         }
 
                     }
                 });
     }
+
+    // Inicializar componentes
     private void initComponent(){
         //Iniciamos FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
@@ -67,28 +74,15 @@ public class MyProfileActivity extends AppCompatActivity {
                 "- Podrás incluir tu mismo una oferta de casa rural y disponer de las funciones de propietario para gestionarlo.\n" +
                 "- Diponer de la sección “Novedades” donde te sugerimos casas rurales en función de tus gustos.\n\n\n" +
                 "Si dispone ya de una cuenta de usuario inicie sesión a continuación:");
-        et_input_user = (EditText) findViewById(R.id.et_input_user);
+        et_input_user = (EditText) findViewById(R.id.et_input_email);
         et_input_passw = (EditText) findViewById(R.id.et_input_passw);
         btnLogin = (Button) findViewById(R.id.btnLogin);
-
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        bottomNavigationView = findViewById(R.id.bottom_navegation);
 
-                // Acceder al menu de la app
-                Intent intent = new Intent (getApplicationContext(), LoginFormActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        // Inicializar y asignar VARIABLES
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navegation);
-
+        //--> BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual
         bottomNavigationView.setSelectedItemId(R.id.MyProfile);
-
         // Incorporar ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -117,16 +111,32 @@ public class MyProfileActivity extends AppCompatActivity {
 
     }
 
-
+    //--> CLICK BOTONES
+    // Entrar para loguearse como usuario
     public void clickBtnLogIn(View view) {
 
+        // Recoger el valor escrito en los campos de email y contraseña
         String email = et_input_user.getText().toString();
         String pass = et_input_passw.getText().toString();
 
+        // Verificar si los campos están vacíos
         if(TextUtils.isEmpty(et_input_passw.getText()) || TextUtils.isEmpty(et_input_user.getText())){
-            Toast.makeText(getApplicationContext(),"No se ha podido acceder", Toast.LENGTH_LONG).show();
+            // Error si los campos están vacíos.
+            Toast.makeText(getApplicationContext(),"No se ha podido acceder. Comprueba tu email y contraseña.", Toast.LENGTH_LONG).show();
         }else{
+
+            // Comprobar si el usuario existe en la base de datos
             logIn(email,pass);
         }
+    }
+
+    // Ir al formulario para darse de alta como usuario
+    public void clickBtnGoFormRegister(View view) {
+
+        // Ir a la clase LoginFormActivity.
+        Intent intent = new Intent (getApplicationContext(), LoginFormActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 }

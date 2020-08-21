@@ -15,7 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class UserAccountActivity extends AppCompatActivity {
 
-    // VARIABLES
+    //--> VARIABLES
     TabLayout tabLayoutAccount;
     ViewPager viewPagerAccount;
     TabItem tabMyProfile, tabMyHouses;
@@ -26,6 +26,15 @@ public class UserAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_account);
+
+        // Iniciar componentes
+        initComponent();
+
+    }
+
+    //--> MÉTODOS
+    // Iniciar componentes
+    private void initComponent() {
 
         // Relaccionar las variables con la parte gráfica
         tabLayoutAccount = (TabLayout) findViewById(R.id.tabLayoutAccount);
@@ -64,6 +73,7 @@ public class UserAccountActivity extends AppCompatActivity {
         viewPagerAccount.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayoutAccount));
 
 
+        // BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual
         bottomNavigationView.setSelectedItemId(R.id.MyProfile);
         // Incorporar ItemSelectedListener

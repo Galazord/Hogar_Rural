@@ -11,17 +11,29 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class FavoriteActivity extends AppCompatActivity {
 
+    //--> VARIABLES
+    BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
 
-        // Inicializar y asignar VARIABLES
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navegation);
+        // Iniciar componentes
+        initComponent();
 
+    }
+
+    //--> MÉTODOS
+    // Iniciar componentes
+    private void initComponent() {
+
+        // Relaccionar las variables con la parte gráfica
+        bottomNavigationView = findViewById(R.id.bottom_navegation);
+
+        // BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual
         bottomNavigationView.setSelectedItemId(R.id.Favorites);
-
         // Incorporar ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

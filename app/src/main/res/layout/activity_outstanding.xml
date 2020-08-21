@@ -20,14 +20,14 @@
             android:id="@+id/tabMyNews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Novedades"
+            android:text="@string/outstanding_news"
             android:icon="@drawable/ic_icon_tab_news" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabMyLowPrices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bajan de precio"
+            android:text="@string/outstanding_lowprice"
             android:icon="@drawable/ic_icon_tab_lowprices"/>
 
     </com.google.android.material.tabs.TabLayout>
@@ -39,9 +39,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_navegation">
-
     </androidx.viewpager.widget.ViewPager>
 
+    <!-- BARRA DE NAVEGACIÓN INFERIOR -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

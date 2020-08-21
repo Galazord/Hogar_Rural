@@ -20,7 +20,7 @@ import com.google.android.material.tabs.TabLayout;
 
 public class OutstandingActivity extends AppCompatActivity {
 
-    // Inicializar VARIABLES
+    //--> VARIABLES
     private ListView listView;
     private String[] nameList = {"Pakistan", "Canada", "India", "Alemania", "Australia", "China", "España", "Francia", "Italia"};
     private ArrayAdapter<String> adapterList;
@@ -34,6 +34,14 @@ public class OutstandingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outstanding);
+
+        // Iniciar componentes
+        initComponent();
+    }
+
+    //--> MÉTODOS
+    // Iniciar componentes
+    private void initComponent() {
 
         // Inicializar y asignar VARIABLES
         bottomNavigationView = findViewById(R.id.bottom_navegation);
@@ -71,9 +79,9 @@ public class OutstandingActivity extends AppCompatActivity {
         });
         viewPagerAccount.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayoutAccount));
 
+        // BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual
         bottomNavigationView.setSelectedItemId(R.id.OutStanding);
-
         // Incorporar ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -109,6 +117,7 @@ public class OutstandingActivity extends AppCompatActivity {
         listView.setAdapter(adapterList);
 
          */
+
     }
 
     // Menú superior: Resolver la búsqueda
@@ -136,4 +145,7 @@ public class OutstandingActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    //--> CLICK BOTONES
+
 }

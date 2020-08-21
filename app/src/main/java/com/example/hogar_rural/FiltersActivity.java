@@ -3,6 +3,7 @@ package com.example.hogar_rural;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,7 +19,7 @@ import java.util.Calendar;
 
 public class FiltersActivity extends AppCompatActivity {
 
-    // VARIABLES
+    //--> VARIABLES
     private TextView tvFilter_priceIndicator, tvFilter_input_entrance, tvFilter_input_exit, tvFilter_nPersons;
     private Button btnLessPerson, btnPlusPerson, btnLessValoration, btnPlusValoration;
     private ToggleButton tbFilter_complete, tbFilter_room;
@@ -29,6 +30,15 @@ public class FiltersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filters);
+
+        // Iniciar componentes
+        initComponent();
+
+    }
+
+    //--> MÉTODOS
+    // Iniciar componentes
+    private void initComponent() {
 
         // Relacionar las variables con la parte gráfica
         tvFilter_priceIndicator = (TextView) findViewById(R.id.tvFilter_priceIndicator);
@@ -122,6 +132,23 @@ public class FiltersActivity extends AppCompatActivity {
     // Acción ToggleButtom: Habitaciones íntegras
     public void OnDefaultToggleClickComplete(View view) {
         Toast.makeText(this, "OnDefaultToggleClickComplete", Toast.LENGTH_SHORT).show();
+    }
+
+
+    //--> CLICK BOTONES
+    // Confirmar la selección de filtros
+    public void clickConfirmFilters(View view) {
+
+
+    }
+
+    // Volver a la vista de explorar
+    public void clickBackFilters(View view) {
+
+        Intent intent = new Intent (getApplicationContext(), ExplorerActivity.class);
+        startActivity(intent);
+        finish();
+
     }
 
 

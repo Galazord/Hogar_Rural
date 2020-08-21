@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ExplorerActivity extends AppCompatActivity {
 
-    // Inicializar VARIABLES
+    //--> VARIABLES
     private ListView listView;
     private String[] nameList = {"Pakistan", "Canada", "India", "Alemania", "Australia", "China", "España", "Francia", "Italia"};
     private ArrayAdapter<String> adapterList;
@@ -43,7 +43,7 @@ public class ExplorerActivity extends AppCompatActivity {
     private ArrayList<House> modelHouse;
     private DbRetrofitApi dbRetrofitApi;
 
-    // VARIABLES FIJAS
+    //--> VARIABLES FIJAS
     private final String URL_PHP = "https://hogarruralapp.000webhostapp.com/hogarRural/php/";
 
     @Override
@@ -54,10 +54,21 @@ public class ExplorerActivity extends AppCompatActivity {
         // Subtitulo en la toolbar (número de resultados de búsqueda)
         getSupportActionBar().setSubtitle(getString(R.string.app_sub));
 
+        // Iniciar componentes
+        initComponent();
+
+    }
+
+    //--> MÉTODOS
+    // Iniciar componentes
+    private void initComponent() {
+
         // Inicializar y/o asignar VARIABLES a la parte gráfica
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navegation);
         recyclerView = findViewById(R.id.exploreRecyclerView);
         modelHouse = new ArrayList<>();
+        btnFilters = (Button) findViewById(R.id.btnFilters);
+        btnMap = (Button) findViewById(R.id.btnMap);
 
         // RecyclerView: instanciar Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -66,9 +77,9 @@ public class ExplorerActivity extends AppCompatActivity {
                 .build();
         dbRetrofitApi = retrofit.create(DbRetrofitApi.class);
 
+        //--> MENÚ DE NAVEGACIÓN INFERIOR
         // Menu de Navegación: Establecer este icono como marcado en el actual
         bottomNavigationView.setSelectedItemId(R.id.SearchList);
-
         // Menu de Navegación: Incorporar ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -105,33 +116,12 @@ public class ExplorerActivity extends AppCompatActivity {
 
          */
 
-        // Botones de las opciones FILTRAR y MAPA
-        btnFilters = (Button) findViewById(R.id.btnFilters);
-        btnFilters.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Ir a la sección Filtrar
-                Intent intentFilter = new Intent (getApplicationContext(), FiltersActivity.class);
-                startActivity(intentFilter);
-            }
-        });
-
-        btnMap = (Button) findViewById(R.id.btnMap);
-        btnMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Ir a la sección Mapa
-                Intent intentMap = new Intent (getApplicationContext(), MapActivity.class);
-                startActivity(intentMap);
-            }
-        });
-
         // RecyclerView 1: Mostrar los datos del listado de casas
-        modelHouse = new ArrayList<>();
         showListHouses();
 
     }
 
+    // Mostrar datos de cada casa en el recyclerView
     private void showListHouses() {
 
         Call<List<House>> call = dbRetrofitApi.getHouses();
@@ -170,6 +160,7 @@ public class ExplorerActivity extends AppCompatActivity {
 
     }
 
+    // Mostrar el resultado final del listado del RecyclerView
     private void showFinalHouses() {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -203,4 +194,21 @@ public class ExplorerActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    //--> CLICK BOTONES
+    // Ir a la sección Filtrar
+    public void clickGoFilters(View view) {
+
+        Intent intentFilter = new Intent (getApplicationContext(), FiltersActivity.class);
+        startActivity(intentFilter);
+    }
+
+    public void clickGoMap(View view) {
+
+        // Ir a la sección Mapa
+        Intent intentMap = new Intent (getApplicationContext(), MapActivity.class);
+        startActivity(intentMap);
+
+    }
+
 }

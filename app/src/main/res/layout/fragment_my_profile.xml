@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -48,7 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="JAIMITO46"
+                        android:text="@string/dataUser_nick"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/green_dark"
                         android:textSize="20sp"
@@ -66,7 +67,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="Nombre: "
+                            android:text="@string/dataUser_titleName"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -78,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/tvUser_TitleName"
                             android:layout_marginTop="10dp"
-                            android:text="Jaime Ruiz Pérez"
+                            android:text="@string/dataUser_name"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -91,7 +92,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_below="@id/tvUser_TitleName"
-                            android:text="DNI/ NIF: "
+                            android:text="@string/dataUser_titleDni"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -104,7 +105,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleDni"
                             android:layout_below="@id/tvUser_name"
                             android:layout_marginTop="10dp"
-                            android:text="459632U"
+                            android:text="@string/dataUser_dni"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -117,7 +118,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_below="@id/tvUser_TitleDni"
-                            android:text="Fecha nacimiento: "
+                            android:text="@string/dataUser_titleBirthday"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -130,7 +131,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleBirthday"
                             android:layout_below="@id/tvUser_TitleDni"
                             android:layout_marginTop="10dp"
-                            android:text="12-05-1882"
+                            android:text="@string/dataUser_birthday"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -143,7 +144,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_below="@id/tvUser_TitleBirthday"
-                            android:text="Teléfono: "
+                            android:text="@string/dataUser_titlePhone"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -156,7 +157,7 @@
                             android:layout_toEndOf="@id/tvUser_TitlePhone"
                             android:layout_below="@id/tvUser_birthday"
                             android:layout_marginTop="10dp"
-                            android:text="658451295"
+                            android:text="@string/dataUser_phone"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -169,7 +170,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_below="@id/tvUser_TitlePhone"
-                            android:text="E-mail: "
+                            android:text="@string/dataUser_titleMail"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -182,7 +183,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleMail"
                             android:layout_below="@id/tvUser_phone"
                             android:layout_marginTop="10dp"
-                            android:text="jaime46@hotmail.com"
+                            android:text="@string/dataUser_mail"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -216,7 +217,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="DATOS PERSONALES"
+                        android:text="@string/dataUser_personData"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/green_dark"
                         android:textSize="20sp"
@@ -234,7 +235,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
-                            android:text="Dirección: "
+                            android:text="@string/dataUser_titleAddress"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -246,7 +247,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/tvUser_TitleAdress"
                             android:layout_marginTop="10dp"
-                            android:text="Jaime Ruiz Pérez"
+                            android:text="@string/dataUser_address"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -259,7 +260,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_below="@id/tvUser_TitleAdress"
-                            android:text="Código postal: "
+                            android:text="@string/dataUser_titlePostal"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -272,7 +273,7 @@
                             android:layout_toEndOf="@id/tvUser_TitlePostal"
                             android:layout_below="@id/tvUser_adress"
                             android:layout_marginTop="10dp"
-                            android:text="37001"
+                            android:text="@string/dataUser_postal"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -285,7 +286,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_below="@id/tvUser_TitlePostal"
-                            android:text="Municipio: "
+                            android:text="@string/dataUser_titleMunicipality"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -298,7 +299,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleMunicipality"
                             android:layout_below="@id/tvUser_postal"
                             android:layout_marginTop="10dp"
-                            android:text="Salamanca"
+                            android:text="@string/dataUser_municipality"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -311,7 +312,7 @@
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="10dp"
                             android:layout_below="@id/tvUser_TitleMunicipality"
-                            android:text="Provincia: "
+                            android:text="@string/dataUser_titleProvince"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_icon"
                             android:textSize="16sp"/>
@@ -324,7 +325,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleProvince"
                             android:layout_below="@id/tvUser_municipality"
                             android:layout_marginTop="10dp"
-                            android:text="658451295"
+                            android:text="@string/dataUser_province"
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -344,7 +345,21 @@
                 android:layout_marginVertical="20dp"
                 android:background="@drawable/gradient_green"
                 android:fontFamily="@font/kanit_semibold"
-                android:text="MODIFICAR DATOS DE USUARIO"
+                android:text="@string/dataUser_modifyUser"
+                android:textSize="16sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text" />
+
+            <!-- PARTE 4: CERRAR SESSIÓN DE USUARIO -->
+            <Button
+                android:id="@+id/btnCloseSession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnLogin"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/gradient_red"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="@string/dataUser_closeSession"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
                 android:textColor="@color/white_text" />

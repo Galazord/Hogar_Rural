@@ -21,14 +21,14 @@
             android:id="@+id/tabMyProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mi perfil"
+            android:text="@string/accountUser_myProfile"
             android:icon="@drawable/ic_icon_tab_profile" />
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tabMyHouses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mis casas"
+            android:text="@string/accountUser_myhouses"
             android:icon="@drawable/ic_icon_tab_houses"/>
 
     </com.google.android.material.tabs.TabLayout>
@@ -43,7 +43,7 @@
 
     </androidx.viewpager.widget.ViewPager>
 
-    <!-- Barra de navegación inferior -->
+    <!-- BARRA DE NAVEGACIÓN INFERIOR -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navegation"
         android:layout_width="match_parent"

@@ -50,7 +50,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:paddingTop="10dp"
-                    android:text="Lugar de la casa"
+                    android:text="@string/house_place"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="16sp"
@@ -67,7 +67,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:paddingTop="5dp"
-                    android:text="Alquiler: tipo"
+                    android:text="@string/house_rental"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_sub"
                     android:textSize="14sp"
@@ -82,7 +82,7 @@
                     android:layout_below="@id/DetailRental"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
-                    android:text="nº personas"
+                    android:text="@string/house_nPerson"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_sub"
                     android:textSize="14sp"
@@ -98,7 +98,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="-105dp"
                     android:paddingTop="10dp"
-                    android:text="Precio €"
+                    android:text="@string/house_price"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="18sp"
@@ -115,7 +115,7 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginLeft="10dp"
                     android:paddingTop="5dp"
-                    android:text="nº opiniones"
+                    android:text="@string/house_nOpinion"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_sub"
                     android:textSize="14sp"
@@ -132,7 +132,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
                     android:paddingTop="10dp"
-                    android:text="Valoraciones"
+                    android:text="@string/house_valoration"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="16sp"
@@ -202,7 +202,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="10dp"
                     android:paddingTop="10dp"
-                    android:text="Cómo llegar:"
+                    android:text="@string/house_arrive"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="16sp"
@@ -217,21 +217,18 @@
                     android:id="@+id/btnDisponibility"
                     android:layout_width="370dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/DetailCardLinearLayout"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerHorizontal="true"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
-                    android:text="Consulta precios y disponibilidad"
+                    android:text="@string/house_disponibility"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:textScaleX="1.2"
                     android:textColor="@color/white_text"
-                    android:drawableLeft="@drawable/ic_calendar"
                     android:drawableStart="@drawable/ic_calendar"
-                    android:paddingLeft="30dp"/>
+                    android:paddingStart="30dp"
+                    android:onClick="clickShowDisponibility"/>
 
             </LinearLayout>
 
@@ -248,14 +245,14 @@
 
             <!-- Título 1: CARACTERÍSTICAS DEL ALOJAMIENTO -->
             <TextView
-                android:id="@+id/DetailTitleCaracter"
+                android:id="@+id/DetailTitleFeatures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/DetailMapLinearLayout"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
-                android:text="CARACTERÍSTICAS DEL ALOJAMIENTO"
+                android:text="@string/house_features"
                 android:textColor="@color/green_icon" />
 
             <!-- Texto 1 -->
@@ -270,7 +267,7 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:layout_below="@+id/DetailPanelTitle1"
-                android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500."
+                android:text="@string/loremIpsum"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="14sp"
@@ -281,7 +278,7 @@
                 android:id="@+id/btnShowMore1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ver más"
+                android:text="@string/showMore"
                 android:layout_above="@+id/DetailPanelTitle2"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="65dp"
@@ -291,7 +288,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                android:background="?android:attr/selectableItemBackground"/>
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="clickShowMoreFeatures"/>
 
             <!-- **************** 2º BLOOUE **************** -->
             <!-- Panel Título 2 -->
@@ -313,7 +311,7 @@
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
-                android:text="ACTIVIDADES"
+                android:text="@string/house_activities"
                 android:textColor="@color/green_icon" />
 
             <!-- Texto 2 -->
@@ -328,7 +326,7 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:layout_below="@+id/DetailPanelTitle2"
-                android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500."
+                android:text="@string/loremIpsum"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="14sp" />
@@ -338,7 +336,7 @@
                 android:id="@+id/btnShowMore2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ver más"
+                android:text="@string/showMore"
                 android:layout_above="@+id/DetailPanelTitle3"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="65dp"
@@ -348,7 +346,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                android:background="?android:attr/selectableItemBackground"/>
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="clickShowMoreActivities"/>
 
             <!-- **************** 3º BLOOUE **************** -->
             <!-- Panel Título 3 -->
@@ -370,7 +369,7 @@
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
-                android:text="LUGARES DE INTERÉS"
+                android:text="@string/house_placeInterest"
                 android:textColor="@color/green_icon" />
 
             <!-- Texto 3 -->
@@ -385,7 +384,7 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:layout_below="@+id/DetailPanelTitle3"
-                android:text="Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500."
+                android:text="@string/loremIpsum"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="14sp" />
@@ -395,7 +394,7 @@
                 android:id="@+id/btnShowMore3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ver más"
+                android:text="@string/showMore"
                 android:layout_above="@+id/DetailPanelTitle4"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="65dp"
@@ -405,7 +404,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                android:background="?android:attr/selectableItemBackground"/>
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="clickShowMorePlaceInterest"/>
 
             <!-- **************** 4º BLOOUE **************** -->
             <!-- Panel Título 4 -->
@@ -424,10 +424,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/DetailTextMultiLine3"
-                android:layout_marginLeft="35dp"
+                android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
-                android:text="CARACTERÍSTICAS Y SERVICIOS"
+                android:text="@string/filters_services"
                 android:textColor="@color/green_icon"/>
 
             <!-- Listado de iconos de servicios -->
@@ -442,7 +442,7 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:layout_below="@+id/DetailPanelTitle4"
-                android:text="Aquí se mostrarán los iconos de los servicios"
+                android:text="@string/house_icons"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="14sp" />
@@ -467,7 +467,7 @@
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
-                android:text="COMENTARIOS"
+                android:text="@string/house_comments"
                 android:textColor="@color/green_icon"/>
 
             <!-- Listado de comentarios -->
@@ -482,7 +482,7 @@
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:layout_below="@+id/DetailPanelTitle5"
-                android:text="Aquí se mostrarán los comentarios"
+                android:text="@string/house_showComments"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="14sp" />
@@ -501,7 +501,7 @@
                 android:id="@+id/btnShowMoreComents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mostrar más"
+                android:text="@string/showMore"
                 android:layout_below="@+id/DetailTextMultiLine5"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="65dp"
@@ -511,7 +511,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
-                android:background="?android:attr/selectableItemBackground"/>
+                android:background="?android:attr/selectableItemBackground"
+                android:onClick="clickShowMoreComments"/>
 
             <!-- Barra separadora de: mostrar más -> 2 -->
             <View
@@ -538,7 +539,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="+"
+                    android:text="@string/filters_symbol_plus"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="24sp"
@@ -556,7 +557,7 @@
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
                     android:textSize="15sp"
-                    android:hint="Añadir un comentario..."
+                    android:hint="@string/house_addComment"
                     android:textColorHint="@color/green_hint"
                     android:paddingStart="20dp"/>
 
@@ -565,14 +566,14 @@
                     android:id="@+id/btnOKComent"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
-                    android:text="OK"
+                    android:text="@string/ok"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:textScaleX="1.2"
-                    android:textColor="@color/white_text" />
+                    android:textColor="@color/white_text"
+                    android:onClick="clickSendComment"/>
 
             </LinearLayout>
 
@@ -610,7 +611,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="El propietario"
+                        android:text="@string/house_owner"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/green_dark"
                         android:textSize="20sp"
@@ -623,7 +624,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:text="última actualización: X días"
+                        android:text="@string/house_lastUpdate"
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/green_icon"
                         android:textSize="12sp"/>
@@ -637,7 +638,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/ic_phone"
-                    android:background="?android:attr/selectableItemBackground"/>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:onClick="clickCallOwner"/>
 
                 <ImageButton
                     android:id="@+id/iBtnPropertyMail"
@@ -646,7 +648,8 @@
                     android:layout_marginStart="10dp"
                     android:layout_gravity="center_vertical"
                     app:srcCompat="@drawable/ic_mail"
-                    android:background="?android:attr/selectableItemBackground"/>
+                    android:background="?android:attr/selectableItemBackground"
+                    android:onClick="clickEmailOwner"/>
 
             </LinearLayout>
 
