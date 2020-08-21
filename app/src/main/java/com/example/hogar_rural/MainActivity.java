@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
+
 public class MainActivity extends AppCompatActivity {
 
     // declarar VARIABLES
@@ -68,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
         // VSi el campo está vacío, salta el error
         if (value.isEmpty()) {
 
-            Toast.makeText(getApplicationContext(),"ERROR. Debes rellenar el campo de destino.", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"ERROR. Debes rellenar el campo de destino.", Toast.LENGTH_SHORT).show();
+            UtilMethod.showToast(TypeToast.ERROR, this,"Debes de rellenar el campo de destino");
             soundError.start();
         }
         else{

@@ -25,7 +25,7 @@ public class MyProfileActivity extends AppCompatActivity {
     //--> VARIABLES
     private TextView tv_infoProfile;
     private Button btnLogin, btnRegister;
-    private EditText et_input_user, et_input_passw;
+    private EditText et_input_mail, et_input_passw;
     private FirebaseAuth mAuth;
     private BottomNavigationView bottomNavigationView;
 
@@ -74,7 +74,7 @@ public class MyProfileActivity extends AppCompatActivity {
                 "- Podrás incluir tu mismo una oferta de casa rural y disponer de las funciones de propietario para gestionarlo.\n" +
                 "- Diponer de la sección “Novedades” donde te sugerimos casas rurales en función de tus gustos.\n\n\n" +
                 "Si dispone ya de una cuenta de usuario inicie sesión a continuación:");
-        et_input_user = (EditText) findViewById(R.id.et_input_email);
+        et_input_mail = (EditText) findViewById(R.id.et_input_email);
         et_input_passw = (EditText) findViewById(R.id.et_input_passw);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnRegister);
@@ -116,11 +116,11 @@ public class MyProfileActivity extends AppCompatActivity {
     public void clickBtnLogIn(View view) {
 
         // Recoger el valor escrito en los campos de email y contraseña
-        String email = et_input_user.getText().toString();
+        String email = et_input_mail.getText().toString();
         String pass = et_input_passw.getText().toString();
 
         // Verificar si los campos están vacíos
-        if(TextUtils.isEmpty(et_input_passw.getText()) || TextUtils.isEmpty(et_input_user.getText())){
+        if(TextUtils.isEmpty(et_input_passw.getText()) || TextUtils.isEmpty(et_input_mail.getText())){
             // Error si los campos están vacíos.
             Toast.makeText(getApplicationContext(),"No se ha podido acceder. Comprueba tu email y contraseña.", Toast.LENGTH_LONG).show();
         }else{
@@ -138,5 +138,24 @@ public class MyProfileActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
 
+    }
+
+    // Olvidar contraseña
+    public void clickBtnForgotPassw(View view) {
+
+        if(TextUtils.isEmpty(et_input_mail.getText())){
+            Toast.makeText(this,"Introduce un email", Toast.LENGTH_LONG).show();
+        }else{
+            String email = et_input_mail.getText().toString();
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(),"Se le ha enviado un email para reestrablecer su contraseña", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        }
     }
 }

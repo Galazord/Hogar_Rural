@@ -338,7 +338,7 @@
 
             <!-- PARTE 3: MODIFICAR PERFIL -->
             <Button
-                android:id="@+id/btnLogin"
+                android:id="@+id/btnModifyUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/LLUser_3"
@@ -355,14 +355,15 @@
                 android:id="@+id/btnCloseSession"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btnLogin"
+                android:layout_below="@+id/btnModifyUser"
                 android:layout_marginVertical="5dp"
                 android:background="@drawable/gradient_red"
                 android:fontFamily="@font/kanit_semibold"
                 android:text="@string/dataUser_closeSession"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
-                android:textColor="@color/white_text" />
+                android:textColor="@color/white_text"
+                />
 
         </RelativeLayout>
 

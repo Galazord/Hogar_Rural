@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.hogar_rural.Interface.DbRetrofitApi;
 import com.example.hogar_rural.Model.House;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class ExplorerActivity extends AppCompatActivity {
     private ArrayList<House> modelHouse;
     private DbRetrofitApi dbRetrofitApi;
 
+    private FirebaseAuth mAuth;
     //--> VARIABLES FIJAS
     private final String URL_PHP = "https://hogarruralapp.000webhostapp.com/hogarRural/php/";
 
@@ -62,6 +64,7 @@ public class ExplorerActivity extends AppCompatActivity {
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
+        mAuth = FirebaseAuth.getInstance();
 
         // Inicializar y/o asignar VARIABLES a la parte gráfica
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navegation);
@@ -89,7 +92,13 @@ public class ExplorerActivity extends AppCompatActivity {
                     case R.id.SearchList: // EXPLORAR
                         return true;
                     case R.id.MyProfile: // MI PERFIL
-                        startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+                        //Existe un usuario logueado
+                        if(mAuth.getCurrentUser()!=null){
+                            startActivity(new Intent(getApplicationContext(), UserAccountActivity.class));
+                        }else{
+                            startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+                        }
+
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.OutStanding: // DESTACADOS

@@ -1,14 +1,30 @@
 package com.example.hogar_rural.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.hogar_rural.ExplorerActivity;
+import com.example.hogar_rural.Model.Users;
 import com.example.hogar_rural.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,50 +33,113 @@ import com.example.hogar_rural.R;
  */
 public class MyProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Button btnCloseSession, btnUpdateProfile;
+    private TextView tvUser_name, tvUser_dni, tvUser_birthday, tvUser_phone, tvUser_mail, tvUser_adress, tvUser_postal, tvUser_municipality, tvUser_province;
+
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     public MyProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyProfileFragment newInstance(String param1, String param2) {
+
+    public static MyProfileFragment newInstance() {
         MyProfileFragment fragment = new MyProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_profile, container, false);
+        View view =  inflater.inflate(R.layout.fragment_my_profile, container, false);
+        initComponent(view);
+        loadUserFromDB();
+        return view;
+    }
+
+    private void initComponent(View view){
+
+        // Relaccionar las variables con la parte gráfica
+        tvUser_name = (TextView) view.findViewById(R.id.tvUser_name);
+        tvUser_dni = (TextView) view.findViewById(R.id.tvUser_dni);
+        tvUser_birthday = (TextView) view.findViewById(R.id.tvUser_birthday);
+        tvUser_phone = (TextView) view.findViewById(R.id.tvUser_phone);
+        tvUser_mail = (TextView) view.findViewById(R.id.tvUser_mail);
+        tvUser_adress = (TextView) view.findViewById(R.id.tvUser_adress);
+        tvUser_postal = (TextView) view.findViewById(R.id.tvUser_postal);
+        tvUser_municipality = (TextView) view.findViewById(R.id.tvUser_municipality);
+        tvUser_province = (TextView) view.findViewById(R.id.tvUser_province);
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        btnCloseSession = (Button) view.findViewById(R.id.btnCloseSession);
+        btnCloseSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new AlertDialog.Builder(getContext())
+                        .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
+                        .setTitle("Cerrar Sesión")
+                        .setMessage("Estás seguro de cerrar sesion?")
+                        .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                mAuth.signOut();
+
+                                Intent i = new Intent(getContext(), ExplorerActivity.class);
+                                startActivity(i);
+
+
+                            }
+
+                        })
+                        .setNegativeButton("NO", null)
+                        .show();
+            }
+        });
+        btnUpdateProfile = (Button) view.findViewById(R.id.btnModifyUser);
+        btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    private void loadUserFromDB(){
+        String userId = mAuth.getCurrentUser().getUid();
+        DocumentReference docRef = db.collection("users").document(userId);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
+                        Users user = doc.toObject(Users.class);
+                        tvUser_name.setText(user.getNickname());
+                    }
+                    else{
+                        Log.i("ERROR USER NOT EXIST", task.getResult().toString());
+                    }
+                }else{
+                    Log.i("ERROR GET USER", task.getResult().toString());
+                }
+            }
+        });
     }
 }

@@ -94,6 +94,22 @@
                 android:textColor="@color/white_text"
                 android:onClick="clickBtnLogIn" />
 
+            <!-- Botón olvidar contraseña-->
+            <Button
+                android:id="@+id/btnForgotPassw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/gradient_green"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="¿Has olvidado la contraseña?"
+                android:textSize="16sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text"
+                android:onClick="clickBtnForgotPassw" />
+
             <!-- Línea separadora -->
             <View
                 android:id="@+id/divider_myprofile"

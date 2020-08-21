@@ -336,7 +336,7 @@ public class LoginFormActivity extends AppCompatActivity {
         String municipality = etForm_input_municipality.getText().toString();
         String province = etForm_input_province.getText().toString();
 
-        if(TextUtils.isEmpty(etForm_input_name.getText()) || TextUtils.isEmpty(etForm_input_email.getText()) ){
+        if(TextUtils.isEmpty(etForm_input_name.getText()) || TextUtils.isEmpty(etForm_input_email.getText())){
             // En caso de no rellenar todos los campos obligatorios
             Toast.makeText(getApplicationContext(),"ERROR. Rellenar todos los campos obligatorios (*).", Toast.LENGTH_LONG).show();
         }else{
