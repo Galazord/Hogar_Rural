@@ -187,9 +187,9 @@ public class LoginFormActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             //Aquí guardaríamos el usuario en base de datos.
                             user.setId(mAuth.getCurrentUser().getUid());
-                            registerUserFirestore(user);
 
-                            //saveUserDB(user);
+                              registerUserFirestore(user);
+
                             //UtilMethod.showToast(TypeToast.SUCCESS, getParent().getParent(), getString(R.string.msg_success_register));
                         } else {
 
@@ -213,6 +213,7 @@ public class LoginFormActivity extends AppCompatActivity {
 
     // Dar de alta al usuario en Firebase y guardar sus datos
     private void registerUserFirestore(Users user){
+
         mFirestore.collection("users")
                 .document(user.getId())
                 .set(user)
@@ -220,7 +221,9 @@ public class LoginFormActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getApplicationContext(),"Usuario registrado con éxito", Toast.LENGTH_LONG).show();
-                        // singIn();
+                        Intent intent = new Intent (getApplicationContext(), ExplorerActivity.class);
+                        startActivity(intent);
+                        finish();
 
                     }
                 })
@@ -354,9 +357,7 @@ public class LoginFormActivity extends AppCompatActivity {
                 //uploadImage();
 
                 // Iniciar la vista del perfil de usuario
-                Intent intent = new Intent (getApplicationContext(), MyProfileFragment.class);
-                startActivity(intent);
-                finish();
+
 
             }
             else{
