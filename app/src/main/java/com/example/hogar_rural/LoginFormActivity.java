@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,7 +25,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,8 +33,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.hogar_rural.Fragments.MyProfileFragment;
-import com.example.hogar_rural.Model.Users;
+import com.example.hogar_rural.Model.User;
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,6 +45,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
@@ -55,7 +58,7 @@ import java.util.Map;
 public class LoginFormActivity extends AppCompatActivity {
 
     //--> VARIABLES
-    private TextView etForm_input_birthday;
+    private TextView tvForm_title, tvForm_info, etForm_input_birthday;
     private EditText etForm_input_user, etForm_input_email, etForm_input_passw, etForm_input_passwRepit, etForm_input_name, etForm_input_lastname, etForm_input_dni, etForm_input_phone, etForm_input_address, etForm_input_postal, etForm_input_municipality, etForm_input_province;
     private ImageView ivForm_avatar;
     private CheckBox cbForm_terms, cbForm_advertising;
@@ -66,6 +69,8 @@ public class LoginFormActivity extends AppCompatActivity {
     private final String URL_UPLOAD = "https://hogarruralapp.000webhostapp.com/hogarRural/php/upload.php";
     private String KEY_IMAGE = "photo";
     private String KEY_NAME = "name";
+    private String typeFormUser;
+    private MediaPlayer soundError, soundCorrect;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -74,6 +79,9 @@ public class LoginFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_form);
+
+        // Recibir parámetros
+        typeFormUser = getIntent().getStringExtra("typeFormUser"); // tipo: crear/modificar usuario
 
         // Inicializar componentes
         initComponent();
@@ -94,6 +102,8 @@ public class LoginFormActivity extends AppCompatActivity {
         actionBar.setTitle("Formulario para darse de alta como usuario");
 
         // Relaccionar las variables con la parte gráfica
+        tvForm_title = (TextView) findViewById(R.id.tvForm_title);
+        tvForm_info = (TextView) findViewById(R.id.tvForm_info);
         etForm_input_user = (EditText) findViewById(R.id.etForm_input_user);
         etForm_input_email = (EditText) findViewById(R.id.etForm_input_email);
         etForm_input_passw = (EditText) findViewById(R.id.etForm_input_passw);
@@ -113,10 +123,86 @@ public class LoginFormActivity extends AppCompatActivity {
         btnUpAvatar = (Button) findViewById(R.id.btnUpAvatar);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnBack = (Button) findViewById(R.id.btnBack);
+        soundError = MediaPlayer.create(this, R.raw.sound_error);
+        soundCorrect = MediaPlayer.create(this, R.raw.sound_correct);
 
         // Activar la función de calendario para la fecha de nacimiento
         activateCalendar();
 
+        // Dependiendo si venimos de registrarse o modificar, el nombre del botón de confirmación cambia de nombre
+        if(typeFormUser.equals("create")){
+
+            btnRegister.setText(R.string.formUser_register);
+
+            // Mostrar los checkbox
+            cbForm_terms.setVisibility(View.VISIBLE);
+            cbForm_advertising.setVisibility(View.VISIBLE);
+
+        }
+        // Si viene de registrarse, ir a la clase UserAccountActivity.
+        else if(typeFormUser.equals("modify")){
+
+            // Modificar titular y texto introductorio
+            tvForm_title.setText(R.string.formUser_title_modify);
+            tvForm_info.setText(R.string.formUser_info_modify);
+
+            btnRegister.setText(R.string.formUser_save_changes);
+
+            // Ocultar los checkbox
+            cbForm_terms.setVisibility(View.GONE);
+            cbForm_advertising.setVisibility(View.GONE);
+
+            // mmostrar en los campos los datos del usuario logado actualmente
+            showDataUser();
+
+        }
+        else {
+            UtilMethod.showToast(TypeToast.ERROR, this,"ERROR. Problemas con la variable typeFormUser.");
+            soundError.start();
+        }
+
+    }
+
+    // mmostrar en los campos los datos del usuario logado actualmente
+    private void showDataUser() {
+
+        // Recoger el ID del usuario logado
+        String userId = mAuth.getCurrentUser().getUid();
+        DocumentReference docRef = mFirestore.collection("users").document(userId);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
+
+                        // Recoger los datos del usuario
+                        User user = doc.toObject(User.class);
+                        // mostrar los datos del usuario en los campos correspondientes
+                        etForm_input_user.setText(user.getNickname());
+                        etForm_input_email.setText(user.getEmail());
+                        etForm_input_passw.setText(user.getPassword());
+                        etForm_input_passwRepit.setText(user.getPassword());
+                        etForm_input_name.setText(user.getName());
+                        etForm_input_lastname.setText(user.getLastname());
+                        etForm_input_dni.setText(user.getDni());
+                        etForm_input_birthday.setText(user.getBirthday());
+                        etForm_input_phone.setText(user.getPhone());
+                        etForm_input_address.setText(user.getAddress());
+                        etForm_input_postal.setText(user.getPostal());
+                        etForm_input_municipality.setText(user.getMunicipality());
+                        etForm_input_province.setText(user.getProvince());
+
+                    }
+                    else{
+                        Log.i("ERROR USER NOT EXIST", task.getResult().toString());
+                    }
+                }else{
+                    Log.i("ERROR GET USER", task.getResult().toString());
+                }
+            }
+        });
     }
 
     // Activar el efecto para mostrar un calendario e introducir una fecha
@@ -173,7 +259,7 @@ public class LoginFormActivity extends AppCompatActivity {
     }
 
     // Realizar el registro de usuario
-    private void registerUser(final Users user){
+    private void registerUser(final User user){
 
         // Recoger el dato del email correcto del usuario
         final String emailUser = user.getEmail();
@@ -190,20 +276,23 @@ public class LoginFormActivity extends AppCompatActivity {
 
                               registerUserFirestore(user);
 
-                            //UtilMethod.showToast(TypeToast.SUCCESS, getParent().getParent(), getString(R.string.msg_success_register));
                         } else {
 
                             // Si la señal falla mostrará el mensaje de error correspondiente
                             try {
                                 throw task.getException();
                             } catch(FirebaseAuthWeakPasswordException e) {
-                                Toast.makeText(getApplicationContext(),"ERROR. La contraseña es incorrecta", Toast.LENGTH_LONG).show();
+                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. La contraseña es incorrecta");
+                                soundError.start();
                             } catch(FirebaseAuthInvalidCredentialsException e) {
-                                Toast.makeText(getApplicationContext(),"ERROR. El e-mail es incorrecto", Toast.LENGTH_LONG).show();
+                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. El e-mail es incorrecto");
+                                soundError.start();
                             } catch(FirebaseAuthUserCollisionException e) {
-                                Toast.makeText(getApplicationContext(),"ERROR. El usuario introducido ya existe", Toast.LENGTH_LONG).show();
+                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. El usuario introducido ya existe");
+                                soundError.start();
                             } catch(Exception e) {
-                                Toast.makeText(getApplicationContext(),"ERROR. Se ha producido un fallo inesperado.", Toast.LENGTH_LONG).show();
+                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. Se ha producido un fallo inesperado.");
+                                soundError.start();
                             }
                         }
 
@@ -212,7 +301,7 @@ public class LoginFormActivity extends AppCompatActivity {
     }
 
     // Dar de alta al usuario en Firebase y guardar sus datos
-    private void registerUserFirestore(Users user){
+    private void registerUserFirestore(User user){
 
         mFirestore.collection("users")
                 .document(user.getId())
@@ -220,7 +309,10 @@ public class LoginFormActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(),"Usuario registrado con éxito", Toast.LENGTH_LONG).show();
+
+                        UtilMethod.showToast(TypeToast.SUCCESS, LoginFormActivity.this,"Usuario registrado con éxito");
+                        soundCorrect.start();
+
                         Intent intent = new Intent (getApplicationContext(), ExplorerActivity.class);
                         startActivity(intent);
                         finish();
@@ -230,7 +322,8 @@ public class LoginFormActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),"Error general", Toast.LENGTH_LONG).show();
+                        UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR GENERAL.");
+                        soundError.start();
                         Log.e("ERROR FIRESTORE USER: ", e.getMessage());
                     }
                 });
@@ -263,13 +356,15 @@ public class LoginFormActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 loading.dismiss();
-                Toast.makeText(LoginFormActivity.this, response, Toast.LENGTH_SHORT).show();
+                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: " + response);
+                soundError.start();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 loading.dismiss();
-                Toast.makeText(LoginFormActivity.this, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: " + error.getMessage().toString());
+                soundError.start();
             }
         }){
             @Override
@@ -316,7 +411,6 @@ public class LoginFormActivity extends AppCompatActivity {
     //--> CLICK BOTONES
     // Buscar y selecionar imagen de usuario
     public void clickBtnUploadImage(View view) {
-
         showFileChooser();
     }
 
@@ -339,16 +433,17 @@ public class LoginFormActivity extends AppCompatActivity {
         String municipality = etForm_input_municipality.getText().toString();
         String province = etForm_input_province.getText().toString();
 
-        if(TextUtils.isEmpty(etForm_input_name.getText()) || TextUtils.isEmpty(etForm_input_email.getText())){
+        if(TextUtils.isEmpty(etForm_input_user.getText()) || TextUtils.isEmpty(etForm_input_email.getText()) || TextUtils.isEmpty(etForm_input_passw.getText()) || TextUtils.isEmpty(etForm_input_passwRepit.getText()) || TextUtils.isEmpty(etForm_input_name.getText()) || TextUtils.isEmpty(etForm_input_lastname.getText()) || TextUtils.isEmpty(etForm_input_dni.getText()) || TextUtils.isEmpty(etForm_input_birthday.getText()) || TextUtils.isEmpty(etForm_input_phone.getText())){
             // En caso de no rellenar todos los campos obligatorios
-            Toast.makeText(getApplicationContext(),"ERROR. Rellenar todos los campos obligatorios (*).", Toast.LENGTH_LONG).show();
+            UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. Rellenar todos los campos obligatorios (*).");
+            soundError.start();
         }else{
 
             // Comprobar que la contraseña y la repeticción de la contraseña son iguales
             if(password.equals(repitPassword)){
 
                 // Guardar todos los datos del usuario registrado
-                Users user = new Users(email, nickname, password, name, lastname, "imagen.png", dni, birthday, phone, address, postal, municipality, province);
+                User user = new User(email, nickname, password, name, lastname, "imagen.png", dni, birthday, phone, address, postal, municipality, province);
 
                 // Registrar los datos del usuario
                 registerUser(user);
@@ -356,12 +451,10 @@ public class LoginFormActivity extends AppCompatActivity {
                 // Subir la foto de avatar de usuario
                 //uploadImage();
 
-                // Iniciar la vista del perfil de usuario
-
-
             }
             else{
-                Toast.makeText(getApplicationContext(),"ERROR. Las dos contraseñas introducidas no son iguales.", Toast.LENGTH_LONG).show();
+                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. Las dos contraseñas introducidas no son iguales.");
+                soundError.start();
             }
 
         }
@@ -369,13 +462,28 @@ public class LoginFormActivity extends AppCompatActivity {
     }
 
     //--> CLICK BOTONES
-    // Volver a la vista de inicio de sesión
+    // Volver a la vista anterior
     public void clickBtnBackRegister(View view) {
 
-        // Ir a la clase MyProfileActivity.
-        Intent intent = new Intent (getApplicationContext(), MyProfileActivity.class);
-        startActivity(intent);
-        finish();
+        // Si viene de registrarse, ir a la clase MyProfileActivity.
+        if(typeFormUser.equals("create")){
+
+            Intent intent = new Intent (getApplicationContext(), MyProfileActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
+        // Si viene de registrarse, ir a la clase UserAccountActivity.
+        else if(typeFormUser.equals("modify")){
+
+            Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. No se ha podido volver atrás");
+            soundError.start();
+        }
 
     }
 }

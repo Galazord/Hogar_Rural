@@ -6,14 +6,17 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
 
 import java.util.Calendar;
 
@@ -25,6 +28,7 @@ public class FiltersActivity extends AppCompatActivity {
     private ToggleButton tbFilter_complete, tbFilter_room;
     private SeekBar sbFilter_priceSelector;
     private DatePickerDialog.OnDateSetListener setListener;
+    private MediaPlayer soundError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class FiltersActivity extends AppCompatActivity {
         tbFilter_complete = (ToggleButton) findViewById(R.id.tbFilter_complete);
         tbFilter_room = (ToggleButton) findViewById(R.id.tbFilter_room);
         sbFilter_priceSelector = (SeekBar) findViewById(R.id.sbFilter_priceSelector);
+        soundError = MediaPlayer.create(this, R.raw.sound_error);
 
         // Mostrar calendario para la fecha de llegada
         activateCalendar(tvFilter_input_entrance);
@@ -131,7 +136,7 @@ public class FiltersActivity extends AppCompatActivity {
 
     // Acción ToggleButtom: Habitaciones íntegras
     public void OnDefaultToggleClickComplete(View view) {
-        Toast.makeText(this, "OnDefaultToggleClickComplete", Toast.LENGTH_SHORT).show();
+        UtilMethod.showToast(TypeToast.SUCCESS, this,"OnDefaultToggleClickComplete");
     }
 
 

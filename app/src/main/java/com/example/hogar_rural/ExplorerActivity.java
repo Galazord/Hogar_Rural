@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +16,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.hogar_rural.Interface.DbRetrofitApi;
 import com.example.hogar_rural.Model.House;
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -43,6 +45,7 @@ public class ExplorerActivity extends AppCompatActivity {
     private Adapter adapter;
     private ArrayList<House> modelHouse;
     private DbRetrofitApi dbRetrofitApi;
+    private MediaPlayer soundError;
 
     private FirebaseAuth mAuth;
     //--> VARIABLES FIJAS
@@ -72,6 +75,7 @@ public class ExplorerActivity extends AppCompatActivity {
         modelHouse = new ArrayList<>();
         btnFilters = (Button) findViewById(R.id.btnFilters);
         btnMap = (Button) findViewById(R.id.btnMap);
+        soundError = MediaPlayer.create(this, R.raw.sound_error);
 
         // RecyclerView: instanciar Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -139,7 +143,8 @@ public class ExplorerActivity extends AppCompatActivity {
             public void onResponse(Call<List<House>> call, Response<List<House>> response) {
                 // Cuando la conexión NO fue exitosa
                 if(!response.isSuccessful()){
-                    Toast.makeText(ExplorerActivity.this, "showListHouses: Error código: " + response.code(), Toast.LENGTH_SHORT).show();
+                    UtilMethod.showToast(TypeToast.ERROR, ExplorerActivity.this,"showListHouses: Error código: " + response.code());
+                    soundError.start();
                 }
 
                 // Recoger los campos de la base de datos e incluirlos en el Arraylist (aqui se guardan los datos de cada casa)
@@ -163,7 +168,8 @@ public class ExplorerActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<House>> call, Throwable t) {
                 // Cuando la conexión falla por cualquier motivo
-                Toast.makeText(ExplorerActivity.this, "showListHouses: Fallo en la conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                UtilMethod.showToast(TypeToast.ERROR, ExplorerActivity.this,"showListHouses: Fallo en la conexión: " + t.getMessage());
+                soundError.start();
             }
         });
 

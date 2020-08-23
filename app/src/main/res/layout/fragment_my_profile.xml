@@ -49,7 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="@string/dataUser_nick"
+                        android:text=""
                         android:fontFamily="@font/roboto_medium"
                         android:textColor="@color/green_dark"
                         android:textSize="20sp"
@@ -79,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/tvUser_TitleName"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_name"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -105,7 +105,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleDni"
                             android:layout_below="@id/tvUser_name"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_dni"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -131,7 +131,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleBirthday"
                             android:layout_below="@id/tvUser_TitleDni"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_birthday"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -157,7 +157,7 @@
                             android:layout_toEndOf="@id/tvUser_TitlePhone"
                             android:layout_below="@id/tvUser_birthday"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_phone"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -183,7 +183,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleMail"
                             android:layout_below="@id/tvUser_phone"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_mail"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -247,7 +247,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/tvUser_TitleAdress"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_address"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -273,7 +273,7 @@
                             android:layout_toEndOf="@id/tvUser_TitlePostal"
                             android:layout_below="@id/tvUser_adress"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_postal"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -299,7 +299,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleMunicipality"
                             android:layout_below="@id/tvUser_postal"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_municipality"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>
@@ -325,7 +325,7 @@
                             android:layout_toEndOf="@id/tvUser_TitleProvince"
                             android:layout_below="@id/tvUser_municipality"
                             android:layout_marginTop="10dp"
-                            android:text="@string/dataUser_province"
+                            android:text=""
                             android:fontFamily="@font/roboto_medium"
                             android:textColor="@color/green_dark"
                             android:textSize="16sp"/>

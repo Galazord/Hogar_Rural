@@ -1,11 +1,11 @@
 package com.example.hogar_rural.Model;
 
-public class Users {
+public class User {
 
     // VARIABLES
     private String id, email, nickname, password, name, lastname, image, dni, birthday, phone, address, postal, municipality, province;
 
-    public Users(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province) {
+    public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
@@ -22,7 +22,7 @@ public class Users {
     }
 
     // CONTRUCTOR
-    public Users() {}
+    public User() {}
 
     // GET & SET
     public String getId() {

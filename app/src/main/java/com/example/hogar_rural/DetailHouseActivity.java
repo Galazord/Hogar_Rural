@@ -4,15 +4,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.hogar_rural.Interface.DbRetrofitApi;
 import com.example.hogar_rural.Model.HouseDetail;
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
 
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4;
     private ImageView CardDetailImage;
     private DbRetrofitApi dbRetrofitApi;
+    private MediaPlayer soundError;
 
     //--> VARIABLES FIJAS
     private final String URL_PHP = "https://hogarruralapp.000webhostapp.com/hogarRural/php/";
@@ -58,11 +61,11 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine3 = (TextView) findViewById(R.id.DetailTextMultiLine3);
         DetailTextMultiLine4 = (TextView) findViewById(R.id.DetailTextMultiLine4);
         CardDetailImage = (ImageView) findViewById(R.id.CardDetailImage);
+        soundError = MediaPlayer.create(this, R.raw.sound_error);
 
         // Recibir los parámetros del intent procedente de Adapter.java
         Intent i = getIntent();
         String idHouse = i.getStringExtra("idHouse");
-        //Toast.makeText(this, "ID: " + idHouse, Toast.LENGTH_SHORT).show();
 
         // RecyclerView: instanciar Retrofit
         Retrofit retrofit = new Retrofit.Builder()
@@ -84,8 +87,8 @@ public class DetailHouseActivity extends AppCompatActivity {
             public void onResponse(Call<List<HouseDetail>> call, Response<List<HouseDetail>> response) {
 
                 if(!response.isSuccessful()){
-                    Toast.makeText(DetailHouseActivity.this, "Error de código: DetailHouseActivity: " + response.code(), Toast.LENGTH_SHORT).show();
-
+                    UtilMethod.showToast(TypeToast.ERROR, DetailHouseActivity.this,"Error de código: DetailHouseActivity: " + response.code());
+                    soundError.start();
                 }
 
                 List<HouseDetail> houseDetails = response.body();
@@ -117,8 +120,8 @@ public class DetailHouseActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<HouseDetail>> call, Throwable t) {
 
-                Toast.makeText(DetailHouseActivity.this, "Fallo en la conexión: DetailHouseActivity: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-
+                UtilMethod.showToast(TypeToast.ERROR, DetailHouseActivity.this,"Fallo en la conexión: DetailHouseActivity: " + t.getMessage());
+                soundError.start();
             }
         });
     }

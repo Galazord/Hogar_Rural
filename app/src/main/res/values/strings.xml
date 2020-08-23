@@ -91,14 +91,16 @@
     <string name="customExplore_namePlace">Lugar de la casa</string>
 
     <!-- MI PERFIL -->
-    <string name="myProfile_info">Mensaje informativo</string>
+    <string name="myProfile_info">Si deseas iniciarte como usuario tendrás las siguientes ventajas:\n\n- Tus datos, lugares favoritos y otros marcadores se guardarán para recuperarlos en caso de cambiar de dispositivo.\n- Podrás incluir tu mismo una oferta de casa rural y disponer de las funciones de propietario para gestionarlo.\n- Diponer de la sección “Novedades” donde te sugerimos casas rurales en función de tus gustos.\n\n\nSi dispone ya de una cuenta de usuario inicie sesión a continuación:</string>
     <string name="myProfile_startSession">INICIAR SESIÓN</string>
     <string name="myProfile_info2">En cambio para darse de alta como usuario pulse aquí y rellene el formulario:</string>
     <string name="myProfile_updateUser">DARSE DE ALTA COMO USUARIO</string>
 
     <!-- FORMULARIO ALTA USUARIO -->
     <string name="formUser_title">DARSE DE ALTA COMO USUARIO</string>
+    <string name="formUser_title_modify">MODIFICAR DATOS DE USUARIO</string>
     <string name="formUser_info">Rellena el siguiente formulario, acepta los terminos de uso y pulsa el boton de registrarse.\n\nLos campos que continen el signo * son obligatorios.</string>
+    <string name="formUser_info_modify">Modifica los campos que deseas cambiar y acepta los cambios al final.\n\nLos campos que continen el signo * son obligatorios.</string>
     <string name="formUser_nick">* Introduce el nombre de usuario</string>
     <string name="formUser_mail">* Introduce el email de usuario</string>
     <string name="formUser_passw">* Introduce la contraseña</string>
@@ -117,28 +119,19 @@
     <string name="formUser_terms">Aceptar los términos y condiciones de uso</string>
     <string name="formUser_advertising">Deseo recibir ofertas e información por email</string>
     <string name="formUser_register">REGISTRARSE</string>
+    <string name="formUser_save_changes">GUARDAR CAMBIOS</string>
 
     <!-- DATOS DEL USUARIO -->
-    <string name="dataUser_nick">JAIMITO46</string>
     <string name="dataUser_titleName">Nombre: </string>
-    <string name="dataUser_name">Jaime Ruiz Pérez</string>
     <string name="dataUser_titleDni">DNI/ NIF: </string>
-    <string name="dataUser_dni">459632U</string>
     <string name="dataUser_titleBirthday">Fecha nacimiento: </string>
-    <string name="dataUser_birthday">12-05-1882</string>
     <string name="dataUser_titlePhone">Teléfono: </string>
-    <string name="dataUser_phone">658451295</string>
     <string name="dataUser_titleMail">E-mail: </string>
-    <string name="dataUser_mail">jaime46@hotmail.com</string>
     <string name="dataUser_personData">DATOS PERSONALES</string>
     <string name="dataUser_titleAddress">Dirección: </string>
-    <string name="dataUser_address">Plaza sin Nombre 1</string>
     <string name="dataUser_titlePostal">Código postal: </string>
-    <string name="dataUser_postal">37001</string>
     <string name="dataUser_titleMunicipality">Municipio: </string>
-    <string name="dataUser_municipality">Salamanca</string>
     <string name="dataUser_titleProvince">Provincia: </string>
-    <string name="dataUser_province">Castilla y León</string>
     <string name="dataUser_modifyUser">MODIFICAR DATOS DE USUARIO</string>
     <string name="dataUser_closeSession">CERRAR SESIÓN</string>
 

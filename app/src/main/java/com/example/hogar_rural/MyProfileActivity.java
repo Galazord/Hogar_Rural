@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -12,8 +13,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,6 +30,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private EditText et_input_mail, et_input_passw;
     private FirebaseAuth mAuth;
     private BottomNavigationView bottomNavigationView;
+    private MediaPlayer soundError, soundCorrect;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -54,7 +57,7 @@ public class MyProfileActivity extends AppCompatActivity {
                             finish();
                         } else {
                             // Error de acceso a la cuenta de usuario.
-                            Toast.makeText(getApplicationContext(),"ERROR. No se ha podido acceder.", Toast.LENGTH_LONG).show();
+                            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder.");
 
                         }
 
@@ -69,16 +72,13 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // Relacionar variables con la parte gráfica
         tv_infoProfile = (TextView) findViewById(R.id.tv_infoProfile);
-        tv_infoProfile.setText("Si deseas iniciarte como usuario tendrás las siguientes ventajas:\n\n" +
-                "- Tus datos, lugares favoritos y otros marcadores se guardarán para recuperarlos en caso de cambiar de dispositivo.\n" +
-                "- Podrás incluir tu mismo una oferta de casa rural y disponer de las funciones de propietario para gestionarlo.\n" +
-                "- Diponer de la sección “Novedades” donde te sugerimos casas rurales en función de tus gustos.\n\n\n" +
-                "Si dispone ya de una cuenta de usuario inicie sesión a continuación:");
         et_input_mail = (EditText) findViewById(R.id.et_input_email);
         et_input_passw = (EditText) findViewById(R.id.et_input_passw);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         bottomNavigationView = findViewById(R.id.bottom_navegation);
+        soundError = MediaPlayer.create(this, R.raw.sound_error);
+        soundCorrect = MediaPlayer.create(this, R.raw.sound_correct);
 
         //--> BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual
@@ -122,7 +122,8 @@ public class MyProfileActivity extends AppCompatActivity {
         // Verificar si los campos están vacíos
         if(TextUtils.isEmpty(et_input_passw.getText()) || TextUtils.isEmpty(et_input_mail.getText())){
             // Error si los campos están vacíos.
-            Toast.makeText(getApplicationContext(),"No se ha podido acceder. Comprueba tu email y contraseña.", Toast.LENGTH_LONG).show();
+            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder. Comprueba tu email y contraseña.");
+            soundError.start();
         }else{
 
             // Comprobar si el usuario existe en la base de datos
@@ -135,6 +136,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // Ir a la clase LoginFormActivity.
         Intent intent = new Intent (getApplicationContext(), LoginFormActivity.class);
+        intent.putExtra("typeFormUser", "create");
         startActivity(intent);
         finish();
 
@@ -144,7 +146,8 @@ public class MyProfileActivity extends AppCompatActivity {
     public void clickBtnForgotPassw(View view) {
 
         if(TextUtils.isEmpty(et_input_mail.getText())){
-            Toast.makeText(this,"Introduce un email", Toast.LENGTH_LONG).show();
+            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. Introduce un email.");
+            soundError.start();
         }else{
             String email = et_input_mail.getText().toString();
             mAuth.sendPasswordResetEmail(email)
@@ -152,7 +155,8 @@ public class MyProfileActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(),"Se le ha enviado un email para reestrablecer su contraseña", Toast.LENGTH_LONG).show();
+                                UtilMethod.showToast(TypeToast.SUCCESS, MyProfileActivity.this,"Se le ha enviado un email para reestrablecer su contraseña");
+                                soundCorrect.start();
                             }
                         }
                     });

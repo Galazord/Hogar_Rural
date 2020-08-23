@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
@@ -55,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         // Validar que haya información introducida en el campo destino y sea correcta
         if(validData(valueDestiny)){
 
-            //Toast.makeText(getApplicationContext(),"CORRECTO", Toast.LENGTH_SHORT).show();
-
             // Acceder al menu de la app
             Intent intentExplorer = new Intent (getApplicationContext(), ExplorerActivity.class);
             startActivity(intentExplorer);
@@ -71,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
         // VSi el campo está vacío, salta el error
         if (value.isEmpty()) {
 
-            //Toast.makeText(getApplicationContext(),"ERROR. Debes rellenar el campo de destino.", Toast.LENGTH_SHORT).show();
-            UtilMethod.showToast(TypeToast.ERROR, this,"Debes de rellenar el campo de destino");
+            // Toast Personalizado
+            UtilMethod.showToast(TypeToast.ERROR, this,"ERROR. Debes rellenar el campo de destino.");
             soundError.start();
         }
         else{

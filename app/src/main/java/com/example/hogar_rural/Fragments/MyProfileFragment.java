@@ -13,11 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.hogar_rural.ExplorerActivity;
-import com.example.hogar_rural.Model.Users;
+import com.example.hogar_rural.LoginFormActivity;
+import com.example.hogar_rural.Model.User;
 import com.example.hogar_rural.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,24 +27,23 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ ---------- MIS DATOS DE PERFIL ----------
+ Aquí se muestra los datos del usuario que se ha logado (si no lo está se mostrará la vista MyProfile para loguearse o registrarse).
+ En esta vista de pueden modificar los datos y cerrar sesión del usuario actual.
  */
+
 public class MyProfileFragment extends Fragment {
 
-
+    //--> VARIABLES
     private Button btnCloseSession, btnUpdateProfile;
-    private TextView tvUser_name, tvUser_dni, tvUser_birthday, tvUser_phone, tvUser_mail, tvUser_adress, tvUser_postal, tvUser_municipality, tvUser_province;
-
+    private TextView tvUser_nick, tvUser_name, tvUser_dni, tvUser_birthday, tvUser_phone, tvUser_mail, tvUser_adress, tvUser_postal, tvUser_municipality, tvUser_province;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
 
     public MyProfileFragment() {
-        // Required empty public constructor
-    }
 
+    }
 
     public static MyProfileFragment newInstance() {
         MyProfileFragment fragment = new MyProfileFragment();
@@ -64,14 +63,21 @@ public class MyProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_my_profile, container, false);
+
+        // Iniciar componentes
         initComponent(view);
+
+        // Cargar los datos del usuario logado
         loadUserFromDB();
+
         return view;
     }
 
+    //--> MÉTODOS
     private void initComponent(View view){
 
         // Relaccionar las variables con la parte gráfica
+        tvUser_nick = (TextView) view.findViewById(R.id.tvUser_nick);
         tvUser_name = (TextView) view.findViewById(R.id.tvUser_name);
         tvUser_dni = (TextView) view.findViewById(R.id.tvUser_dni);
         tvUser_birthday = (TextView) view.findViewById(R.id.tvUser_birthday);
@@ -85,6 +91,22 @@ public class MyProfileFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        // Modificar los datos de usuario
+        btnUpdateProfile = (Button) view.findViewById(R.id.btnModifyUser);
+        btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Ir a la vista de activity_login_form desde la opción de modificar
+                Intent i = new Intent(getContext(), LoginFormActivity.class);
+                // Mandamos un parámetro (extra) para indicar que venimos del botón modificar usuario
+                i.putExtra("typeFormUser", "modify");
+                startActivity(i);
+
+            }
+        });
+
+        // Cerrar sesión de usuario y volver al Explorar
         btnCloseSession = (Button) view.findViewById(R.id.btnCloseSession);
         btnCloseSession.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,11 +120,11 @@ public class MyProfileFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                mAuth.signOut();
+                                mAuth.signOut(); // Dar la orden en firebase de cerrar sesión
 
+                                // Ir a la vista del explorador de casas
                                 Intent i = new Intent(getContext(), ExplorerActivity.class);
                                 startActivity(i);
-
 
                             }
 
@@ -111,16 +133,13 @@ public class MyProfileFragment extends Fragment {
                         .show();
             }
         });
-        btnUpdateProfile = (Button) view.findViewById(R.id.btnModifyUser);
-        btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
     }
 
+    // Cargar y mostrar los datos del usuario logado en ese momento
     private void loadUserFromDB(){
+
+        // Recoger el ID del usuario logado
         String userId = mAuth.getCurrentUser().getUid();
         DocumentReference docRef = db.collection("users").document(userId);
 
@@ -130,8 +149,21 @@ public class MyProfileFragment extends Fragment {
                 if(task.isSuccessful()){
                 DocumentSnapshot doc = task.getResult();
                     if(doc.exists()){
-                        Users user = doc.toObject(Users.class);
-                        tvUser_name.setText(user.getNickname());
+
+                        // Recoger los datos del usuario
+                        User user = doc.toObject(User.class);
+                        // mostrar los datos del usuario en los campos correspondientes
+                        tvUser_nick.setText(user.getNickname());
+                        tvUser_name.setText(user.getName());
+                        tvUser_dni.setText(user.getDni());
+                        tvUser_birthday.setText(user.getBirthday());
+                        tvUser_phone.setText(user.getPhone());
+                        tvUser_mail.setText(user.getEmail());
+                        tvUser_adress.setText(user.getAddress());
+                        tvUser_postal.setText(user.getPostal());
+                        tvUser_municipality.setText(user.getMunicipality());
+                        tvUser_province.setText(user.getProvince());
+
                     }
                     else{
                         Log.i("ERROR USER NOT EXIST", task.getResult().toString());

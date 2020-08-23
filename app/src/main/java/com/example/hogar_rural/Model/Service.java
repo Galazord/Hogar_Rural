@@ -1,12 +1,12 @@
 package com.example.hogar_rural.Model;
 
-public class Services {
+public class Service {
 
     // VARIABLES
     private String id, name, icon;
 
     // CONTRUCTOR
-    public Services() {}
+    public Service() {}
 
     // GET & SET
     public String getId() {

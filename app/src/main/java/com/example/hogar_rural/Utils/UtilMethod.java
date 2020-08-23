@@ -23,16 +23,20 @@ public class UtilMethod {
 
         switch (typeToast){
             case SUCCESS:
-                ((ImageView) custom_view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_done);
-                ((CardView) custom_view.findViewById(R.id.parent_view)).setCardBackgroundColor(context.getResources().getColor(R.color.green_500));
+                ((ImageView) custom_view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_icon_toast);
+                ((CardView) custom_view.findViewById(R.id.parent_view)).setCardBackgroundColor(context.getResources().getColor(R.color.toast_green));
                 break;
             case ERROR:
-                ((ImageView) custom_view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_close);
-                ((CardView) custom_view.findViewById(R.id.parent_view)).setCardBackgroundColor(context.getResources().getColor(R.color.red_600));
+                ((ImageView) custom_view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_icon_toast);
+                ((CardView) custom_view.findViewById(R.id.parent_view)).setCardBackgroundColor(context.getResources().getColor(R.color.toast_red));
                 break;
             case INFO:
-                ((ImageView) custom_view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_error_outline);
-                ((CardView) custom_view.findViewById(R.id.parent_view)).setCardBackgroundColor(context.getResources().getColor(R.color.blue_500));
+                ((ImageView) custom_view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_icon_toast);
+                ((CardView) custom_view.findViewById(R.id.parent_view)).setCardBackgroundColor(context.getResources().getColor(R.color.toast_blue));
+                break;
+            case WARNNING:
+                ((ImageView) custom_view.findViewById(R.id.icon)).setImageResource(R.drawable.ic_icon_toast);
+                ((CardView) custom_view.findViewById(R.id.parent_view)).setCardBackgroundColor(context.getResources().getColor(R.color.toast_yellow));
                 break;
             default:
                 break;

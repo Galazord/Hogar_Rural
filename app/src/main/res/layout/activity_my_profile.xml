@@ -100,14 +100,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/gradient_green"
+                android:background="?android:attr/selectableItemBackground"
                 android:fontFamily="@font/kanit_semibold"
                 android:text="¿Has olvidado la contraseña?"
+                android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textScaleX="1.2"
-                android:textColor="@color/white_text"
+                android:textColor="@color/link_url"
                 android:onClick="clickBtnForgotPassw" />
 
             <!-- Línea separadora -->

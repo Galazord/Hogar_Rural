@@ -2,7 +2,7 @@ package com.example.hogar_rural.Model;
 
 import java.sql.Timestamp;
 
-public class Homes {
+public class Home {
 
     // VARIABLES
     private String id, owner, name, address, postal, municipality, province, description, activities, interesting_places, services, images;
@@ -10,7 +10,7 @@ public class Homes {
     private Timestamp creation_date, update_date;
 
     // CONTRUCTOR
-    public Homes() {}
+    public Home() {}
 
     // GET & SET
     public String getId() {
