@@ -70,7 +70,7 @@
 
                     <!-- Botón de seleccionar imagen-->
                     <Button
-                        android:id="@+id/btnUpAvatar"
+                        android:id="@+id/btnSelectGaleryImage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -130,6 +130,7 @@
                 android:layout_below="@+id/tvHouse_description_3">
 
                 <RadioButton
+                    android:id="@+id/rbHouseUp_complete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
@@ -137,6 +138,7 @@
                     android:onClick="CheckButtonTypeHouse"/>
 
                 <RadioButton
+                    android:id="@+id/rbHouseUp_rooms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -224,63 +226,42 @@
                 android:textSize="16sp" />
 
             <!-- Controlador del precio en euros/día de la estancia -->
-            <LinearLayout
-                android:id="@+id/LLHouse_4"
+            <TextView
+                android:id="@+id/tvHouseUp_priceIndicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="30dp"
-                android:gravity="center_horizontal"
                 android:layout_below="@id/tvCounter_price"
-                android:orientation="horizontal">
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:text="@string/filters_euros_person"
+                android:fontFamily="@font/roboto_medium"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:textColor="@color/green_icon" />
 
-                <!-- Botón disminuir precio -->
-                <Button
-                    android:id="@+id/btnPrice_less"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/gradient_green"
-                    android:fontFamily="@font/kanit_semibold"
-                    android:text="@string/filters_symbol_less"
-                    android:textAllCaps="false"
-                    android:textSize="40sp"
-                    android:textScaleX="1.2"
-                    android:textColor="@color/white_text" />
-
-                <!-- Contador del precio -->
-                <TextView
-                    android:id="@+id/tvPrice_capMax"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:text="@string/houseUp_eurosDay"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/green_dark"
-                    android:textSize="20sp"/>
-
-                <!-- Botón incrementar precio -->
-                <Button
-                    android:id="@+id/btnPrice_plus"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/gradient_green"
-                    android:fontFamily="@font/kanit_semibold"
-                    android:text="@string/filters_symbol_plus"
-                    android:textAllCaps="false"
-                    android:textSize="40sp"
-                    android:textScaleX="1.2"
-                    android:textColor="@color/white_text" />
-
-            </LinearLayout>
+            <!-- SeekBar: barra selectora de precios -->
+            <SeekBar
+                android:id="@+id/sbHouseUp_priceSelector"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_below="@id/tvHouseUp_priceIndicator"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="20dp"
+                android:layout_weight="1"
+                android:indeterminate="false"
+                android:max="100"
+                android:min="0"
+                android:progress="50"
+                android:progressDrawable="@drawable/track_progress_bar"
+                android:thumb="@drawable/thumb_progress_bar" />
 
             <!-- Introducir la dirección postal -->
             <EditText
                 android:id="@+id/etHouse_input_address"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/LLHouse_4"
+                android:layout_below="@id/sbHouseUp_priceSelector"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
                 android:textAlignment="center"
@@ -370,7 +351,8 @@
                 android:textScaleX="1.2"
                 android:textColor="@color/white_text"
                 android:drawableStart="@drawable/ic_calendar"
-                android:paddingStart="30dp"/>
+                android:paddingStart="30dp"
+                android:onClick="clickSelectDateAvailable"/>
 
             <!-- Texto: Descripción características principales -->
             <TextView
@@ -988,6 +970,23 @@
                 android:textScaleX="1.2"
                 android:textColor="@color/white_text"
                 android:onClick="clickPublishHouse"/>
+
+            <!-- Botón para volver -->
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnPublishHouse"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/gradient_grey"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="@string/btnBack"
+                android:textSize="16sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text"
+                android:onClick="clickBackFilters"/>
 
         </RelativeLayout>
 

@@ -117,7 +117,7 @@ public class FiltersActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 // Mostrar indicador de texto de la selección
-                tvFilter_priceIndicator.setText("- " + progress + " euros por persona -");
+                tvFilter_priceIndicator.setText(progress + " € por persona");
 
             }
 

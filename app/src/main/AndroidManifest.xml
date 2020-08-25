@@ -42,7 +42,8 @@
             android:parentActivityName=".MyProfileActivity"> <!-- FORMULARIO PARA REGISTRARSE -->
         </activity>
         <activity android:name=".UserAccountActivity" /> <!-- PERFIL DE USUARIO -->
-        <activity android:name=".HouseUpActivity" /> <!-- SUBIR UNA OFERTA DE CASA -->
+        <activity android:name=".HouseUpActivity"
+            android:parentActivityName=".UserAccountActivity"/> <!-- SUBIR UNA OFERTA DE CASA -->
 
         <activity
             android:name=".OutstandingActivity"

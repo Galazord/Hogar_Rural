@@ -3,14 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.MyHousesFragment">
+    tools:context=".Fragments.MyHousesFragment"
+    android:background="@color/background_grey">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!-- ScrollView de toda la vista -->
+    <ScrollView
+        android:id="@+id/myHouse_sv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="MIS CASAS"
-        android:textSize="24sp"
-        android:gravity="center" />
+        android:layout_height="wrap_content">
+
+        <!-- RelativeLayout -->
+        <RelativeLayout
+            android:id="@+id/myHouse_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/myHouse_recycler_view_my_houses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!-- BOTÓN: Añadir otra casa-->
+            <Button
+                android:id="@+id/btnCreateNewHouse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/myHouse_recycler_view_my_houses"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="20dp"
+                android:background="@drawable/gradient_green"
+                android:fontFamily="@font/kanit_semibold"
+                android:text="@string/myHouses_addHouse"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textScaleX="1.2"
+                android:textColor="@color/white_text"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 </FrameLayout>

@@ -334,7 +334,7 @@
                     android:gravity="center"
                     android:textColor="@color/green_icon"/>
 
-                <!-- Indicador de número de personas -->
+                <!-- Indicador del precio -->
                 <TextView
                     android:id="@+id/tvFilter_priceIndicator"
                     android:layout_width="250dp"

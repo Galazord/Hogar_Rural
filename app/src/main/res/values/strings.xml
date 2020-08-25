@@ -38,7 +38,7 @@
     <string name="filters_complete">ÍNTEGRO</string>
     <string name="filters_rooms">HABITACIONES</string>
     <string name="filters_price">PRECIOS</string>
-    <string name="filters_euros_person">- euros por persona -</string>
+    <string name="filters_euros_person"> 50 euros por persona</string>
     <string name="filters_services">SERVICIOS</string>
     <string name="filters_adapted">Adaptado</string>
     <string name="filters_air">Aire \nacondicionado</string>
@@ -140,6 +140,9 @@
     <string name="accountUser_myProfile">Mi perfil</string>
     <string name="accountUser_myhouses">Mis casas</string>
 
+    <!-- MIS CASAS -->
+    <string name="myHouses_addHouse">Añadir nueva casa</string>
+
     <!-- DETALLE DEL FORMULARIO DE CASAS -->
     <string name="houseUp_info">Rellena el siguiente formulario para dar de alta la casa que deseas ofertar.</string>
     <string name="houseUp_info2">Elija una foto o varias del aspecto de la vivienda.\nMostrar fotos ayudará muchísimo a interesarse por el lugar.</string>
@@ -161,5 +164,6 @@
     <!-- DESTACADOS -->
     <string name="outstanding_news">Novedades</string>
     <string name="outstanding_lowprice">Bajan de precio</string>
+
 
 </resources>
