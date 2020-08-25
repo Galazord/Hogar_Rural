@@ -116,7 +116,8 @@
     <string name="formUser_postal">Introduce el código postal</string>
     <string name="formUser_municipatily">Introduce el municipio</string>
     <string name="formUser_province">Introduce la provincia</string>
-    <string name="formUser_terms">Aceptar los términos y condiciones de uso</string>
+    <string name="formUser_terms">Aceptar </string>
+    <string name="formUser_terms_link">términos y condiciones de uso</string>
     <string name="formUser_advertising">Deseo recibir ofertas e información por email</string>
     <string name="formUser_register">REGISTRARSE</string>
     <string name="formUser_save_changes">GUARDAR CAMBIOS</string>

@@ -57,8 +57,8 @@ public class MyProfileActivity extends AppCompatActivity {
                             finish();
                         } else {
                             // Error de acceso a la cuenta de usuario.
-                            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder.");
-
+                            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder. Comprueba tu email y contraseña");
+                            soundError.start();
                         }
 
                     }
@@ -122,7 +122,7 @@ public class MyProfileActivity extends AppCompatActivity {
         // Verificar si los campos están vacíos
         if(TextUtils.isEmpty(et_input_passw.getText()) || TextUtils.isEmpty(et_input_mail.getText())){
             // Error si los campos están vacíos.
-            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder. Comprueba tu email y contraseña.");
+            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder. Rellena todos los campos.");
             soundError.start();
         }else{
 
@@ -136,7 +136,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // Ir a la clase LoginFormActivity.
         Intent intent = new Intent (getApplicationContext(), LoginFormActivity.class);
-        intent.putExtra("typeFormUser", "create");
+         intent.putExtra("typeFormUser", "create");
         startActivity(intent);
         finish();
 

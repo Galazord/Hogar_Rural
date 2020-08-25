@@ -364,7 +364,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etForm_input_province"
-                android:layout_marginHorizontal="30dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginVertical="10dp"
                 android:paddingStart="10dp"
                 android:text="@string/formUser_terms"
@@ -372,6 +373,22 @@
                 android:textColor="@color/green_dark"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
+
+            <!-- URL-Link: Términos y condiciones de uso -->
+            <TextView
+                android:id="@+id/tvForm_link_terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etForm_input_province"
+                android:layout_toEndOf="@id/cbForm_terms"
+                android:layout_marginEnd="30dp"
+                android:layout_marginVertical="14dp"
+                android:text="@string/formUser_terms_link"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/link_url"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:onClick="clickReadTermsUser"/>
 
             <!-- Checkbox de recibir información -->
             <CheckBox

@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,15 +24,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.hogar_rural.Model.User;
+import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,17 +41,17 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.ByteArrayOutputStream;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Hashtable;
-import java.util.Map;
 
 public class LoginFormActivity extends AppCompatActivity {
 
     //--> VARIABLES
-    private TextView tvForm_title, tvForm_info, etForm_input_birthday;
+    private TextView tvForm_title, tvForm_info, etForm_input_birthday, tvForm_link_terms;
     private EditText etForm_input_user, etForm_input_email, etForm_input_passw, etForm_input_passwRepit, etForm_input_name, etForm_input_lastname, etForm_input_dni, etForm_input_phone, etForm_input_address, etForm_input_postal, etForm_input_municipality, etForm_input_province;
     private ImageView ivForm_avatar;
     private CheckBox cbForm_terms, cbForm_advertising;
@@ -66,14 +59,16 @@ public class LoginFormActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener setListener;
     private Bitmap bitmap;
     private int PICK_IMAGE_REQUEST = 1;
-    private final String URL_UPLOAD = "https://hogarruralapp.000webhostapp.com/hogarRural/php/upload.php";
-    private String KEY_IMAGE = "photo";
-    private String KEY_NAME = "name";
     private String typeFormUser;
     private MediaPlayer soundError, soundCorrect;
+    private Uri filePath;
+    private String urlImage;
+    private boolean ImageExist = false;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
+    private StorageReference storageReference;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +76,11 @@ public class LoginFormActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login_form);
 
         // Recibir parámetros
-        typeFormUser = getIntent().getStringExtra("typeFormUser"); // tipo: crear/modificar usuario
+        // tipo: crear/modificar usuario
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            typeFormUser = b.getString("typeFormUser");
+        }
 
         // Inicializar componentes
         initComponent();
@@ -96,6 +95,9 @@ public class LoginFormActivity extends AppCompatActivity {
         mFirestore = FirebaseFirestore.getInstance();
         //Instanciamos el auth
         mAuth = FirebaseAuth.getInstance();
+        //Instaciamos Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseStorage  = FirebaseStorage.getInstance();
 
         // Establecer Titular en el action bar
         ActionBar actionBar = getSupportActionBar();
@@ -104,6 +106,7 @@ public class LoginFormActivity extends AppCompatActivity {
         // Relaccionar las variables con la parte gráfica
         tvForm_title = (TextView) findViewById(R.id.tvForm_title);
         tvForm_info = (TextView) findViewById(R.id.tvForm_info);
+        tvForm_link_terms = (TextView) findViewById(R.id.tvForm_link_terms);
         etForm_input_user = (EditText) findViewById(R.id.etForm_input_user);
         etForm_input_email = (EditText) findViewById(R.id.etForm_input_email);
         etForm_input_passw = (EditText) findViewById(R.id.etForm_input_passw);
@@ -130,7 +133,7 @@ public class LoginFormActivity extends AppCompatActivity {
         activateCalendar();
 
         // Dependiendo si venimos de registrarse o modificar, el nombre del botón de confirmación cambia de nombre
-        if(typeFormUser.equals("create")){
+        if(typeFormUser.equals(Constant.BUNDLE_CREATE)){
 
             btnRegister.setText(R.string.formUser_register);
 
@@ -140,7 +143,7 @@ public class LoginFormActivity extends AppCompatActivity {
 
         }
         // Si viene de registrarse, ir a la clase UserAccountActivity.
-        else if(typeFormUser.equals("modify")){
+        else if(typeFormUser.equals(Constant.BUNDLE_MODIFY)){
 
             // Modificar titular y texto introductorio
             tvForm_title.setText(R.string.formUser_title_modify);
@@ -151,6 +154,7 @@ public class LoginFormActivity extends AppCompatActivity {
             // Ocultar los checkbox
             cbForm_terms.setVisibility(View.GONE);
             cbForm_advertising.setVisibility(View.GONE);
+            tvForm_link_terms.setVisibility(View.GONE);
 
             // mmostrar en los campos los datos del usuario logado actualmente
             showDataUser();
@@ -194,6 +198,7 @@ public class LoginFormActivity extends AppCompatActivity {
                         etForm_input_municipality.setText(user.getMunicipality());
                         etForm_input_province.setText(user.getProvince());
 
+                        loadUserImage(user);
                     }
                     else{
                         Log.i("ERROR USER NOT EXIST", task.getResult().toString());
@@ -205,6 +210,18 @@ public class LoginFormActivity extends AppCompatActivity {
         });
     }
 
+    private void loadUserImage(User user){
+        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());
+        gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    Glide.with(getApplicationContext()).load(task.getResult()).into(ivForm_avatar);
+                }
+            }
+
+        });
+    }
     // Activar el efecto para mostrar un calendario e introducir una fecha
     private void activateCalendar() {
 
@@ -236,80 +253,90 @@ public class LoginFormActivity extends AppCompatActivity {
             }
         };
 
-        /*
-        // Modo calendario tradicional introducir las fechas
-        etForm_input_birthday.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(LoginFormActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        month = month + 1;
-                        String date = day + "/" + month + "/" + year;
-                        etForm_input_birthday.setText(date);
-                    }
-                }, year, month, day);
-
-                datePickerDialog.show();
-            }
-        });
-         */
-
     }
 
     // Realizar el registro de usuario
     private void registerUser(final User user){
 
-        // Recoger el dato del email correcto del usuario
-        final String emailUser = user.getEmail();
+        if(typeFormUser.equals(Constant.BUNDLE_MODIFY)){
+            // Modificar datos de usuario
+            user.setId(mAuth.getCurrentUser().getUid());
+            registerUserFirestore(user);
 
-        // Validar el email y la contraseña introducidas
-        mAuth.createUserWithEmailAndPassword(emailUser, user.getPassword())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+        }else if(typeFormUser.equals(Constant.BUNDLE_CREATE)){
 
-                        if (task.isSuccessful()) {
-                            //Aquí guardaríamos el usuario en base de datos.
-                            user.setId(mAuth.getCurrentUser().getUid());
+            // Crear nuevo usuario
 
-                              registerUserFirestore(user);
 
-                        } else {
+            // Recoger el dato del email correcto del usuario
+            final String emailUser = user.getEmail();
 
-                            // Si la señal falla mostrará el mensaje de error correspondiente
-                            try {
-                                throw task.getException();
-                            } catch(FirebaseAuthWeakPasswordException e) {
-                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. La contraseña es incorrecta");
-                                soundError.start();
-                            } catch(FirebaseAuthInvalidCredentialsException e) {
-                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. El e-mail es incorrecto");
-                                soundError.start();
-                            } catch(FirebaseAuthUserCollisionException e) {
-                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. El usuario introducido ya existe");
-                                soundError.start();
-                            } catch(Exception e) {
-                                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. Se ha producido un fallo inesperado.");
-                                soundError.start();
+            // Validar el email y la contraseña introducidas
+            mAuth.createUserWithEmailAndPassword(emailUser, user.getPassword())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            if (task.isSuccessful()) {
+                                //Aquí guardaríamos el usuario en base de datos.
+                                user.setId(mAuth.getCurrentUser().getUid());
+
+                                  registerUserFirestore(user);
+
+                            } else {
+
+                                // Si la señal falla mostrará el mensaje de error correspondiente
+                                try {
+                                    throw task.getException();
+                                } catch(FirebaseAuthWeakPasswordException e) {
+                                    UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. La contraseña es incorrecta");
+                                    soundError.start();
+                                } catch(FirebaseAuthInvalidCredentialsException e) {
+                                    UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. El e-mail es incorrecto");
+                                    soundError.start();
+                                } catch(FirebaseAuthUserCollisionException e) {
+                                    UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. El usuario introducido ya existe");
+                                    soundError.start();
+                                } catch(Exception e) {
+                                    UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. Se ha producido un fallo inesperado.");
+                                    soundError.start();
+                                }
                             }
-                        }
 
-                    }
-                });
+                        }
+                    });
+
+        }else {
+
+        }
     }
 
     // Dar de alta al usuario en Firebase y guardar sus datos
     private void registerUserFirestore(User user){
 
+        final String idUser = user.getId();
+
+        // Comprobar si la imagen es nueva, modificada o poner una por defecto
+        if(ImageExist){
+            urlImage = Constant.URL_GS_IMAGE_USER+user.getId();
+        }else{
+            if(typeFormUser.equals(Constant.BUNDLE_MODIFY)){
+                urlImage = user.getImage();
+            }else{
+                urlImage = Constant.URL_GS_IMAGE_USER_DEFAULT;
+            }
+
+        }
+        user.setImage(urlImage);
+
+        // Subir los datos de usuario a firebase
         mFirestore.collection("users")
                 .document(user.getId())
-                .set(user)
+                    .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-
+                        uploadImage(idUser);
                         UtilMethod.showToast(TypeToast.SUCCESS, LoginFormActivity.this,"Usuario registrado con éxito");
                         soundCorrect.start();
 
@@ -332,57 +359,61 @@ public class LoginFormActivity extends AppCompatActivity {
     // Para seleccionar una imagen
     private void showFileChooser(){
 
+        ImageExist = true;
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
+
         startActivityForResult(Intent.createChooser(intent, "Selecciona una imagen"), PICK_IMAGE_REQUEST);
     }
-    // Convierte la imagen en un string
-    public String getStringImage(Bitmap bmp){
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-        return encodedImage;
-
-    }
     // Subir imagen al servidor
-    public void uploadImage(){
+    private void uploadImage(String idUser)
+    {
 
-        final ProgressDialog loading = ProgressDialog.show(this, "Subiendo...", "Espere por favor");
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_UPLOAD, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                loading.dismiss();
-                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: " + response);
-                soundError.start();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                loading.dismiss();
-                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: " + error.getMessage().toString());
-                soundError.start();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+        if(filePath != null)
+        {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Subiendo foto...");
+            progressDialog.show();
 
-                String image = getStringImage(bitmap);
-                String name = "miFoto";
+            StorageReference ref = storageReference.child("users/"+idUser);
 
-                Map<String, String> params = new Hashtable<String, String>();
-                params.put(KEY_IMAGE, image);
-                params.put(KEY_NAME, name);
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+                        {
+                            progressDialog.dismiss();
 
-                return params;
-            }
-        };
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener()
+                    {
+                        @Override
+                        public void onFailure(@NonNull Exception e)
+                        {
+                            progressDialog.dismiss();
+                            UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: No se ha subido la imagen" + e.getMessage());
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>()
+                    {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot)
+                        {
+                            // Barra de progreso al subir la imagen
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+                            progressDialog.setMessage("Subida "+(int)progress+"%");
+                        }
+                    });
+        }
+
+
+
     }
     // Validación de la imagen
     @Override
@@ -391,7 +422,7 @@ public class LoginFormActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
 
-            Uri filePath = data.getData();
+            filePath = data.getData();
 
             try {
 
@@ -432,6 +463,7 @@ public class LoginFormActivity extends AppCompatActivity {
         String postal = etForm_input_postal.getText().toString();
         String municipality = etForm_input_municipality.getText().toString();
         String province = etForm_input_province.getText().toString();
+        boolean advertising = false;
 
         if(TextUtils.isEmpty(etForm_input_user.getText()) || TextUtils.isEmpty(etForm_input_email.getText()) || TextUtils.isEmpty(etForm_input_passw.getText()) || TextUtils.isEmpty(etForm_input_passwRepit.getText()) || TextUtils.isEmpty(etForm_input_name.getText()) || TextUtils.isEmpty(etForm_input_lastname.getText()) || TextUtils.isEmpty(etForm_input_dni.getText()) || TextUtils.isEmpty(etForm_input_birthday.getText()) || TextUtils.isEmpty(etForm_input_phone.getText())){
             // En caso de no rellenar todos los campos obligatorios
@@ -439,25 +471,63 @@ public class LoginFormActivity extends AppCompatActivity {
             soundError.start();
         }else{
 
-            // Comprobar que la contraseña y la repeticción de la contraseña son iguales
-            if(password.equals(repitPassword)){
+            // Si viene de registrarse, debe aceptar los terminos y condiciones de uso.
+            if(typeFormUser.equals("create")){
 
-                // Guardar todos los datos del usuario registrado
-                User user = new User(email, nickname, password, name, lastname, "imagen.png", dni, birthday, phone, address, postal, municipality, province);
+                if(cbForm_terms.isChecked()){
 
-                // Registrar los datos del usuario
-                registerUser(user);
+                    // Comprobar que la contraseña y la repeticción de la contraseña son iguales
+                    if(password.equals(repitPassword)){
 
-                // Subir la foto de avatar de usuario
-                //uploadImage();
+                        // Si acepta el usuario recibir publicidad
+                        if(cbForm_advertising.isChecked()){
+                            advertising = true;
+                        }
+
+                        // Terminar de registrar o modificar datos de usuario
+                        finalRegisterUser(email, nickname, password, name, lastname, "gs://hogarapp-77df0.appspot.com/users/default.png", dni, birthday, phone, address, postal, municipality, province, advertising);
+
+                    }
+                    else{
+                        UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: Las dos contraseñas introducidas no son iguales.");
+                        soundError.start();
+                    }
+
+                }
+                else{
+                    UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: Debe aceptar los términos y condiciones de uso.");
+                    soundError.start();
+                }
 
             }
             else{
-                UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. Las dos contraseñas introducidas no son iguales.");
-                soundError.start();
+
+                // Comprobar que la contraseña y la repeticción de la contraseña son iguales
+                if(password.equals(repitPassword)){
+
+                    // Terminar de registrar o modificar datos de usuario
+                    finalRegisterUser(email, nickname, password, name, lastname, "gs://hogarapp-77df0.appspot.com/users/default.png", dni, birthday, phone, address, postal, municipality, province, advertising);
+
+                }
+                else{
+                    UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR: Las dos contraseñas introducidas no son iguales.");
+                    soundError.start();
+                }
+
             }
 
         }
+
+    }
+
+    // Terminar de registrar o modificar datos de usuario
+    private void finalRegisterUser(String email, String nickname, String password, String name, String lastname, String urlAvatar, String dni, String birthday, String phone, String address, String postal, String municipality, String province, boolean advertising) {
+
+        // Guardar todos los datos del usuario registrado
+        User user = new User(email, nickname, password, name, lastname, urlAvatar, dni, birthday, phone, address, postal, municipality, province, advertising);
+
+        // Registrar los datos del usuario
+        registerUser(user);
 
     }
 
@@ -484,6 +554,14 @@ public class LoginFormActivity extends AppCompatActivity {
             UtilMethod.showToast(TypeToast.ERROR, LoginFormActivity.this,"ERROR. No se ha podido volver atrás");
             soundError.start();
         }
+
+    }
+
+    // Ir a la página para ver el documento legal de términos de uso de la apliación
+    public void clickReadTermsUser(View view) {
+
+        Uri uri = Uri.parse("http://www.galanteartdesign.com/");
+        startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
     }
 }

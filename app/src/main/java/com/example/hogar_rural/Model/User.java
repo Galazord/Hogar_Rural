@@ -4,8 +4,9 @@ public class User {
 
     // VARIABLES
     private String id, email, nickname, password, name, lastname, image, dni, birthday, phone, address, postal, municipality, province;
+    private boolean advertising;
 
-    public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province) {
+    public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province, boolean advertising) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
@@ -19,6 +20,7 @@ public class User {
         this.postal = postal;
         this.municipality = municipality;
         this.province = province;
+        this.advertising = advertising;
     }
 
     // CONTRUCTOR
@@ -135,6 +137,14 @@ public class User {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public boolean isAdvertising() {
+        return advertising;
+    }
+
+    public void setAdvertising(boolean advertising) {
+        this.advertising = advertising;
     }
 
 }
