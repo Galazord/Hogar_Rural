@@ -1,9 +1,15 @@
 package com.example.hogar_rural;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +18,28 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.User;
+import com.example.hogar_rural.Utils.Constant;
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import okhttp3.internal.Util;
+
+import static com.example.hogar_rural.Utils.Constant.PRICE_MAX;
+import static com.example.hogar_rural.Utils.Constant.PRICE_MIN;
 
 public class HouseUpActivity extends AppCompatActivity {
 
@@ -22,8 +50,17 @@ public class HouseUpActivity extends AppCompatActivity {
     private TextView tvCounter_capMax, tvHouseUp_priceIndicator;
     private SeekBar sbHouseUp_priceSelector;
     private ToggleButton tbFilter_adapted, tbFilter_air, tbFilter_barbecue, tbFilter_bath, tbFilter_pool, tbFilter_climatized, tbFilter_garden, tbFilter_heating, tbFilter_jacuzzi, tbFilter_kitchen, tbFilter_mountain, tbFilter_parking, tbFilter_beach, tbFilter_breakfast, tbFilter_children, tbFilter_fireplace, tbFilter_pets, tbFilter_spa, tbFilter_tv, tbFilter_wifi;
-    private Button btnSelectGaleryImage, btnCapMax_less, btnCapMax_plus;
+    private Button btnSelectGaleryImage, btnCapMax_less, btnCapMax_plus, btnGallery_next_left, btnGallery_next_right, btnPrice_less, btnPrice_plus;
+    private int numPeople = 1;
+    private int price = 0;
+    private MediaPlayer soundError, soundCorrect;
 
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
+    private StorageReference storageReference;
+    private FirebaseStorage firebaseStorage;
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +73,7 @@ public class HouseUpActivity extends AppCompatActivity {
 
     //--> MÉTODOS
     // Inciar componentes
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void initComponent() {
 
         // Relaccionar las variables con la parte gráfica
@@ -53,6 +91,8 @@ public class HouseUpActivity extends AppCompatActivity {
         tvCounter_capMax = (TextView) findViewById(R.id.tvCounter_capMax);
         tvHouseUp_priceIndicator = (TextView) findViewById(R.id.tvHouseUp_priceIndicator);
         sbHouseUp_priceSelector = (SeekBar) findViewById(R.id.sbHouseUp_priceSelector);
+        sbHouseUp_priceSelector.setMin(PRICE_MIN);
+        sbHouseUp_priceSelector.setMax(PRICE_MAX);
         tbFilter_adapted = (ToggleButton) findViewById(R.id.tbFilter_adapted);
         tbFilter_air = (ToggleButton) findViewById(R.id.tbFilter_air);
         tbFilter_barbecue = (ToggleButton) findViewById(R.id.tbFilter_barbecue);
@@ -76,6 +116,20 @@ public class HouseUpActivity extends AppCompatActivity {
         btnSelectGaleryImage = (Button) findViewById(R.id.btnSelectGaleryImage);
         btnCapMax_less = (Button) findViewById(R.id.btnCapMax_less);
         btnCapMax_plus = (Button) findViewById(R.id.btnCapMax_plus);
+        btnGallery_next_left = (Button) findViewById(R.id.btnGallery_next_left);
+        btnGallery_next_right = (Button) findViewById(R.id.btnGallery_next_right);
+        btnPrice_less = (Button) findViewById(R.id.btnPrice_less);
+        btnPrice_plus = (Button) findViewById(R.id.btnPrice_plus);
+        soundError = MediaPlayer.create(this, R.raw.sound_error);
+        soundCorrect = MediaPlayer.create(this, R.raw.sound_correct);
+
+        //Init firestore
+        mFirestore = FirebaseFirestore.getInstance();
+        //Instanciamos el auth
+        mAuth = FirebaseAuth.getInstance();
+        //Instaciamos Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseStorage  = FirebaseStorage.getInstance();
 
         // Gestión del SeekBar para seleccionar el precio
         generateSeekBar();
@@ -92,7 +146,7 @@ public class HouseUpActivity extends AppCompatActivity {
 
                 // Mostrar indicador de texto de la selección
                 tvHouseUp_priceIndicator.setText(progress + " € por persona");
-
+                price = progress;
             }
 
             @Override
@@ -125,6 +179,60 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickPublishHouse(View view) {
 
 
+        //Añadir a este if todos aquellos campos que quieras que sean obligatorios.
+        if(TextUtils.isEmpty(etHouse_input_name.getText())){
+
+        }else{
+            String nameHome = etHouse_input_name.getText().toString();
+            Long typeRoom = -1L;
+            String address = etHouse_input_address.getText().toString();
+            String municipality = etHouse_input_municipaly.getText().toString();
+            String province = etHouse_input_province.getText().toString();
+            String cp = etHouse_input_code.getText().toString();
+            String features = etHouse_input_features.getText().toString();
+            String activities = etHouse_input_activities.getText().toString();
+            String interest_places = etHouse_input_interest.getText().toString();
+
+
+            Date date = new Date();
+            String date_str = UtilMethod.getDate(date);
+            Timestamp date_now = UtilMethod.getTimestamp(date_str);
+
+           typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, view);
+            String idHome = UtilMethod.getUIID();
+
+            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now);
+            registerHomesFirestore(home);
+        }
+
+
+    }
+
+    private void registerHomesFirestore(Home home){
+
+            // Subir los datos de usuario a firebase
+            mFirestore.collection("homes")
+                    .document(home.getId())
+                    .set(home)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Usuario registrado con éxito");
+                            soundCorrect.start();
+
+
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this,"ERROR GENERAL.");
+                            soundError.start();
+                            Log.e("ERROR FIRESTORE USER: ", e.getMessage());
+                        }
+                    });
     }
 
     // Volver a la vista de Mi Perfil
@@ -133,6 +241,76 @@ public class HouseUpActivity extends AppCompatActivity {
         Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
         startActivity(intent);
         finish();
+
+    }
+
+    // Añadir + personas
+    public void clickAddPeople(View view) {
+
+        // Cambiar color para indicar que se puede llegar al mínimo posible
+        btnCapMax_less.setBackgroundColor(R.drawable.gradient_green);
+
+        // Sumar 1
+        numPeople++;
+        tvCounter_capMax.setText(numPeople+" personas");
+    }
+
+    // Añadir - personas
+    public void clickLessPeople(View view) {
+        if(numPeople==1){
+
+            // Cambiar color para indicar que se ha llegado al mínimo posible
+            btnCapMax_less.setBackgroundColor(R.drawable.gradient_grey);
+
+        }else{
+
+            // Restar 1
+            numPeople--;
+            tvCounter_capMax.setText(numPeople+" personas");
+        }
+    }
+
+    // Pasar en la galería a la foto de la izquierda
+    public void clickGalleryNextLeft(View view) {
+
+        // Cambiar color para indicar que se puede llegar al mínimo posible
+        btnGallery_next_left.setBackgroundColor(R.drawable.gradient_green);
+
+    }
+
+    // Pasar en la galería a la foto de la izquierda
+    public void clickGalleryNextRight(View view) {
+
+        // Cambiar color para indicar que se puede llegar al mínimo posible
+        btnGallery_next_left.setBackgroundColor(R.drawable.gradient_grey);
+    }
+
+    // Disminuir en un punto el precio por día
+    public void clickLessPrice(View view) {
+
+        if(price==1){
+
+            // Cambiar color para indicar que se ha llegado al mínimo posible
+            btnPrice_less.setBackgroundColor(R.drawable.gradient_grey);
+
+        }else{
+
+            // Restar 1
+            price--;
+            tvHouseUp_priceIndicator.setText(price+" € por persona");
+        }
+
+    }
+
+    // Aumentar en un punto el precio por día
+    public void clickPlusPrice(View view) {
+
+        // Cambiar color para indicar que se puede llegar al mínimo posible
+        btnPrice_less.setBackgroundColor(R.drawable.gradient_green);
+
+        // Sumar 1
+        price++;
+        tvHouseUp_priceIndicator.setText(price+" € por persona");
 
     }
 }

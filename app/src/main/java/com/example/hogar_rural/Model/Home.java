@@ -1,6 +1,7 @@
 package com.example.hogar_rural.Model;
 
-import java.sql.Timestamp;
+
+import com.google.firebase.Timestamp;
 
 public class Home {
 
@@ -8,6 +9,25 @@ public class Home {
     private String id, owner, name, address, postal, municipality, province, description, activities, interesting_places, services, images;
     private Long type, amount, price, valoration;
     private Timestamp creation_date, update_date;
+
+    public Home(String id, String owner, String name, String address, String postal, String municipality, String province, String description, String activities, String interesting_places, Long type, Long amount, Long price, Long valoration, Timestamp creation_date, Timestamp update_date) {
+        this.id = id;
+        this.owner = owner;
+        this.name = name;
+        this.address = address;
+        this.postal = postal;
+        this.municipality = municipality;
+        this.province = province;
+        this.description = description;
+        this.activities = activities;
+        this.interesting_places = interesting_places;
+        this.type = type;
+        this.amount = amount;
+        this.price = price;
+        this.valoration = valoration;
+        this.creation_date = creation_date;
+        this.update_date = update_date;
+    }
 
     // CONTRUCTOR
     public Home() {}

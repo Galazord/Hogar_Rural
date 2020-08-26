@@ -64,7 +64,7 @@ public class LoginFormActivity extends AppCompatActivity {
     private Uri filePath;
     private String urlImage;
     private boolean ImageExist = false;
-
+    private String urlImageModify;
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
     private StorageReference storageReference;
@@ -90,14 +90,6 @@ public class LoginFormActivity extends AppCompatActivity {
     //--> MÉTODOS
     // Inicializar componentes
     private void initComponent(){
-
-        //Init firestore
-        mFirestore = FirebaseFirestore.getInstance();
-        //Instanciamos el auth
-        mAuth = FirebaseAuth.getInstance();
-        //Instaciamos Storage
-        storageReference = FirebaseStorage.getInstance().getReference();
-        firebaseStorage  = FirebaseStorage.getInstance();
 
         // Establecer Titular en el action bar
         ActionBar actionBar = getSupportActionBar();
@@ -128,6 +120,14 @@ public class LoginFormActivity extends AppCompatActivity {
         btnBack = (Button) findViewById(R.id.btnBack);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
         soundCorrect = MediaPlayer.create(this, R.raw.sound_correct);
+
+        //Init firestore
+        mFirestore = FirebaseFirestore.getInstance();
+        //Instanciamos el auth
+        mAuth = FirebaseAuth.getInstance();
+        //Instaciamos Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseStorage  = FirebaseStorage.getInstance();
 
         // Activar la función de calendario para la fecha de nacimiento
         activateCalendar();
@@ -197,7 +197,7 @@ public class LoginFormActivity extends AppCompatActivity {
                         etForm_input_postal.setText(user.getPostal());
                         etForm_input_municipality.setText(user.getMunicipality());
                         etForm_input_province.setText(user.getProvince());
-
+                        urlImageModify = user.getImage();
                         loadUserImage(user);
                     }
                     else{
@@ -260,7 +260,9 @@ public class LoginFormActivity extends AppCompatActivity {
 
         if(typeFormUser.equals(Constant.BUNDLE_MODIFY)){
             // Modificar datos de usuario
-            user.setId(mAuth.getCurrentUser().getUid());
+            String idUser = mAuth.getCurrentUser().getUid();
+            user.setId(idUser);
+
             registerUserFirestore(user);
 
         }else if(typeFormUser.equals(Constant.BUNDLE_CREATE)){
@@ -472,7 +474,7 @@ public class LoginFormActivity extends AppCompatActivity {
         }else{
 
             // Si viene de registrarse, debe aceptar los terminos y condiciones de uso.
-            if(typeFormUser.equals("create")){
+            if(typeFormUser.equals(Constant.BUNDLE_CREATE)){
 
                 if(cbForm_terms.isChecked()){
 
@@ -485,7 +487,7 @@ public class LoginFormActivity extends AppCompatActivity {
                         }
 
                         // Terminar de registrar o modificar datos de usuario
-                        finalRegisterUser(email, nickname, password, name, lastname, "gs://hogarapp-77df0.appspot.com/users/default.png", dni, birthday, phone, address, postal, municipality, province, advertising);
+                        finalRegisterUser(email, nickname, password, name, lastname, Constant.URL_GS_IMAGE_USER_DEFAULT, dni, birthday, phone, address, postal, municipality, province, advertising);
 
                     }
                     else{
@@ -506,7 +508,7 @@ public class LoginFormActivity extends AppCompatActivity {
                 if(password.equals(repitPassword)){
 
                     // Terminar de registrar o modificar datos de usuario
-                    finalRegisterUser(email, nickname, password, name, lastname, "gs://hogarapp-77df0.appspot.com/users/default.png", dni, birthday, phone, address, postal, municipality, province, advertising);
+                    finalRegisterUser(email, nickname, password, name, lastname, urlImageModify, dni, birthday, phone, address, postal, municipality, province, advertising);
 
                 }
                 else{
@@ -536,7 +538,7 @@ public class LoginFormActivity extends AppCompatActivity {
     public void clickBtnBackRegister(View view) {
 
         // Si viene de registrarse, ir a la clase MyProfileActivity.
-        if(typeFormUser.equals("create")){
+        if(typeFormUser.equals(Constant.BUNDLE_CREATE)){
 
             Intent intent = new Intent (getApplicationContext(), MyProfileActivity.class);
             startActivity(intent);
@@ -544,7 +546,7 @@ public class LoginFormActivity extends AppCompatActivity {
 
         }
         // Si viene de registrarse, ir a la clase UserAccountActivity.
-        else if(typeFormUser.equals("modify")){
+        else if(typeFormUser.equals(Constant.BUNDLE_MODIFY)){
 
             Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
             startActivity(intent);
