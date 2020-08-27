@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,7 +53,7 @@ public class HouseUpActivity extends AppCompatActivity {
     private ToggleButton tbFilter_adapted, tbFilter_air, tbFilter_barbecue, tbFilter_bath, tbFilter_pool, tbFilter_climatized, tbFilter_garden, tbFilter_heating, tbFilter_jacuzzi, tbFilter_kitchen, tbFilter_mountain, tbFilter_parking, tbFilter_beach, tbFilter_breakfast, tbFilter_children, tbFilter_fireplace, tbFilter_pets, tbFilter_spa, tbFilter_tv, tbFilter_wifi;
     private Button btnSelectGaleryImage, btnCapMax_less, btnCapMax_plus, btnGallery_next_left, btnGallery_next_right, btnPrice_less, btnPrice_plus;
     private int numPeople = 1;
-    private int price = 0;
+    private int price = PRICE_MIN;
     private MediaPlayer soundError, soundCorrect;
 
     private FirebaseAuth mAuth;
@@ -143,6 +144,9 @@ public class HouseUpActivity extends AppCompatActivity {
         sbHouseUp_priceSelector.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                // Cambiar color del botón restar por si acaso está gris de fondo
+                btnPrice_less.setBackgroundResource(R.drawable.gradient_green);
 
                 // Mostrar indicador de texto de la selección
                 tvHouseUp_priceIndicator.setText(progress + " € por persona");
@@ -248,7 +252,7 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickAddPeople(View view) {
 
         // Cambiar color para indicar que se puede llegar al mínimo posible
-        btnCapMax_less.setBackgroundColor(R.drawable.gradient_green);
+        btnCapMax_less.setBackgroundResource(R.drawable.gradient_green);
 
         // Sumar 1
         numPeople++;
@@ -260,7 +264,7 @@ public class HouseUpActivity extends AppCompatActivity {
         if(numPeople==1){
 
             // Cambiar color para indicar que se ha llegado al mínimo posible
-            btnCapMax_less.setBackgroundColor(R.drawable.gradient_grey);
+            btnCapMax_less.setBackgroundResource(R.drawable.gradient_grey);
 
         }else{
 
@@ -274,7 +278,7 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickGalleryNextLeft(View view) {
 
         // Cambiar color para indicar que se puede llegar al mínimo posible
-        btnGallery_next_left.setBackgroundColor(R.drawable.gradient_green);
+        btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
 
     }
 
@@ -282,16 +286,16 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickGalleryNextRight(View view) {
 
         // Cambiar color para indicar que se puede llegar al mínimo posible
-        btnGallery_next_left.setBackgroundColor(R.drawable.gradient_grey);
+        btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
     }
 
     // Disminuir en un punto el precio por día
     public void clickLessPrice(View view) {
 
-        if(price==1){
+        if(price == PRICE_MIN){
 
             // Cambiar color para indicar que se ha llegado al mínimo posible
-            btnPrice_less.setBackgroundColor(R.drawable.gradient_grey);
+            btnPrice_less.setBackgroundResource(R.drawable.gradient_grey);
 
         }else{
 
@@ -306,7 +310,7 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickPlusPrice(View view) {
 
         // Cambiar color para indicar que se puede llegar al mínimo posible
-        btnPrice_less.setBackgroundColor(R.drawable.gradient_green);
+        btnPrice_less.setBackgroundResource(R.drawable.gradient_green);
 
         // Sumar 1
         price++;
