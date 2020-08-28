@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,7 +36,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.internal.Util;
 
@@ -55,6 +58,7 @@ public class HouseUpActivity extends AppCompatActivity {
     private int numPeople = 1;
     private int price = PRICE_MIN;
     private MediaPlayer soundError, soundCorrect;
+    private List<String> services;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -76,7 +80,7 @@ public class HouseUpActivity extends AppCompatActivity {
     // Inciar componentes
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initComponent() {
-
+        services = new ArrayList<>();
         // Relaccionar las variables con la parte gráfica
         etHouse_input_name = (EditText) findViewById(R.id.etHouse_input_name);
         etHouse_input_address = (EditText) findViewById(R.id.etHouse_input_address);
@@ -176,7 +180,20 @@ public class HouseUpActivity extends AppCompatActivity {
     }
 
     // Acción para seleccionar ON/OFF los iconos de los servicios
-    public void OnDefaultToggleClickComplete(View view) {
+    public void OnDefaultToggleClickServices(View view) {
+        ToggleButton toggleButton = (ToggleButton)view;
+        String serviceName = toggleButton.getTag().toString();
+        services = UtilMethod.checkServicesList(services,serviceName);
+
+        /*
+        Log.i("ARRAY_SERVICIOS","Tam "+services.size());
+
+        for(String a: services){
+            Log.i("item de servicios",a);
+
+        }
+        */
+
     }
 
     // Publicar/ Subir oferta de la casa
@@ -184,7 +201,7 @@ public class HouseUpActivity extends AppCompatActivity {
 
 
         //Añadir a este if todos aquellos campos que quieras que sean obligatorios.
-        if(TextUtils.isEmpty(etHouse_input_name.getText())){
+        if(services.isEmpty() || TextUtils.isEmpty(etHouse_input_name.getText())){
 
         }else{
             String nameHome = etHouse_input_name.getText().toString();
@@ -198,14 +215,16 @@ public class HouseUpActivity extends AppCompatActivity {
             String interest_places = etHouse_input_interest.getText().toString();
 
 
-            Date date = new Date();
+          /*  Date date = new Date();
             String date_str = UtilMethod.getDate(date);
-            Timestamp date_now = UtilMethod.getTimestamp(date_str);
+            Timestamp date_now = UtilMethod.getTimestamp(date_str);*/
+            Timestamp date_now = Timestamp.now();
+           typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, getWindow().getDecorView().getRootView(), getApplicationContext());
 
-           typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, view);
+
             String idHome = UtilMethod.getUIID();
 
-            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now);
+            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now,services);
             registerHomesFirestore(home);
         }
 

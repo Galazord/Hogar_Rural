@@ -1,6 +1,7 @@
 package com.example.hogar_rural.Utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -13,8 +14,11 @@ import androidx.cardview.widget.CardView;
 import com.google.firebase.Timestamp;
 import com.example.hogar_rural.R;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class UtilMethod {
@@ -61,16 +65,16 @@ public class UtilMethod {
     }
 
     // Recoger la opción seleccionada de los radioButton del tipo de vivienda (Íntegro/ habitaciones)
-    static public Long getNameSelectedRadioButton(RadioGroup radioGroup, View view){
+    static public Long getNameSelectedRadioButton(RadioGroup radioGroup, View view, Context context){
 
         int selectedId = radioGroup.getCheckedRadioButtonId();
 
         RadioButton radioButton = (RadioButton)view.findViewById(selectedId);
 
-        if(radioButton.getText().equals(R.string.houseUp_complete)){
-            return 1L;
-        }else if(radioButton.getText().equals(R.string.houseUp_rooms)){
-            return 2L;
+        if(radioButton.getText().equals(context.getString(R.string.houseUp_complete))){
+           return  1L;
+        }else if(radioButton.getText().equals(context.getString(R.string.houseUp_rooms))){
+            return  2L;
         }
         return -1L;
     }
@@ -92,6 +96,18 @@ public class UtilMethod {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
 
+    }
+
+
+    public static List<String> checkServicesList(List<String> services, String new_service){
+
+        if (services.contains(new_service)) {
+            services.remove(new_service);
+        }else{
+            services.add(new_service);
+        }
+
+        return services;
     }
     
 }

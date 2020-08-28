@@ -179,6 +179,7 @@
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/houseUp_complete"
+
                     android:onClick="CheckButtonTypeHouse"/>
 
                 <RadioButton
@@ -560,10 +561,11 @@
                     android:id="@+id/tbFilter_adapted"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/btntoogle_selector"
+                    android:tag="@string/filters_adapted"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_adapted" />
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle Aire acondicionado -->
                 <ToggleButton
@@ -571,30 +573,33 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginHorizontal="30dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_air"
+                    android:tag="@string/filters_air"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_air"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle barbacoa -->
                 <ToggleButton
                     android:id="@+id/tbFilter_barbecue"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_barbecue"
+                    android:tag="@string/filters_barbacue"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_barbecue"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle baño en habitación -->
                 <ToggleButton
                     android:id="@+id/tbFilter_bath"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_bath"
+                    android:tag="@string/filters_bath"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_bath"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Texto: Minusválidos -->
                 <TextView
@@ -657,40 +662,44 @@
                     android:id="@+id/tbFilter_pool"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_pool"/>
+                    android:tag="@string/filters_pool"
+                    android:background="@drawable/ic_service_pool"
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle piscina climatizada -->
                 <ToggleButton
                     android:id="@+id/tbFilter_climatized"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_climatized_pool"
+                    android:tag="@string/filters_climatized"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_climatized_pool"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle jardín -->
                 <ToggleButton
                     android:id="@+id/tbFilter_garden"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_garden"
+                    android:tag="@string/filters_garden"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_garden"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle calefacción -->
                 <ToggleButton
                     android:id="@+id/tbFilter_heating"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_heatingi"
+                    android:tag="@string/filters_heating"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_heatingi"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Texto: piscina -->
                 <TextView
@@ -753,40 +762,44 @@
                     android:id="@+id/tbFilter_jacuzzi"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_jacuzzi"
+                    android:tag="@string/filters_jacuzzi"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_jacuzzi"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle cocina incluida -->
                 <ToggleButton
                     android:id="@+id/tbFilter_kitchen"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_kitchen"
+                    android:tag="@string/filters_kitchen"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_kitchen"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle Montañas-->
                 <ToggleButton
                     android:id="@+id/tbFilter_mountain"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_mountain"
+                    android:tag="@string/filters_mountain"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_mountain"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle parking -->
                 <ToggleButton
                     android:id="@+id/tbFilter_parking"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_parking"
+                    android:tag="@string/filters_parking"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_parking"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Texto: Jacuzzi -->
                 <TextView
@@ -849,40 +862,44 @@
                     android:id="@+id/tbFilter_beach"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_beach"
+                    android:tag="@string/filters_beach"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_beach"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle desayuno incluido -->
                 <ToggleButton
                     android:id="@+id/tbFilter_breakfast"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_breakfast"
+                    android:tag="@string/filters_breakfast"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_breakfast"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle zona para niños -->
                 <ToggleButton
                     android:id="@+id/tbFilter_children"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_children"
+                    android:tag="@string/filters_children"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_children"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle chimenea -->
                 <ToggleButton
                     android:id="@+id/tbFilter_fireplace"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_fireplacei"
+                    android:tag="@string/filters_fireplace"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_fireplacei"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Texto: playa -->
                 <TextView
@@ -945,40 +962,44 @@
                     android:id="@+id/tbFilter_pets"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_pets"
+                    android:tag="@string/filters_pets"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_pets"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle spa -->
                 <ToggleButton
                     android:id="@+id/tbFilter_spa"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_spa"
+                    android:tag="@string/filters_spa"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_spa"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle television -->
                 <ToggleButton
                     android:id="@+id/tbFilter_tv"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_tv"
+                    android:tag="@string/filters_tv"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_tv"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Botón Toggle wifi -->
                 <ToggleButton
                     android:id="@+id/tbFilter_wifi"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:background="@drawable/ic_service_wifi"
+                    android:tag="@string/filters_wifi"
                     android:textOn=""
                     android:textOff=""
-                    android:background="@drawable/ic_service_wifi"/>
+                    android:onClick="OnDefaultToggleClickServices"/>
 
                 <!-- Texto: Permite mascotas -->
                 <TextView

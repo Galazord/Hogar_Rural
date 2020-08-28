@@ -3,14 +3,17 @@ package com.example.hogar_rural.Model;
 
 import com.google.firebase.Timestamp;
 
+import java.util.List;
+
 public class Home {
 
     // VARIABLES
-    private String id, owner, name, address, postal, municipality, province, description, activities, interesting_places, services, images;
+    private String id, owner, name, address, postal, municipality, province, description, activities, interesting_places, images;
     private Long type, amount, price, valoration;
     private Timestamp creation_date, update_date;
+    private List<String> services;
 
-    public Home(String id, String owner, String name, String address, String postal, String municipality, String province, String description, String activities, String interesting_places, Long type, Long amount, Long price, Long valoration, Timestamp creation_date, Timestamp update_date) {
+    public Home(String id, String owner, String name, String address, String postal, String municipality, String province, String description, String activities, String interesting_places, Long type, Long amount, Long price, Long valoration, Timestamp creation_date, Timestamp update_date, List<String> services) {
         this.id = id;
         this.owner = owner;
         this.name = name;
@@ -27,6 +30,7 @@ public class Home {
         this.valoration = valoration;
         this.creation_date = creation_date;
         this.update_date = update_date;
+        this.services =services;
     }
 
     // CONTRUCTOR
@@ -113,11 +117,11 @@ public class Home {
         this.interesting_places = interesting_places;
     }
 
-    public String getServices() {
+    public List<String> getServices() {
         return services;
     }
 
-    public void setServices(String services) {
+    public void setServices(List<String> services) {
         this.services = services;
     }
 

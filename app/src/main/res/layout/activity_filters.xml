@@ -255,7 +255,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginHorizontal="30dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:onClick="OnDefaultToggleClickServices"
                     android:textOn=""
                     android:textOff=""
                     android:background="@drawable/toggle_selector_complete"/>
@@ -266,7 +266,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginHorizontal="30dp"
-                    android:onClick="OnDefaultToggleClickComplete"
+                    android:onClick="OnDefaultToggleClickServices"
                     android:textOn=""
                     android:textOff=""
                     android:background="@drawable/toggle_selector_room"/>
@@ -397,7 +397,7 @@
                         android:id="@+id/tbFilter_adapted"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_adapted" />
@@ -408,7 +408,7 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:layout_marginHorizontal="30dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_air"/>
@@ -418,7 +418,7 @@
                         android:id="@+id/tbFilter_barbecue"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_barbecue"/>
@@ -428,7 +428,7 @@
                         android:id="@+id/tbFilter_bath"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_bath"/>
@@ -494,7 +494,7 @@
                         android:id="@+id/tbFilter_pool"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_pool"/>
@@ -504,7 +504,7 @@
                         android:id="@+id/tbFilter_climatized"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_climatized_pool"/>
@@ -514,7 +514,7 @@
                         android:id="@+id/tbFilter_garden"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_garden"/>
@@ -524,7 +524,7 @@
                         android:id="@+id/tbFilter_heating"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_heatingi"/>
@@ -590,7 +590,7 @@
                         android:id="@+id/tbFilter_jacuzzi"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_jacuzzi"/>
@@ -600,7 +600,7 @@
                         android:id="@+id/tbFilter_kitchen"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_kitchen"/>
@@ -610,7 +610,7 @@
                         android:id="@+id/tbFilter_mountain"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_mountain"/>
@@ -620,7 +620,7 @@
                         android:id="@+id/tbFilter_parking"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_parking"/>
@@ -686,7 +686,7 @@
                         android:id="@+id/tbFilter_beach"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_beach"/>
@@ -696,7 +696,7 @@
                         android:id="@+id/tbFilter_breakfast"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_breakfast"/>
@@ -706,7 +706,7 @@
                         android:id="@+id/tbFilter_children"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_children"/>
@@ -716,7 +716,7 @@
                         android:id="@+id/tbFilter_fireplace"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_fireplacei"/>
@@ -782,7 +782,7 @@
                         android:id="@+id/tbFilter_pets"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_pets"/>
@@ -792,7 +792,7 @@
                         android:id="@+id/tbFilter_spa"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_spa"/>
@@ -802,7 +802,7 @@
                         android:id="@+id/tbFilter_tv"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_tv"/>
@@ -812,7 +812,7 @@
                         android:id="@+id/tbFilter_wifi"
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:onClick="OnDefaultToggleClickComplete"
+                        android:onClick="OnDefaultToggleClickServices"
                         android:textOn=""
                         android:textOff=""
                         android:background="@drawable/ic_service_wifi"/>
