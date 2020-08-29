@@ -8,11 +8,20 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class FavoriteActivity extends AppCompatActivity {
 
     //--> VARIABLES
-    BottomNavigationView bottomNavigationView;
+    private BottomNavigationView bottomNavigationView;
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
+    private StorageReference storageReference;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +39,14 @@ public class FavoriteActivity extends AppCompatActivity {
 
         // Relaccionar las variables con la parte gráfica
         bottomNavigationView = findViewById(R.id.bottom_navegation);
+
+        //Init firestore
+        mFirestore = FirebaseFirestore.getInstance();
+        //Instanciamos el auth
+        mAuth = FirebaseAuth.getInstance();
+        //Instaciamos Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseStorage  = FirebaseStorage.getInstance();
 
         // BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual

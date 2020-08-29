@@ -99,6 +99,7 @@ public class UtilMethod {
     }
 
 
+    // Método que comprueba si un icono de servicios está incluido/ seleccionado en la lista (ON/OFF)
     public static List<String> checkServicesList(List<String> services, String new_service){
 
         if (services.contains(new_service)) {

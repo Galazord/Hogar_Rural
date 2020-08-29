@@ -17,6 +17,10 @@ import com.example.hogar_rural.Fragments.PagerControllerOutstanding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class OutstandingActivity extends AppCompatActivity {
 
@@ -24,11 +28,16 @@ public class OutstandingActivity extends AppCompatActivity {
     private ListView listView;
     private String[] nameList = {"Pakistan", "Canada", "India", "Alemania", "Australia", "China", "España", "Francia", "Italia"};
     private ArrayAdapter<String> adapterList;
-    TabLayout tabLayoutAccount;
-    ViewPager viewPagerAccount;
-    TabItem tabMyNews, tabMyLowPrices;
-    PagerControllerOutstanding pagerAdapter;
-    BottomNavigationView bottomNavigationView;
+    private TabLayout tabLayoutAccount;
+    private ViewPager viewPagerAccount;
+    private TabItem tabMyNews, tabMyLowPrices;
+    private PagerControllerOutstanding pagerAdapter;
+    private BottomNavigationView bottomNavigationView;
+
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
+    private StorageReference storageReference;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,14 @@ public class OutstandingActivity extends AppCompatActivity {
         viewPagerAccount = (ViewPager) findViewById(R.id.viewPagerOutstanding);
         tabMyNews = (TabItem) findViewById(R.id.tabMyNews);
         tabMyLowPrices = (TabItem) findViewById(R.id.tabMyLowPrices);
+
+        //Init firestore
+        mFirestore = FirebaseFirestore.getInstance();
+        //Instanciamos el auth
+        mAuth = FirebaseAuth.getInstance();
+        //Instaciamos Storage
+        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseStorage  = FirebaseStorage.getInstance();
 
         // Seleccionar y gestionar los diferentes tabs (Mi perfil y Mis casas)
         pagerAdapter = new PagerControllerOutstanding(getSupportFragmentManager(), tabLayoutAccount.getTabCount());

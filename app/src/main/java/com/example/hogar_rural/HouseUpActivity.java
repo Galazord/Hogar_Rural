@@ -1,20 +1,24 @@
 package com.example.hogar_rural;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -22,8 +26,6 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.hogar_rural.Model.Home;
-import com.example.hogar_rural.Model.User;
-import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,15 +34,13 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import okhttp3.internal.Util;
 
 import static com.example.hogar_rural.Utils.Constant.PRICE_MAX;
 import static com.example.hogar_rural.Utils.Constant.PRICE_MIN;
@@ -48,6 +48,7 @@ import static com.example.hogar_rural.Utils.Constant.PRICE_MIN;
 public class HouseUpActivity extends AppCompatActivity {
 
     //--> VARIABLES
+    private ImageView ivUser_avatar;
     private EditText etHouse_input_name, etHouse_input_address, etHouse_input_code, etHouse_input_municipaly, etHouse_input_province, etHouse_input_features, etHouse_input_activities, etHouse_input_interest;
     private RadioGroup RGHouse;
     private RadioButton rbHouseUp_complete, rbHouseUp_rooms;
@@ -59,6 +60,12 @@ public class HouseUpActivity extends AppCompatActivity {
     private int price = PRICE_MIN;
     private MediaPlayer soundError, soundCorrect;
     private List<String> services;
+
+    private boolean ImageExist = false;
+    private int PICK_IMAGE_REQUEST = 1;
+    private Bitmap bitmap;
+    private Uri filePath;
+    private String urlImage;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -80,8 +87,9 @@ public class HouseUpActivity extends AppCompatActivity {
     // Inciar componentes
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void initComponent() {
-        services = new ArrayList<>();
+
         // Relaccionar las variables con la parte gráfica
+        ivUser_avatar = (ImageView) findViewById(R.id.ivUser_avatar);
         etHouse_input_name = (EditText) findViewById(R.id.etHouse_input_name);
         etHouse_input_address = (EditText) findViewById(R.id.etHouse_input_address);
         etHouse_input_code = (EditText) findViewById(R.id.etHouse_input_code);
@@ -98,6 +106,7 @@ public class HouseUpActivity extends AppCompatActivity {
         sbHouseUp_priceSelector = (SeekBar) findViewById(R.id.sbHouseUp_priceSelector);
         sbHouseUp_priceSelector.setMin(PRICE_MIN);
         sbHouseUp_priceSelector.setMax(PRICE_MAX);
+        services = new ArrayList<>();
         tbFilter_adapted = (ToggleButton) findViewById(R.id.tbFilter_adapted);
         tbFilter_air = (ToggleButton) findViewById(R.id.tbFilter_air);
         tbFilter_barbecue = (ToggleButton) findViewById(R.id.tbFilter_barbecue);
@@ -170,6 +179,106 @@ public class HouseUpActivity extends AppCompatActivity {
 
     }
 
+    // Subir los datos de usuario a firebase
+    private void registerHomesFirestore(Home home){
+
+        mFirestore.collection("homes")
+                .document(home.getId())
+                .set(home)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Usuario registrado con éxito");
+                        soundCorrect.start();
+
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this,"ERROR GENERAL.");
+                        soundError.start();
+                        Log.e("ERROR FIRESTORE USER: ", e.getMessage());
+                    }
+                });
+    }
+
+    // Para seleccionar una imagen
+    private void showFileChooser(){
+
+        ImageExist = true;
+
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+
+        startActivityForResult(Intent.createChooser(intent, "Selecciona una o varias imágenes"), PICK_IMAGE_REQUEST);
+    }
+
+    // Subir imagen al servidor
+    private void uploadImage(String idUser) {
+
+        if (filePath != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Subiendo fotos...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("users/" + idUser);
+
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this, "ERROR: No se ha subido la imagen" + e.getMessage());
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Barra de progreso al subir la imagen
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+
+                            progressDialog.setMessage("Subida " + (int) progress + "%");
+                        }
+                    });
+        }
+    }
+
+    // Validación de la imagen
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
+
+            filePath = data.getData();
+
+            try {
+
+                // Cómo obtener el mapa de bits de la galería
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                // Configuración del mapa de bits en el ImageView
+                ivUser_avatar.setImageBitmap(bitmap);
+
+            }catch (IOException e){
+
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     //--> CLICK BOTONES
     // Controlador de los radio buttom: Integro/ Habitaciones
     public void CheckButtonTypeHouse(View view) {
@@ -219,7 +328,7 @@ public class HouseUpActivity extends AppCompatActivity {
             String date_str = UtilMethod.getDate(date);
             Timestamp date_now = UtilMethod.getTimestamp(date_str);*/
             Timestamp date_now = Timestamp.now();
-           typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, getWindow().getDecorView().getRootView(), getApplicationContext());
+            typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, getWindow().getDecorView().getRootView(), getApplicationContext());
 
 
             String idHome = UtilMethod.getUIID();
@@ -229,33 +338,6 @@ public class HouseUpActivity extends AppCompatActivity {
         }
 
 
-    }
-
-    private void registerHomesFirestore(Home home){
-
-            // Subir los datos de usuario a firebase
-            mFirestore.collection("homes")
-                    .document(home.getId())
-                    .set(home)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-
-                            UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Usuario registrado con éxito");
-                            soundCorrect.start();
-
-
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this,"ERROR GENERAL.");
-                            soundError.start();
-                            Log.e("ERROR FIRESTORE USER: ", e.getMessage());
-                        }
-                    });
     }
 
     // Volver a la vista de Mi Perfil
@@ -335,5 +417,10 @@ public class HouseUpActivity extends AppCompatActivity {
         price++;
         tvHouseUp_priceIndicator.setText(price+" € por persona");
 
+    }
+
+    // Seleccionar una o varias imágenes para la galería de la casa
+    public void clickSelectGalleryImage(View view) {
+        showFileChooser();
     }
 }

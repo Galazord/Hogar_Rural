@@ -20,15 +20,19 @@ import com.example.hogar_rural.Utils.UtilMethod;
 
 import java.util.Calendar;
 
+import static com.example.hogar_rural.Utils.Constant.PRICE_MIN;
+
 public class FiltersActivity extends AppCompatActivity {
 
     //--> VARIABLES
     private TextView tvFilter_priceIndicator, tvFilter_input_entrance, tvFilter_input_exit, tvFilter_nPersons;
-    private Button btnLessPerson, btnPlusPerson, btnLessValoration, btnPlusValoration;
+    private Button btnLessPerson, btnPlusPerson, btnLessValoration, btnPlusValoration, btnPrice_plus, btnPrice_less;
     private ToggleButton tbFilter_complete, tbFilter_room;
     private SeekBar sbFilter_priceSelector;
     private DatePickerDialog.OnDateSetListener setListener;
     private MediaPlayer soundError;
+    private int numPeople = 1, numValoration = 0;
+    private int price = PRICE_MIN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,8 @@ public class FiltersActivity extends AppCompatActivity {
         btnPlusPerson = (Button) findViewById(R.id.btnPlusPerson);
         btnLessValoration = (Button) findViewById(R.id.btnLessValoration);
         btnPlusValoration = (Button) findViewById(R.id.btnPlusValoration);
+        btnPrice_less = (Button) findViewById(R.id.btnPrice_less);
+        btnPrice_plus = (Button) findViewById(R.id.btnPrice_plus);
         tbFilter_complete = (ToggleButton) findViewById(R.id.tbFilter_complete);
         tbFilter_room = (ToggleButton) findViewById(R.id.tbFilter_room);
         sbFilter_priceSelector = (SeekBar) findViewById(R.id.sbFilter_priceSelector);
@@ -134,13 +140,59 @@ public class FiltersActivity extends AppCompatActivity {
 
     }
 
-    // Acción ToggleButtom: Habitaciones íntegras
-    public void OnDefaultToggleClickComplete(View view) {
-        UtilMethod.showToast(TypeToast.SUCCESS, this,"OnDefaultToggleClickComplete");
+    //--> CLICK BOTONES
+    // Añadir + personas
+    public void clickAddPeople(View view) {
+
+        // Cambiar color para indicar que se puede llegar al mínimo posible
+        btnLessPerson.setBackgroundResource(R.drawable.gradient_green);
+
+        // Sumar 1
+        numPeople++;
+        tvFilter_nPersons.setText(numPeople+" personas");
     }
 
+    // Añadir - personas
+    public void clickLessPeople(View view) {
+        if(numPeople==1){
 
-    //--> CLICK BOTONES
+            // Cambiar color para indicar que se ha llegado al mínimo posible
+            btnLessPerson.setBackgroundResource(R.drawable.gradient_grey);
+
+        }else{
+
+            // Restar 1
+            numPeople--;
+            tvFilter_nPersons.setText(numPeople+" personas");
+        }
+    }
+
+    // Añadir + valoración
+    public void clickAddValoration(View view) {
+
+        // Cambiar color para indicar que se puede llegar al mínimo posible
+        btnLessValoration.setBackgroundResource(R.drawable.gradient_green);
+
+        // Sumar 1
+        numValoration++;
+
+    }
+
+    // Añadir - personas
+    public void clickLessValoration(View view) {
+        if(numValoration==1){
+
+            // Cambiar color para indicar que se ha llegado al mínimo posible
+            btnLessValoration.setBackgroundResource(R.drawable.gradient_grey);
+
+        }else{
+
+            // Restar 1
+            numValoration--;
+
+        }
+    }
+
     // Confirmar la selección de filtros
     public void clickConfirmFilters(View view) {
 
@@ -156,5 +208,38 @@ public class FiltersActivity extends AppCompatActivity {
 
     }
 
+    // Acción ToggleButtom: Habitaciones íntegras
+    public void OnDefaultToggleClickComplete(View view) {
+        //UtilMethod.showToast(TypeToast.SUCCESS, this,"OnDefaultToggleClickComplete");
+    }
+
+    // Aumentar en un punto el precio
+    public void clickPlusPriceFilter(View view) {
+
+        // Cambiar color para indicar que se puede llegar al mínimo posible
+        btnPrice_less.setBackgroundResource(R.drawable.gradient_green);
+
+        // Sumar 1
+        price++;
+        tvFilter_priceIndicator.setText(price+" € por persona");
+
+    }
+
+    // Disminuir en un punto el precio
+    public void clickLessPriceFilter(View view) {
+
+        if(price == PRICE_MIN){
+
+            // Cambiar color para indicar que se ha llegado al mínimo posible
+            btnPrice_less.setBackgroundResource(R.drawable.gradient_grey);
+
+        }else{
+
+            // Restar 1
+            price--;
+            tvFilter_priceIndicator.setText(price+" € por persona");
+        }
+
+    }
 
 }
