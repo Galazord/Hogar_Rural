@@ -309,10 +309,17 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickPublishHouse(View view) {
 
 
-        //Añadir a este if todos aquellos campos que quieras que sean obligatorios.
-        if(services.isEmpty() || TextUtils.isEmpty(etHouse_input_name.getText())){
+        // Comprobar el contenido de los campos obligatorios.
+        if(services.isEmpty() || TextUtils.isEmpty(etHouse_input_name.getText()) || TextUtils.isEmpty(etHouse_input_address.getText()) || TextUtils.isEmpty(etHouse_input_municipaly.getText()) || TextUtils.isEmpty(etHouse_input_province.getText()) || TextUtils.isEmpty(etHouse_input_code.getText()) || TextUtils.isEmpty(etHouse_input_features.getText()) || TextUtils.isEmpty(etHouse_input_activities.getText()) || TextUtils.isEmpty(etHouse_input_interest.getText())){
+
+            UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this, "ERROR: Debes rellenar todos los campos.");
 
         }else{
+
+            // Generar un ID para la casa
+            String idHome = UtilMethod.getUIID();
+
+            // Recoger valores de los campos
             String nameHome = etHouse_input_name.getText().toString();
             Long typeRoom = -1L;
             String address = etHouse_input_address.getText().toString();
@@ -323,20 +330,20 @@ public class HouseUpActivity extends AppCompatActivity {
             String activities = etHouse_input_activities.getText().toString();
             String interest_places = etHouse_input_interest.getText().toString();
 
-
           /*  Date date = new Date();
             String date_str = UtilMethod.getDate(date);
             Timestamp date_now = UtilMethod.getTimestamp(date_str);*/
+
+            // Fecha de hoy para la creación/actualización
             Timestamp date_now = Timestamp.now();
+            // Tipo de vivienda (Ïntegra/ habitaciones)
             typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, getWindow().getDecorView().getRootView(), getApplicationContext());
 
-
-            String idHome = UtilMethod.getUIID();
-
-            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now,services);
+            // Agrupar todos los datos en un tipo Home y subirlo a firebase
+            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now, services);
             registerHomesFirestore(home);
-        }
 
+        }
 
     }
 

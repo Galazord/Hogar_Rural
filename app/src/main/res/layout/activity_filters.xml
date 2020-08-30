@@ -355,7 +355,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="20dp">
 
                     <!-- Botón disminuir el precio-->
@@ -375,13 +374,13 @@
                     <!-- SeekBar: barra selectora de precios -->
                     <SeekBar
                         android:id="@+id/sbFilter_priceSelector"
-                        android:layout_width="300dp"
+                        android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:layout_marginTop="15dp"
                         android:layout_weight="1"
                         android:indeterminate="false"
                         android:max="100"
-                        android:min="0"
+                        android:min="20"
                         android:progress="50"
                         android:progressDrawable="@drawable/track_progress_bar"
                         android:thumb="@drawable/thumb_progress_bar" />

@@ -8,15 +8,20 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
+import com.google.firebase.Timestamp;
 
 import java.util.Calendar;
 
@@ -33,6 +38,7 @@ public class FiltersActivity extends AppCompatActivity {
     private MediaPlayer soundError;
     private int numPeople = 1, numValoration = 0;
     private int price = PRICE_MIN;
+    private CheckBox cbFilter_cheaper, cbFilter_expensive, cbFilter_MoreValor, cbFilter_Comentary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,10 @@ public class FiltersActivity extends AppCompatActivity {
         tbFilter_room = (ToggleButton) findViewById(R.id.tbFilter_room);
         sbFilter_priceSelector = (SeekBar) findViewById(R.id.sbFilter_priceSelector);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
+        cbFilter_cheaper = (CheckBox) findViewById(R.id.cbFilter_cheaper);
+        cbFilter_expensive = (CheckBox) findViewById(R.id.cbFilter_expensive);
+        cbFilter_MoreValor = (CheckBox) findViewById(R.id.cbFilter_MoreValor);
+        cbFilter_Comentary = (CheckBox) findViewById(R.id.cbFilter_Comentary);
 
         // Mostrar calendario para la fecha de llegada
         activateCalendar(tvFilter_input_entrance);
@@ -121,6 +131,14 @@ public class FiltersActivity extends AppCompatActivity {
         sbFilter_priceSelector.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+                // Igualar a la variable precio
+                price = progress;
+
+                // No bajar del mínimo
+                if(price < PRICE_MIN){
+                    price = PRICE_MIN;
+                }
 
                 // Mostrar indicador de texto de la selección
                 tvFilter_priceIndicator.setText(progress + " € por persona");
@@ -196,6 +214,36 @@ public class FiltersActivity extends AppCompatActivity {
     // Confirmar la selección de filtros
     public void clickConfirmFilters(View view) {
 
+        // Recoger valores de los campos
+        int totalPeople = numPeople;
+        String dateEntrance = tvFilter_input_entrance.getText().toString();
+        String dateExit = tvFilter_input_exit.getText().toString();
+        Long typeRoom = -1L;
+        String priceDay = tvFilter_priceIndicator.getText().toString();
+        boolean checkCheaper = false;
+        if(cbFilter_cheaper.isChecked()){
+            checkCheaper = true;
+        }
+        boolean checkExpensive = false;
+        if(cbFilter_expensive.isChecked()){
+            checkCheaper = true;
+        }
+        boolean checkValoration = false;
+        if(cbFilter_MoreValor.isChecked()){
+            checkCheaper = true;
+        }
+        boolean checkComentary = false;
+        if(cbFilter_Comentary.isChecked()){
+            checkCheaper = true;
+        }
+
+        // Recoger valoraciones
+
+
+        // Tipo de vivienda (Ïntegra/ habitaciones)
+
+
+        // Realizar la gestión del filtro
 
     }
 
@@ -211,6 +259,15 @@ public class FiltersActivity extends AppCompatActivity {
     // Acción ToggleButtom: Habitaciones íntegras
     public void OnDefaultToggleClickComplete(View view) {
         //UtilMethod.showToast(TypeToast.SUCCESS, this,"OnDefaultToggleClickComplete");
+
+        // Indicar que sólo pueda haber uno seleccinado en cuanto al tipo de casa
+        if(tbFilter_complete.isChecked()){
+            tbFilter_room.setChecked(false);
+        }
+        if(tbFilter_room.isChecked()){
+            tbFilter_complete.setChecked(false);
+        }
+
     }
 
     // Aumentar en un punto el precio
@@ -237,6 +294,12 @@ public class FiltersActivity extends AppCompatActivity {
 
             // Restar 1
             price--;
+
+            // No bajar del mínimo
+            if(price < PRICE_MIN){
+                price = PRICE_MIN;
+            }
+
             tvFilter_priceIndicator.setText(price+" € por persona");
         }
 
