@@ -156,8 +156,8 @@
     <string name="houseUp_amount">Introduzca la capacidad máxima de inquilinos:</string>
     <string name="houseUp_eurosDay">0 €/día</string>
     <string name="houseUp_btnDateDisponibility">FECHAS DISPONIBLES \nPARA LA VIVIENDA</string>
-    <string name="houseUp_features">Escribe una breve descripción de la casa y sus característicasprincipales:</string>
-    <string name="houseUp_activities">Escribe las actividades qeu se pueden realizar en la casa y/o alrededores del lugar:</string>
+    <string name="houseUp_features">Escribe una breve descripción de la casa y sus características principales:</string>
+    <string name="houseUp_activities">Escribe las actividades que se pueden realizar en la casa y/o alrededores del lugar:</string>
     <string name="houseUp_placeInterest">Escribe los lugares de interés que se pueden disfrutar por la zona:</string>
     <string name="houseUp_services">Selecciona los servicios que ofrece la vivienda:</string>
     <string name="houseUp_publish">PUBLICAR OFERTA</string>
@@ -165,6 +165,13 @@
     <!-- DESTACADOS -->
     <string name="outstanding_news">Novedades</string>
     <string name="outstanding_lowprice">Bajan de precio</string>
+
+    <!-- ADAPTER -->
+    <string name="adapter_price"> €/persona</string>
+    <string name="adapter_people"> personas</string>
+    <string name="adapter_comments"> opinones</string>
+    <string name="adapter_rental_1">Íntegro</string>
+    <string name="adapter_rental_2">Habitaciones</string>
 
 
 </resources>

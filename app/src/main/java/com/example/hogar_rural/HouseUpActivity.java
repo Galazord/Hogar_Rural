@@ -365,6 +365,10 @@ public class HouseUpActivity extends AppCompatActivity {
             Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now, services);
             registerHomesFirestore(home);
 
+            // Volver a mi perfil
+            Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
+            startActivity(intent);
+
         }
 
     }

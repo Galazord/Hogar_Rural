@@ -50,9 +50,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         String namePlace = model.get(position).getName();
         String typeRental ="";
         if(model.get(position).getType() == 1){
-            typeRental = "Integro";
+            typeRental = "Íntegro";
         }else if(model.get(position).getType() == 2) {
-            typeRental = "Habitación";
+            typeRental = "Habitaciones";
         }
         String imgGalery = "gs://hogarapp-77df0.appspot.com/homes/default_house.png";
         String price = String.valueOf(model.get(position).getPrice());
@@ -61,9 +61,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         holder.txtPlace.setText(namePlace);
         holder.txtRental.setText(typeRental);
-        holder.txtPrice.setText(price);
-        holder.txtPeople.setText(numPerson);
-        holder.txtNumOpinions.setText(numOpinion);
+        holder.txtPrice.setText(price + " €");
+        holder.txtPeople.setText(numPerson + " personas");
+        holder.txtNumOpinions.setText(numOpinion + " opinones");
 
         // Incluir la imagen en la Galería de imagenes del Holder
         /* Glide.with(holder.itemView.getContext())
