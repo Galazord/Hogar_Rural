@@ -64,8 +64,9 @@ public class HouseUpActivity extends AppCompatActivity {
     private boolean ImageExist = false;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
-    private Uri filePath;
-    private String urlImage;
+    private List<Uri> filePath;
+    private String  urlImage;
+    private int indexImage = 0;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -90,6 +91,7 @@ public class HouseUpActivity extends AppCompatActivity {
 
         // Relaccionar las variables con la parte gráfica
         ivUser_avatar = (ImageView) findViewById(R.id.ivUser_avatar);
+        filePath = new ArrayList<>();
         etHouse_input_name = (EditText) findViewById(R.id.etHouse_input_name);
         etHouse_input_address = (EditText) findViewById(R.id.etHouse_input_address);
         etHouse_input_code = (EditText) findViewById(R.id.etHouse_input_code);
@@ -182,6 +184,9 @@ public class HouseUpActivity extends AppCompatActivity {
     // Subir los datos de usuario a firebase
     private void registerHomesFirestore(Home home){
 
+        // Generar una ID para cada casa
+        final String homeId = home.getId();
+
         mFirestore.collection("homes")
                 .document(home.getId())
                 .set(home)
@@ -190,6 +195,7 @@ public class HouseUpActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
 
                         UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Usuario registrado con éxito");
+                        uploadImage(mAuth.getCurrentUser().getUid(), homeId);
                         soundCorrect.start();
 
 
@@ -206,52 +212,65 @@ public class HouseUpActivity extends AppCompatActivity {
                 });
     }
 
-    // Para seleccionar una imagen
+    // Para seleccionar una o varias imagenes
     private void showFileChooser(){
 
         ImageExist = true;
 
         Intent intent = new Intent();
         intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-
         startActivityForResult(Intent.createChooser(intent, "Selecciona una o varias imágenes"), PICK_IMAGE_REQUEST);
     }
 
     // Subir imagen al servidor
-    private void uploadImage(String idUser) {
+    private void uploadImage(String idUser, String idHomes) {
 
-        if (filePath != null) {
+        // di la lista no es nula o vacía
+        if (filePath != null && !filePath.isEmpty()) {
+
+            // Mostrar barra de progreso de la subida de imágenes
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Subiendo fotos...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("users/" + idUser);
+            // Contador de número de imágenes inicializado
+            int cont = 1;
 
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
+            // Recorrer cada imagen y subirla a firebase en una carpeta propia
+            for(Uri u: filePath) {
+                String nameImage = idHomes+"_"+cont;
+                StorageReference ref = storageReference.child("homes/" + idUser+"/"+nameImage);
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this, "ERROR: No se ha subido la imagen" + e.getMessage());
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            // Barra de progreso al subir la imagen
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                ref.putFile(u)
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                progressDialog.dismiss();
 
-                            progressDialog.setMessage("Subida " + (int) progress + "%");
-                        }
-                    });
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                progressDialog.dismiss();
+                                UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this, "ERROR: No se ha subido la imagen" + e.getMessage());
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                // Barra de progreso al subir la imagen
+                                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                                progressDialog.setMessage("Subida " + (int) progress + "%");
+                            }
+                        });
+
+                cont++;
+            }
+
         }
     }
 
@@ -260,28 +279,43 @@ public class HouseUpActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null){
 
-            filePath = data.getData();
+            if(data.getClipData() != null) {
 
-            try {
+                drawImage(bitmap, data.getClipData().getItemAt(0).getUri());
 
-                // Cómo obtener el mapa de bits de la galería
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                // Configuración del mapa de bits en el ImageView
-                ivUser_avatar.setImageBitmap(bitmap);
+                int count = data.getClipData().getItemCount();
+                for(int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    filePath.add(imageUri);
+                }
 
-            }catch (IOException e){
-
-                e.printStackTrace();
             }
+        }
 
+
+    }
+
+    private void drawImage(Bitmap bitmap, Uri u){
+        try {
+
+            // Cómo obtener el mapa de bits de la galería
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), u);
+            // Configuración del mapa de bits en el ImageView
+             ivUser_avatar.setImageBitmap(bitmap);
+
+        }catch (IOException e){
+
+            e.printStackTrace();
         }
     }
 
+
     //--> CLICK BOTONES
-    // Controlador de los radio buttom: Integro/ Habitaciones
-    public void CheckButtonTypeHouse(View view) {
+    // Seleccionar una o varias imágenes para la galería de la casa
+    public void clickSelectGalleryImage(View view) {
+        showFileChooser();
     }
 
     // Seleccionar fechas disponibles
@@ -290,18 +324,10 @@ public class HouseUpActivity extends AppCompatActivity {
 
     // Acción para seleccionar ON/OFF los iconos de los servicios
     public void OnDefaultToggleClickServices(View view) {
+
         ToggleButton toggleButton = (ToggleButton)view;
         String serviceName = toggleButton.getTag().toString();
         services = UtilMethod.checkServicesList(services,serviceName);
-
-        /*
-        Log.i("ARRAY_SERVICIOS","Tam "+services.size());
-
-        for(String a: services){
-            Log.i("item de servicios",a);
-
-        }
-        */
 
     }
 
@@ -330,10 +356,6 @@ public class HouseUpActivity extends AppCompatActivity {
             String activities = etHouse_input_activities.getText().toString();
             String interest_places = etHouse_input_interest.getText().toString();
 
-          /*  Date date = new Date();
-            String date_str = UtilMethod.getDate(date);
-            Timestamp date_now = UtilMethod.getTimestamp(date_str);*/
-
             // Fecha de hoy para la creación/actualización
             Timestamp date_now = Timestamp.now();
             // Tipo de vivienda (Ïntegra/ habitaciones)
@@ -347,12 +369,44 @@ public class HouseUpActivity extends AppCompatActivity {
 
     }
 
-    // Volver a la vista de Mi Perfil
-    public void clickBackFilters(View view) {
+    // Eliminar la foto actual de la galería de imagenes
+    public void clickGalleryRemove(View view) {
 
-        Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
-        startActivity(intent);
-        finish();
+    }
+
+    // Pasar en la galería a la foto de la izquierda
+    public void clickGalleryNextLeft(View view) {
+
+        if(indexImage == 0){
+
+        }else{
+            indexImage--;
+            drawImage(bitmap, filePath.get(indexImage));
+
+            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+            if(indexImage == 0){
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
+            }
+        }
+
+
+    }
+
+    // Pasar en la galería a la foto de la izquierda
+    public void clickGalleryNextRight(View view) {
+
+
+        if(filePath.size()-1 == indexImage ){
+            // Cambiar color para indicar que se puede llegar al mínimo posible
+            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+        }else{
+            indexImage++;
+            drawImage(bitmap, filePath.get(indexImage));
+            if(indexImage == filePath.size()-1){
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+            }
+            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+        }
 
     }
 
@@ -382,21 +436,6 @@ public class HouseUpActivity extends AppCompatActivity {
         }
     }
 
-    // Pasar en la galería a la foto de la izquierda
-    public void clickGalleryNextLeft(View view) {
-
-        // Cambiar color para indicar que se puede llegar al mínimo posible
-        btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
-
-    }
-
-    // Pasar en la galería a la foto de la izquierda
-    public void clickGalleryNextRight(View view) {
-
-        // Cambiar color para indicar que se puede llegar al mínimo posible
-        btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
-    }
-
     // Disminuir en un punto el precio por día
     public void clickLessPrice(View view) {
 
@@ -409,6 +448,12 @@ public class HouseUpActivity extends AppCompatActivity {
 
             // Restar 1
             price--;
+
+            // No bajar del mínimo
+            if(price < PRICE_MIN){
+                price = PRICE_MIN;
+            }
+
             tvHouseUp_priceIndicator.setText(price+" € por persona");
         }
 
@@ -426,8 +471,13 @@ public class HouseUpActivity extends AppCompatActivity {
 
     }
 
-    // Seleccionar una o varias imágenes para la galería de la casa
-    public void clickSelectGalleryImage(View view) {
-        showFileChooser();
+    // Volver a la vista de Mi Perfil
+    public void clickBackMyProfile(View view) {
+
+        Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
+        startActivity(intent);
+        finish();
+
     }
+
 }

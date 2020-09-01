@@ -146,6 +146,7 @@
     <!-- DETALLE DEL FORMULARIO DE CASAS -->
     <string name="houseUp_info">Rellena el siguiente formulario para dar de alta la casa que deseas ofertar.</string>
     <string name="houseUp_info2">Elija una foto o varias del aspecto de la vivienda.\nMostrar fotos ayudará muchísimo a interesarse por el lugar.</string>
+    <string name="houseUp_imageRemove">Eliminar</string>
     <string name="houseUp_namePlace">Introduce el nombre del lugar</string>
     <string name="houseUp_type">¿Qué tipo de vivienda quieres ofrecer?</string>
     <string name="houseUp_complete">Íntegro</string>

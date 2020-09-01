@@ -110,9 +110,17 @@ public class OutstandingActivity extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.MyProfile: // MI PERFIL
-                        startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+
+                        //Existe un usuario logueado
+                        if(mAuth.getCurrentUser()!=null){
+                            startActivity(new Intent(getApplicationContext(), UserAccountActivity.class));
+                        }else{
+                            startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+                        }
+
                         overridePendingTransition(0,0);
                         return true;
+
                     case R.id.OutStanding: // DESTACADOS
                         return true;
                     case R.id.Favorites: // FAVORITOS

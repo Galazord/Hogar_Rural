@@ -9,4 +9,5 @@ public class Constant {
     public static String URL_GS_IMAGE_HOME = "gs://hogarapp-77df0.appspot.com/homes/"; // URL de la carpeta de imágenes de casas
     public static int PRICE_MAX = 500;
     public static int PRICE_MIN = 20;
+    public static int MAX_IMAGE_HOMES = 10;
 }

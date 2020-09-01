@@ -1,15 +1,16 @@
 package com.example.hogar_rural;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,21 +18,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.hogar_rural.Interface.DbRetrofitApi;
+import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.House;
-import com.example.hogar_rural.Utils.TypeToast;
-import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ExplorerActivity extends AppCompatActivity {
 
@@ -40,16 +37,16 @@ public class ExplorerActivity extends AppCompatActivity {
     private String[] nameList = {"Pakistan", "Canada", "India", "Alemania", "Australia", "China", "España", "Francia", "Italia"};
     private ArrayAdapter<String> adapterList;
     private Button btnFilters, btnMap;
+    private MediaPlayer soundError;
+
     // RecyclerView
     private RecyclerView recyclerView;
     private Adapter adapter;
-    private ArrayList<House> modelHouse;
-    private DbRetrofitApi dbRetrofitApi;
-    private MediaPlayer soundError;
+    private ArrayList<Home> list_home = new ArrayList<Home>();
 
+    // firebase
     private FirebaseAuth mAuth;
-    //--> VARIABLES FIJAS
-    private final String URL_PHP = "https://hogarruralapp.000webhostapp.com/hogarRural/php/";
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,27 +59,30 @@ public class ExplorerActivity extends AppCompatActivity {
         // Iniciar componentes
         initComponent();
 
+        // Llamar a firebase para recoger los datos y mostrarlos
+        loadFromFirebase();
+
     }
 
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
+
+        // Firebase
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         // Inicializar y/o asignar VARIABLES a la parte gráfica
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navegation);
         recyclerView = findViewById(R.id.exploreRecyclerView);
-        modelHouse = new ArrayList<>();
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        //recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2)));
         btnFilters = (Button) findViewById(R.id.btnFilters);
         btnMap = (Button) findViewById(R.id.btnMap);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
 
-        // RecyclerView: instanciar Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_PHP)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        dbRetrofitApi = retrofit.create(DbRetrofitApi.class);
+
 
         //--> MENÚ DE NAVEGACIÓN INFERIOR
         // Menu de Navegación: Establecer este icono como marcado en el actual
@@ -129,59 +129,41 @@ public class ExplorerActivity extends AppCompatActivity {
 
          */
 
-        // RecyclerView 1: Mostrar los datos del listado de casas
-        showListHouses();
 
     }
 
-    // Mostrar datos de cada casa en el recyclerView
-    private void showListHouses() {
+    // Llamar a firebase para recoger los datos y mostrarlos
+    private void loadFromFirebase(){
+        db.collection("homes")
 
-        Call<List<House>> call = dbRetrofitApi.getHouses();
-        call.enqueue(new Callback<List<House>>() {
-            @Override
-            public void onResponse(Call<List<House>> call, Response<List<House>> response) {
-                // Cuando la conexión NO fue exitosa
-                if(!response.isSuccessful()){
-                    UtilMethod.showToast(TypeToast.ERROR, ExplorerActivity.this,"showListHouses: Error código: " + response.code());
-                    soundError.start();
-                }
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
 
-                // Recoger los campos de la base de datos e incluirlos en el Arraylist (aqui se guardan los datos de cada casa)
-                List<House> houses = response.body();
-                for (House house: houses){
-                    House h = new House();
-                    h.setIdHouse(house.getIdHouse());
-                    h.setName(house.getName());
-                    h.setRental(house.getRental());
-                    h.setPersonMax(house.getPersonMax() + " personas");
-                    h.setPrice(house.getPrice() + "€");
-                    h.setNumOpinion(house.getNumOpinion() + " opiniones");
-                    h.setGalleryImg(house.getGalleryImg());
-                    modelHouse.add(h);
+                        // Empezar con la lista vacía antes de mostrar
+                        list_home.removeAll(list_home);
 
-                }
-                showFinalHouses();
+                        // Recorrer firebase y guardar cada infomación de la casa en un objeto tipo Home y en una lista (list_home)
+                        for (QueryDocumentSnapshot document : value) {
 
-            }
+                            Home h = document.toObject(Home.class);
+                            list_home.add(h);
+                            Log.d("QUERY DB", document.getId() + " => " + document.getData());
+                        }
 
-            @Override
-            public void onFailure(Call<List<House>> call, Throwable t) {
-                // Cuando la conexión falla por cualquier motivo
-                UtilMethod.showToast(TypeToast.ERROR, ExplorerActivity.this,"showListHouses: Fallo en la conexión: " + t.getMessage());
-                soundError.start();
-            }
-        });
+                        // Cargar/ mostrar la información en el recyclerView
+                        loadRecyclerView();
+                    }
+                });
+
 
     }
 
-    // Mostrar el resultado final del listado del RecyclerView
-    private void showFinalHouses() {
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this, modelHouse);
+    // Cargar/ mostrar la información en el recyclerView
+    private void loadRecyclerView(){
+        Adapter adapter = new Adapter(getApplicationContext(), list_home);
         recyclerView.setAdapter(adapter);
-
     }
 
     // Menú superior: Resolver la búsqueda
@@ -209,6 +191,7 @@ public class ExplorerActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
 
     //--> CLICK BOTONES
     // Ir a la sección Filtrar

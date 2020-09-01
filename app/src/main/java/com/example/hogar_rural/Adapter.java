@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.House;
+import com.example.hogar_rural.Utils.Constant;
 
 import java.util.ArrayList;
 
@@ -20,10 +22,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     //--> VARIABLES
     private LayoutInflater inflater;
-    private ArrayList<House> model;
+    private ArrayList<Home> model;
 
     //--> CONSTRCUTOR
-    public Adapter(Context context, ArrayList<House> model) {
+    public Adapter(Context context, ArrayList<Home> model) {
         this.inflater = LayoutInflater.from(context);
         this.model = model;
     }
@@ -46,11 +48,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         // Obtener los datos del modelo y pasarlos a la vista
         // Aqui se ponen los componentes(titulo, fecha e imagen)
         String namePlace = model.get(position).getName();
-        String typeRental = model.get(position).getRental();
-        String imgGalery = model.get(position).getGalleryImg();
-        String price = model.get(position).getPrice();
-        String numPerson = model.get(position).getPersonMax();
-        String numOpinion = model.get(position).getNumOpinion();
+        String typeRental ="";
+        if(model.get(position).getType() == 1){
+            typeRental = "Integro";
+        }else if(model.get(position).getType() == 2) {
+            typeRental = "Habitación";
+        }
+        String imgGalery = "gs://hogarapp-77df0.appspot.com/homes/default_house.png";
+        String price = String.valueOf(model.get(position).getPrice());
+        String numPerson = String.valueOf(model.get(position).getAmount());
+        String numOpinion = "4";
 
         holder.txtPlace.setText(namePlace);
         holder.txtRental.setText(typeRental);
@@ -59,13 +66,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.txtNumOpinions.setText(numOpinion);
 
         // Incluir la imagen en la Galería de imagenes del Holder
-        Glide.with(holder.itemView.getContext())
+        /* Glide.with(holder.itemView.getContext())
                 .load(imgGalery)
                 .centerCrop()
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.imageGalery);
-
+*/
 
 
     }
@@ -90,7 +97,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 public void onClick(View view) {
 
                     Intent in = new Intent(view.getContext(), DetailHouseActivity.class);
-                    in.putExtra("idHouse", model.get(getAdapterPosition()).getIdHouse());
+                    in.putExtra("idHouse", model.get(getAdapterPosition()).getId());
                     // Abrir actividad: DetailHouseActivity
                     view.getContext().startActivity(in);
 
