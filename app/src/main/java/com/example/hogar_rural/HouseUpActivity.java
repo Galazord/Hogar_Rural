@@ -26,12 +26,14 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -55,11 +57,12 @@ public class HouseUpActivity extends AppCompatActivity {
     private TextView tvCounter_capMax, tvHouseUp_priceIndicator;
     private SeekBar sbHouseUp_priceSelector;
     private ToggleButton tbFilter_adapted, tbFilter_air, tbFilter_barbecue, tbFilter_bath, tbFilter_pool, tbFilter_climatized, tbFilter_garden, tbFilter_heating, tbFilter_jacuzzi, tbFilter_kitchen, tbFilter_mountain, tbFilter_parking, tbFilter_beach, tbFilter_breakfast, tbFilter_children, tbFilter_fireplace, tbFilter_pets, tbFilter_spa, tbFilter_tv, tbFilter_wifi;
-    private Button btnSelectGaleryImage, btnCapMax_less, btnCapMax_plus, btnGallery_next_left, btnGallery_next_right, btnPrice_less, btnPrice_plus;
+    private Button btnSelectGaleryImage, btnCapMax_less, btnCapMax_plus, btnGallery_next_left, btnGallery_next_right, btnPrice_less, btnPrice_plus, btnGallery_remove;
     private int numPeople = 1;
     private int price = PRICE_MIN;
     private MediaPlayer soundError, soundCorrect;
     private List<String> services;
+    private List<String> images;
 
     private boolean ImageExist = false;
     private int PICK_IMAGE_REQUEST = 1;
@@ -92,6 +95,7 @@ public class HouseUpActivity extends AppCompatActivity {
         // Relaccionar las variables con la parte gráfica
         ivUser_avatar = (ImageView) findViewById(R.id.ivUser_avatar);
         filePath = new ArrayList<>();
+        images = new ArrayList<>();
         etHouse_input_name = (EditText) findViewById(R.id.etHouse_input_name);
         etHouse_input_address = (EditText) findViewById(R.id.etHouse_input_address);
         etHouse_input_code = (EditText) findViewById(R.id.etHouse_input_code);
@@ -136,6 +140,7 @@ public class HouseUpActivity extends AppCompatActivity {
         btnGallery_next_right = (Button) findViewById(R.id.btnGallery_next_right);
         btnPrice_less = (Button) findViewById(R.id.btnPrice_less);
         btnPrice_plus = (Button) findViewById(R.id.btnPrice_plus);
+        btnGallery_remove = (Button) findViewById(R.id.btnGallery_remove);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
         soundCorrect = MediaPlayer.create(this, R.raw.sound_correct);
 
@@ -146,6 +151,11 @@ public class HouseUpActivity extends AppCompatActivity {
         //Instaciamos Storage
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseStorage  = FirebaseStorage.getInstance();
+
+        // Si solo hay una imagen poner ambos botones en gris
+        btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
+        btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+        btnGallery_remove.setBackgroundResource(R.drawable.gradient_grey);
 
         // Gestión del SeekBar para seleccionar el precio
         generateSeekBar();
@@ -187,6 +197,7 @@ public class HouseUpActivity extends AppCompatActivity {
         // Generar una ID para cada casa
         final String homeId = home.getId();
 
+        // Gestionar el registro final
         mFirestore.collection("homes")
                 .document(home.getId())
                 .set(home)
@@ -222,6 +233,7 @@ public class HouseUpActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Selecciona una o varias imágenes"), PICK_IMAGE_REQUEST);
+
     }
 
     // Subir imagen al servidor
@@ -242,12 +254,14 @@ public class HouseUpActivity extends AppCompatActivity {
             for(Uri u: filePath) {
                 String nameImage = idHomes+"_"+cont;
                 StorageReference ref = storageReference.child("homes/" + idUser+"/"+nameImage);
-
+                images.add(Constant.URL_GS_IMAGE_HOME.concat(idUser+"/"+nameImage));
                 ref.putFile(u)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 progressDialog.dismiss();
+
+
 
                             }
                         })
@@ -268,10 +282,32 @@ public class HouseUpActivity extends AppCompatActivity {
                             }
                         });
 
-                cont++;
+                cont++; // +1 al número de imágenes
             }
 
+            //Guardo en la base de datos el array de string con todas las rutas de las imagenes seleccionadas
+            updateUrlImage(idHomes);
+
         }
+    }
+
+    //Guardo en la base de datos el array de string con todas las rutas de las imagenes seleccionadas
+    private void updateUrlImage(String idHome){
+
+        DocumentReference documentReference = mFirestore.collection("homes").document(idHome);
+
+        documentReference.update("images",images).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(Constant.TAG_INFO, "DocumentSnapshot successfully updated!");
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(Constant.TAG_INFO, "ERROR: updating document", e);
+                    }
+                });
     }
 
     // Validación de la imagen
@@ -279,9 +315,10 @@ public class HouseUpActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // Si se seleccionan varias imágenes
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null){
 
-            if(data.getClipData() != null) {
+            if(data.getClipData() != null ) {
 
                 drawImage(bitmap, data.getClipData().getItemAt(0).getUri());
 
@@ -291,12 +328,26 @@ public class HouseUpActivity extends AppCompatActivity {
                     filePath.add(imageUri);
                 }
 
+                // Poner el color de los botones a verde
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_remove.setBackgroundResource(R.drawable.gradient_green);
+
+            }
+            // Si solo se selecciona 1
+            else if(data.getData()!=null){
+                filePath.add(data.getData());
+                drawImage(bitmap, data.getData());
+
+                // Poner el color de los botones a verde
+                btnGallery_remove.setBackgroundResource(R.drawable.gradient_green);
+
             }
         }
 
 
     }
 
+    // Pintar la imagen en el ImageView
     private void drawImage(Bitmap bitmap, Uri u){
         try {
 
@@ -306,7 +357,6 @@ public class HouseUpActivity extends AppCompatActivity {
              ivUser_avatar.setImageBitmap(bitmap);
 
         }catch (IOException e){
-
             e.printStackTrace();
         }
     }
@@ -365,7 +415,7 @@ public class HouseUpActivity extends AppCompatActivity {
             Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now, services);
             registerHomesFirestore(home);
 
-            // Volver a mi perfil
+            // Volver a mi perfil logueado (UserAccountActivity)
             Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
             startActivity(intent);
 
@@ -375,6 +425,28 @@ public class HouseUpActivity extends AppCompatActivity {
 
     // Eliminar la foto actual de la galería de imagenes
     public void clickGalleryRemove(View view) {
+        if(filePath.size()==1){
+
+            filePath.remove(indexImage);
+            indexImage = 0;
+            ivUser_avatar.setImageResource(R.drawable.icon_missing_house);
+
+            // Si solo hay una imagen poner ambos botones en gris
+            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
+            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+            btnGallery_remove.setBackgroundResource(R.drawable.gradient_grey);
+
+        }else if(filePath.size()>1){
+
+            filePath.remove(indexImage);
+            indexImage = 0;
+            drawImage(bitmap, filePath.get(indexImage));
+
+            // Poner el color de los botones a verde
+            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+            btnGallery_remove.setBackgroundResource(R.drawable.gradient_green);
+        }
 
     }
 
@@ -382,15 +454,24 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickGalleryNextLeft(View view) {
 
         if(indexImage == 0){
-
-        }else{
+            // nada
+        }
+        else{
             indexImage--;
             drawImage(bitmap, filePath.get(indexImage));
-
+            // Poner el color del botón verde
             btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+
+            // Si llega a ser la imagen 0 se cambia el color del botón a gris
             if(indexImage == 0){
                 btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
             }
+        }
+
+        if(filePath.size()==1){
+            // Cambiar color para indicar que se puede llegar al mínimo posible
+            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
         }
 
 
@@ -403,13 +484,21 @@ public class HouseUpActivity extends AppCompatActivity {
         if(filePath.size()-1 == indexImage ){
             // Cambiar color para indicar que se puede llegar al mínimo posible
             btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
-        }else{
+        }
+        else{
             indexImage++;
             drawImage(bitmap, filePath.get(indexImage));
             if(indexImage == filePath.size()-1){
                 btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
             }
             btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+        }
+
+
+        if(filePath.size()==1){
+            // Cambiar color para indicar que se puede llegar al mínimo posible
+            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
         }
 
     }

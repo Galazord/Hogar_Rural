@@ -23,11 +23,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     //--> VARIABLES
     private LayoutInflater inflater;
     private ArrayList<Home> model;
+    private Context context;
 
     //--> CONSTRCUTOR
     public Adapter(Context context, ArrayList<Home> model) {
         this.inflater = LayoutInflater.from(context);
         this.model = model;
+        this.context = context;
     }
 
     // Los 3 métodos implementados del RecyclerView.Adapter
@@ -55,15 +57,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             typeRental = "Habitaciones";
         }
         String imgGalery = "gs://hogarapp-77df0.appspot.com/homes/default_house.png";
-        String price = String.valueOf(model.get(position).getPrice());
-        String numPerson = String.valueOf(model.get(position).getAmount());
-        String numOpinion = "4";
+        String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
+        String numPerson = String.valueOf(model.get(position).getAmount()).concat(this.context.getString(R.string.adapter_people));
+        String numOpinion = "4".concat(this.context.getString(R.string.adapter_comments));
 
+        // Colocar datos en los campos de texto
         holder.txtPlace.setText(namePlace);
         holder.txtRental.setText(typeRental);
-        holder.txtPrice.setText(price + " €");
-        holder.txtPeople.setText(numPerson + " personas");
-        holder.txtNumOpinions.setText(numOpinion + " opinones");
+        holder.txtPrice.setText(price);
+        holder.txtPeople.setText(numPerson);
+        holder.txtNumOpinions.setText(numOpinion);
 
         // Incluir la imagen en la Galería de imagenes del Holder
         /* Glide.with(holder.itemView.getContext())

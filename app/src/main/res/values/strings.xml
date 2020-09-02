@@ -167,7 +167,7 @@
     <string name="outstanding_lowprice">Bajan de precio</string>
 
     <!-- ADAPTER -->
-    <string name="adapter_price"> €/persona</string>
+    <string name="adapter_price"> €</string>
     <string name="adapter_people"> personas</string>
     <string name="adapter_comments"> opinones</string>
     <string name="adapter_rental_1">Íntegro</string>

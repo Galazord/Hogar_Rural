@@ -8,10 +8,11 @@ import java.util.List;
 public class Home {
 
     // VARIABLES
-    private String id, owner, name, address, postal, municipality, province, description, activities, interesting_places, images;
+    private String id, owner, name, address, postal, municipality, province, description, activities, interesting_places;
     private Long type, amount, price, valoration;
     private Timestamp creation_date, update_date;
     private List<String> services;
+    private List<String> images;
 
     public Home(String id, String owner, String name, String address, String postal, String municipality, String province, String description, String activities, String interesting_places, Long type, Long amount, Long price, Long valoration, Timestamp creation_date, Timestamp update_date, List<String> services) {
         this.id = id;
@@ -125,11 +126,11 @@ public class Home {
         this.services = services;
     }
 
-    public String getImages() {
+    public List<String> getImages() {
         return images;
     }
 
-    public void setImages(String images) {
+    public void setImages(List<String> images) {
         this.images = images;
     }
 

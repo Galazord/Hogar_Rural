@@ -10,4 +10,5 @@ public class Constant {
     public static int PRICE_MAX = 500;
     public static int PRICE_MIN = 20;
     public static int MAX_IMAGE_HOMES = 10;
+    public static String TAG_INFO = "TAG INFO";
 }
