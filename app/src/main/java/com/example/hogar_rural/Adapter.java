@@ -3,6 +3,7 @@ package com.example.hogar_rural;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -166,11 +167,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
             imageGalery.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   index++;
-                    configSwipeImage();
+                   /*index++;
+                    configSwipeImage();*/
 
                 }
-            });/*
+            });
 imageGalery.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -179,12 +180,12 @@ imageGalery.setOnTouchListener(new View.OnTouchListener() {
                         int centerX = (v.getWidth() /2);
                         if(event.getX() > centerX  ) {
                             index++;
-                            Toast.makeText(context,"de  inde: "+index, Toast.LENGTH_LONG).show();
+                           Log.i("INDEX",index+"");
 
                         }else{
 
                             index--;
-                            Toast.makeText(context,"izq  inde: "+index, Toast.LENGTH_LONG).show();
+                            Log.i("INDEX",index+"");
 
                         }
                          configSwipeImage();
@@ -193,18 +194,19 @@ imageGalery.setOnTouchListener(new View.OnTouchListener() {
                 }
             });
 
-*/
+
 
 
         }
 
         private void configSwipeImage(){
-            if(index == imgGallery.size()-1){
+            if(index == imgGallery.size()){
                 index = 0;
             }else if(index < 0){
                 index = imgGallery.size()-1;
             }
 
+            Log.i("INDEX post",index+"");
            /* Animation aniFadeOut = AnimationUtils.loadAnimation(context,R.anim.animation_fade_out);
             imageGalery.startAnimation(aniFadeOut);*/
             cargarImagen(imgGallery.get(index), imageGalery);

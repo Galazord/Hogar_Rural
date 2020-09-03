@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -79,6 +80,30 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine4 = (TextView) findViewById(R.id.DetailTextMultiLine4);
         tvPropertyName = (TextView) findViewById(R.id.tvPropertyName);
         CardDetailImage = (ImageView) findViewById(R.id.CardDetailImage);
+        CardDetailImage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    //Check between +- 10px jsu tto have some are to hit
+                    int centerX = (v.getWidth() /2);
+                    if(event.getX() > centerX  ) {
+                        index++;
+                        Log.i("INDEX",index+"");
+
+                    }else{
+
+                        index--;
+                        Log.i("INDEX",index+"");
+
+                    }
+                    configSwipeImage();
+                }
+                return true;
+            }
+        });
+
+
+
         ivDetail_avatarProperty = (ImageView) findViewById(R.id.ivDetail_avatarProperty);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
 
@@ -249,9 +274,12 @@ public class DetailHouseActivity extends AppCompatActivity {
 
     }
     private void configSwipeImage(){
-        if(index == listUrlImages.size()-1){
+        if(index == listUrlImages.size()){
             index = 0;
+        }else if(index < 0){
+            index = listUrlImages.size()-1;
         }
+
            /* Animation aniFadeOut = AnimationUtils.loadAnimation(context,R.anim.animation_fade_out);
             imageGalery.startAnimation(aniFadeOut);*/
         loadHomeGallery(listUrlImages.get(index));
@@ -259,7 +287,7 @@ public class DetailHouseActivity extends AppCompatActivity {
         CardDetailImage.startAnimation(aniFade);
     }
     public void clickImageHomes(View view) {
-        index++;
-        configSwipeImage();
+       /* index++;
+        configSwipeImage();*/
     }
 }
