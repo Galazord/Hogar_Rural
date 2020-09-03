@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/RL_DetailHouse"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -38,7 +39,7 @@
             <RelativeLayout
                 android:id="@+id/DetailCardLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="140dp"
                 android:layout_below="@id/CardDetailImage">
 
                 <!-- Nombre de la casa -->
@@ -49,13 +50,22 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
                     android:paddingTop="10dp"
                     android:text="@string/house_place"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     tools:ignore="RtlHardcoded" />
+
+                <!-- Línea divisoria del nombre -->
+                <ImageView
+                    android:id="@+id/iv_line_divider"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/hr_line_divider"
+                    android:layout_below="@id/DetailPlace"/>
 
                 <!-- Tipo de renta: íntegra/ habitaciones -->
                 <TextView
@@ -63,9 +73,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@id/DetailPlace"
+                    android:layout_below="@id/iv_line_divider"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginVertical="3dp"
                     android:paddingTop="5dp"
                     android:text="@string/house_rental"
                     android:fontFamily="@font/roboto_medium"
@@ -82,7 +93,24 @@
                     android:layout_below="@id/DetailRental"
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginVertical="3dp"
                     android:text="@string/house_nPerson"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_sub"
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
+
+                <!-- Número de opiniones -->
+                <TextView
+                    android:id="@+id/DetailNumOpinions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/DetailPeople"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginVertical="3dp"
+                    android:text="@string/house_nOpinion"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_sub"
                     android:textSize="14sp"
@@ -93,39 +121,24 @@
                     android:id="@+id/DetailPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/DetailPlace"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="-105dp"
+                    android:layout_below="@id/iv_line_divider"
+                    android:layout_toEndOf="@+id/DetailPeople"
+                    android:layout_marginStart="45dp"
+                    android:layout_marginEnd="-105dp"
+                    android:layout_marginTop="18dp"
                     android:paddingTop="10dp"
                     android:text="@string/house_price"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_dark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    tools:ignore="RtlHardcoded" />
-
-                <!-- Número de opiniones -->
-                <TextView
-                    android:id="@+id/DetailNumOpinions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/DetailPlace"
-                    android:layout_below="@id/DetailPrice"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:paddingTop="5dp"
-                    android:text="@string/house_nOpinion"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/green_sub"
-                    android:textSize="14sp"
-                    tools:ignore="RtlHardcoded" />
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <!-- Título valoraciones -->
                 <TextView
                     android:id="@+id/DetailValorations"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/iv_line_divider"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginStart="10dp"

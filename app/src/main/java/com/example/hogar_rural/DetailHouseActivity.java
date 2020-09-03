@@ -1,39 +1,44 @@
 package com.example.hogar_rural;
 
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.hogar_rural.Interface.DbRetrofitApi;
-import com.example.hogar_rural.Model.HouseDetail;
-import com.example.hogar_rural.Utils.TypeToast;
-import com.example.hogar_rural.Utils.UtilMethod;
-
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class DetailHouseActivity extends AppCompatActivity {
 
     //--> VARIABLES
-    private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4;
-    private ImageView CardDetailImage;
+    private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName;
+    private ImageView CardDetailImage, ivDetail_avatarProperty;
     private DbRetrofitApi dbRetrofitApi;
     private MediaPlayer soundError;
+    private String idHouse, idProperty;
+    private User user;
 
-    //--> VARIABLES FIJAS
-    private final String URL_PHP = "https://hogarruralapp.000webhostapp.com/hogarRural/php/";
+    // firebase
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private FirebaseStorage firebaseStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,11 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Iniciar componentes
     private void initComponent() {
 
+        // Firebase
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        firebaseStorage  = FirebaseStorage.getInstance();
+
         // Relaccionar las variables con la parte gráfica
         DetailPlace = (TextView) findViewById(R.id.DetailPlace);
         DetailRental = (TextView) findViewById(R.id.DetailRental);
@@ -60,68 +70,122 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine2 = (TextView) findViewById(R.id.DetailTextMultiLine2);
         DetailTextMultiLine3 = (TextView) findViewById(R.id.DetailTextMultiLine3);
         DetailTextMultiLine4 = (TextView) findViewById(R.id.DetailTextMultiLine4);
+        tvPropertyName = (TextView) findViewById(R.id.tvPropertyName);
         CardDetailImage = (ImageView) findViewById(R.id.CardDetailImage);
+        ivDetail_avatarProperty = (ImageView) findViewById(R.id.ivDetail_avatarProperty);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
 
         // Recibir los parámetros del intent procedente de Adapter.java
         Intent i = getIntent();
-        String idHouse = i.getStringExtra("idHouse");
+        idHouse = i.getStringExtra("idHouse");
 
-        // RecyclerView: instanciar Retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_PHP)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        dbRetrofitApi = retrofit.create(DbRetrofitApi.class);
+        loadHomeFromDB();
 
-        // Mostrar la información de la base de datos en la vista final
-        showDetailList(idHouse);
     }
 
-    // Mostrar los detalles de la lista en el RecyclerView
-    private void showDetailList(String idHouse) {
+    // Cargar y mostrar los datos del usuario logado en ese momento
+    private void loadHomeFromDB(){
 
-        Call<List<HouseDetail>> call = dbRetrofitApi.getDetailHouse(Integer.parseInt(idHouse));
-        call.enqueue(new Callback<List<HouseDetail>>() {
+        DocumentReference docRef = db.collection("homes").document(idHouse);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onResponse(Call<List<HouseDetail>> call, Response<List<HouseDetail>> response) {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
 
-                if(!response.isSuccessful()){
-                    UtilMethod.showToast(TypeToast.ERROR, DetailHouseActivity.this,"Error de código: DetailHouseActivity: " + response.code());
-                    soundError.start();
+                        // Recoger los datos de la casa
+                        Home home = doc.toObject(Home.class);
+                        // Mostrar los datos de la casa en los campos correspondientes
+                        DetailPlace.setText(home.getName());
+                        DetailPrice.setText(String.valueOf(home.getPrice()).concat(getApplicationContext().getString(R.string.adapter_price)));
+                        String typeRental = "Error";
+                        if(home.getType() == 1){
+                            typeRental = "Íntegro";
+                        }else if(home.getType() == 2) {
+                            typeRental = "Habitaciones";
+                        }
+                        DetailRental.setText(typeRental);
+                        DetailPeople.setText(String.valueOf(home.getAmount()).concat(getApplicationContext().getString(R.string.adapter_people)));
+                        DetailNumOpinions.setText("Pendiente".concat(getApplicationContext().getString(R.string.adapter_comments)));
+                        DetailTextMultiLine1.setText(home.getDescription());
+                        DetailTextMultiLine2.setText(home.getActivities());
+                        DetailTextMultiLine3.setText(home.getInteresting_places());
+
+                        // Cargar la galería de imágenes de la casa actual
+                        //loadHomeGallery(home);
+
+                        // Cargar y mostrar los datos del usuario logado en ese momento
+                        idProperty = home.getOwner();
+                        loadUserFromDB(idProperty);
+
+                    }
+                    else{
+                        Log.i("ERROR USER NOT EXIST", task.getResult().toString());
+                    }
+                }else{
+                    Log.i("ERROR GET USER", task.getResult().toString());
                 }
+            }
+        });
+    }
 
-                List<HouseDetail> houseDetails = response.body();
-                // Establecer valores a la lista
-                for(HouseDetail detail: houseDetails){
-                    DetailPlace.setText(detail.getName());
-                    DetailRental.setText(detail.getRental());
-                    DetailPeople.setText(detail.getPersonMax() + " personas");
-                    DetailPrice.setText(detail.getPrice() + "€");
-                    DetailNumOpinions.setText(detail.getNumOpinion() + " opiniones");
-                    DetailTextMultiLine1.setText(detail.getFeatures());
-                    DetailTextMultiLine2.setText(detail.getActivities());
-                    DetailTextMultiLine3.setText(detail.getPlacesinterest());
-                    DetailTextMultiLine4.setText(detail.getServices());
+    private void loadHomeGallery(User user){
 
-                    // Incluir la imagen en la Galería de imagenes del Holder
-                    String imageInsert = detail.getGalleryImg();
-                    Glide.with(getApplicationContext())
-                            .load(imageInsert)
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_launcher_foreground)
-                            .error(R.drawable.ic_launcher_background)
-                            .into(CardDetailImage);
-
+        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());
+        gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    //Glide.with(getContext()).load(task.getResult()).into(ivUser_avatar);
                 }
-
             }
 
-            @Override
-            public void onFailure(Call<List<HouseDetail>> call, Throwable t) {
+        });
+    }
 
-                UtilMethod.showToast(TypeToast.ERROR, DetailHouseActivity.this,"Fallo en la conexión: DetailHouseActivity: " + t.getMessage());
-                soundError.start();
+    // Cargar y mostrar los datos del usuario logado en ese momento
+    private void loadUserFromDB(String idProperty){
+
+        DocumentReference docRef = db.collection("users").document(idProperty);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
+
+                        // Recoger los datos del usuario
+                        user = doc.toObject(User.class);
+                        // mostrar los datos del usuario en los campos correspondientes
+                        tvPropertyName.setText(user.getNickname());
+
+                        // Cargar la imagen de usuario por defecto o la suya
+                        loadUserImage(user);
+
+                    }
+                    else{
+                        Log.i("ERROR USER NOT EXIST", task.getResult().toString());
+                    }
+                }else{
+                    Log.i("ERROR GET USER", task.getResult().toString());
+                }
+            }
+        });
+    }
+
+    // Cargar la imagen del propietario
+    private void loadUserImage(User user){
+
+        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());
+        gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    Glide.with(getApplicationContext()).load(task.getResult()).into(ivDetail_avatarProperty);
+                }
             }
         });
     }

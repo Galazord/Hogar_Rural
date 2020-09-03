@@ -71,7 +71,7 @@
     <string name="house_place">Lugar de la casa</string>
     <string name="house_rental">Alquiler: tipo</string>
     <string name="house_nPerson">nº personas</string>
-    <string name="house_price">Precio €</string>
+    <string name="house_price">Precio €/día</string>
     <string name="house_nOpinion">nº opiniones</string>
     <string name="house_valoration">Valoraciones</string>
     <string name="house_arrive">Cómo llegar:</string>
@@ -167,7 +167,7 @@
     <string name="outstanding_lowprice">Bajan de precio</string>
 
     <!-- ADAPTER -->
-    <string name="adapter_price"> €</string>
+    <string name="adapter_price"> €/día</string>
     <string name="adapter_people"> personas</string>
     <string name="adapter_comments"> opinones</string>
     <string name="adapter_rental_1">Íntegro</string>

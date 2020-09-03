@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="340dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:cardCornerRadius="3dp"
@@ -33,7 +33,7 @@
         <RelativeLayout
             android:id="@+id/ExploreCardLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="140dp"
             android:layout_below="@id/CardGaleryImage">
 
             <!-- Nombre del lugar -->
@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/customExplore_namePlace"
                 android:fontFamily="@font/roboto_medium"
@@ -50,14 +51,22 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <ImageView
+                android:id="@+id/iv_line_divider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/hr_line_divider"
+                android:layout_below="@id/txtPlace"/>
+
             <!-- tipo de renta -->
             <TextView
                 android:id="@+id/txtRental"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/txtPlace"
+                android:layout_below="@id/iv_line_divider"
                 android:layout_marginStart="10dp"
+                android:layout_marginVertical="3dp"
                 android:paddingTop="5dp"
                 android:text="@string/house_rental"
                 android:fontFamily="@font/roboto_medium"
@@ -72,7 +81,22 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/txtRental"
                 android:layout_marginStart="10dp"
+                android:layout_marginVertical="3dp"
                 android:text="@string/house_nPerson"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_sub"
+                android:textSize="14sp" />
+
+            <!-- Número de opiniones -->
+            <TextView
+                android:id="@+id/txtNumOpinions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/txtPeople"
+                android:layout_marginStart="10dp"
+                android:layout_marginVertical="3dp"
+                android:text="@string/house_nOpinion"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_sub"
                 android:textSize="14sp" />
@@ -82,29 +106,17 @@
                 android:id="@+id/txtPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/txtPlace"
-                android:layout_marginStart="40dp"
+                android:layout_below="@id/iv_line_divider"
+                android:layout_toEndOf="@+id/txtPeople"
+                android:layout_marginStart="45dp"
                 android:layout_marginEnd="-105dp"
+                android:layout_marginTop="18dp"
                 android:paddingTop="10dp"
                 android:text="@string/house_price"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
-                android:textSize="16sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
-
-            <!-- Número de opiniones -->
-            <TextView
-                android:id="@+id/txtNumOpinions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/txtPlace"
-                android:layout_below="@id/txtPrice"
-                android:layout_marginStart="40dp"
-                android:paddingTop="5dp"
-                android:text="@string/house_nOpinion"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/green_sub"
-                android:textSize="14sp" />
 
             <!-- valoraciones -->
             <TextView
@@ -112,6 +124,7 @@
                 android:layout_width="110dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_below="@id/iv_line_divider"
                 android:layout_marginStart="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/house_valoration"

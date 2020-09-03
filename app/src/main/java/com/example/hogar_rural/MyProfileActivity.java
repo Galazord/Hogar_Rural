@@ -43,28 +43,6 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     //--> MÉTODOS
-    // Acceder al login por una clave de usuario y mail
-    private void logIn(String email, String password){
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            // Acceder a la sección de usuario (UserAccountActivity)
-                            Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            // Error de acceso a la cuenta de usuario.
-                            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder. Comprueba tu email y contraseña");
-                            soundError.start();
-                        }
-
-                    }
-                });
-    }
-
     // Inicializar componentes
     private void initComponent(){
         //Iniciamos FirebaseAuth
@@ -111,6 +89,28 @@ public class MyProfileActivity extends AppCompatActivity {
 
     }
 
+    // Acceder al login por una clave de usuario y mail
+    private void logIn(String email, String password){
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            // Acceder a la sección de usuario (UserAccountActivity)
+                            Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            // Error de acceso a la cuenta de usuario.
+                            UtilMethod.showToast(TypeToast.ERROR, MyProfileActivity.this,"ERROR. No se ha podido acceder. Comprueba tu email y contraseña");
+                            soundError.start();
+                        }
+
+                    }
+                });
+    }
+
     //--> CLICK BOTONES
     // Entrar para loguearse como usuario
     public void clickBtnLogIn(View view) {
@@ -136,7 +136,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // Ir a la clase LoginFormActivity.
         Intent intent = new Intent (getApplicationContext(), LoginFormActivity.class);
-         intent.putExtra("typeFormUser", "create");
+        intent.putExtra("typeFormUser", "create");
         startActivity(intent);
         finish();
 

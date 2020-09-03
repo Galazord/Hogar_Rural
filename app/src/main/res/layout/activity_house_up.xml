@@ -520,7 +520,6 @@
                 android:id="@+id/tvHouse_interest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
                 android:layout_below="@+id/etHouse_input_activities"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"

@@ -94,7 +94,7 @@ public class MyProfileFragment extends Fragment {
         tvUser_municipality = (TextView) view.findViewById(R.id.tvUser_municipality);
         tvUser_province = (TextView) view.findViewById(R.id.tvUser_province);
         ivUser_avatar = (ImageView) view.findViewById(R.id.ivUser_avatar);
-
+        // firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         firebaseStorage  = FirebaseStorage.getInstance();

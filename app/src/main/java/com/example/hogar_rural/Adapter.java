@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.House;
 import com.example.hogar_rural.Utils.Constant;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -56,6 +58,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         }else if(model.get(position).getType() == 2) {
             typeRental = "Habitaciones";
         }
+
         String imgGalery = "gs://hogarapp-77df0.appspot.com/homes/default_house.png";
         String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
         String numPerson = String.valueOf(model.get(position).getAmount()).concat(this.context.getString(R.string.adapter_people));
@@ -99,10 +102,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 @Override
                 public void onClick(View view) {
 
+                    //Toast.makeText(context, "ID: " + model.get(getAdapterPosition()).getId(), Toast.LENGTH_SHORT).show();
+
                     Intent in = new Intent(view.getContext(), DetailHouseActivity.class);
                     in.putExtra("idHouse", model.get(getAdapterPosition()).getId());
+
+                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                     // Abrir actividad: DetailHouseActivity
                     view.getContext().startActivity(in);
+
 
                 }
             });
