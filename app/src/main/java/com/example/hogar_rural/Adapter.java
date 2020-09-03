@@ -3,8 +3,9 @@ package com.example.hogar_rural;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -17,11 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.hogar_rural.Model.Home;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -35,6 +34,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     private ArrayList<Home> model;
     private Context context;
     FirebaseStorage firebaseStorage;
+    List<String> imgGallery;
 
 
 
@@ -70,10 +70,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
             typeRental = "Habitaciones";
         }
 
-        List<String> imgGallery = model.get(position).getImages();
-        for(String url: imgGallery){
-            cargarImagen(url,holder.imageGalery);
-        }
+        imgGallery = model.get(position).getImages();
+
+        cargarImagen(imgGallery.get(holder.getIndex()),holder.imageGalery);
+
 
         String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
         String numPerson = String.valueOf(model.get(position).getAmount()).concat(this.context.getString(R.string.adapter_people));
@@ -123,6 +123,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
+
+        public int getIndex() {
+            return index;
+        }
+
+        int index;
         TextView txtPlace, txtRental, txtPeople, txtPrice, txtNumOpinions;
         ImageView imageGalery;
 
@@ -148,7 +154,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
                 }
             });
-
+            index = 0;
             firebaseStorage  = FirebaseStorage.getInstance();
             // Relacionar las variables con la parte gráfica
             txtPlace = itemView.findViewById(R.id.txtPlace);
@@ -157,8 +163,30 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
             txtPrice = itemView.findViewById(R.id.txtPrice);
             txtNumOpinions = itemView.findViewById(R.id.txtNumOpinions);
             imageGalery = itemView.findViewById(R.id.CardGaleryImage);
+            imageGalery.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    index++;
+                    configSwipeImage();
+
+                }
+            });
 
 
+
+
+
+        }
+
+        private void configSwipeImage(){
+            if(index == imgGallery.size()-1){
+                index = 0;
+            }
+           /* Animation aniFadeOut = AnimationUtils.loadAnimation(context,R.anim.animation_fade_out);
+            imageGalery.startAnimation(aniFadeOut);*/
+            cargarImagen(imgGallery.get(index), imageGalery);
+            Animation aniFade = AnimationUtils.loadAnimation(context,R.anim.animation_fade_in);
+            imageGalery.startAnimation(aniFade);
         }
     }
 }

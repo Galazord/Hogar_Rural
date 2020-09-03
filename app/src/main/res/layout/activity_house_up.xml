@@ -80,20 +80,25 @@
                 android:orientation="horizontal">
 
                 <!-- Botón eliminar foto actual-->
-                <Button
-                    android:id="@+id/btnGallery_remove"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="5dp"
-                    android:background="@drawable/gradient_green"
-                    android:fontFamily="@font/kanit_semibold"
-                    android:text="@string/houseUp_imageRemove"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textColor="@color/white_text"
-                    android:onClick="clickGalleryRemove" />
-
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <Button
+                        android:id="@+id/btnGallery_remove"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gradient_green"
+                        android:fontFamily="@font/kanit_semibold"
+                        android:onClick="clickGalleryRemove"
+                        android:text="@string/houseUp_imageRemove"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_text"
+                        android:textSize="18sp" />
+                </RelativeLayout>
                 <!-- Botón pasar a la foto de la izquierda-->
+
+
                 <Button
                     android:id="@+id/btnGallery_next_left"
                     android:layout_width="100dp"
@@ -102,6 +107,7 @@
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
                     android:text="@string/filters_symbol_less"
+                    android:layout_weight="1"
                     android:textAllCaps="false"
                     android:textSize="40sp"
                     android:textColor="@color/white_text"
@@ -116,6 +122,7 @@
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
                     android:text="@string/filters_symbol_plus"
+                    android:layout_weight="1"
                     android:textAllCaps="false"
                     android:textSize="40sp"
                     android:textColor="@color/white_text"

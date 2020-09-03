@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.List;
+
 public class DetailHouseActivity extends AppCompatActivity {
 
     //--> VARIABLES
@@ -39,6 +43,9 @@ public class DetailHouseActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseStorage firebaseStorage;
+
+    private List<String> listUrlImages;
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +119,9 @@ public class DetailHouseActivity extends AppCompatActivity {
                         DetailTextMultiLine1.setText(home.getDescription());
                         DetailTextMultiLine2.setText(home.getActivities());
                         DetailTextMultiLine3.setText(home.getInteresting_places());
-
+                        listUrlImages = home.getImages();
                         // Cargar la galería de imágenes de la casa actual
-                        //loadHomeGallery(home);
+                         loadHomeGallery(listUrlImages.get(index));
 
                         // Cargar y mostrar los datos del usuario logado en ese momento
                         idProperty = home.getOwner();
@@ -131,19 +138,22 @@ public class DetailHouseActivity extends AppCompatActivity {
         });
     }
 
-    private void loadHomeGallery(User user){
+    private void loadHomeGallery(String img){
 
-        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());
+
+        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(img);
         gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()){
-                    //Glide.with(getContext()).load(task.getResult()).into(ivUser_avatar);
+                    Glide.with(getApplicationContext()).load(task.getResult()).into(CardDetailImage);
                 }
             }
 
         });
     }
+
+
 
     // Cargar y mostrar los datos del usuario logado en ese momento
     private void loadUserFromDB(String idProperty){
@@ -237,5 +247,19 @@ public class DetailHouseActivity extends AppCompatActivity {
     public void clickEmailOwner(View view) {
 
 
+    }
+    private void configSwipeImage(){
+        if(index == listUrlImages.size()-1){
+            index = 0;
+        }
+           /* Animation aniFadeOut = AnimationUtils.loadAnimation(context,R.anim.animation_fade_out);
+            imageGalery.startAnimation(aniFadeOut);*/
+        loadHomeGallery(listUrlImages.get(index));
+        Animation aniFade = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation_fade_in);
+        CardDetailImage.startAnimation(aniFade);
+    }
+    public void clickImageHomes(View view) {
+        index++;
+        configSwipeImage();
     }
 }

@@ -24,6 +24,8 @@
                 android:id="@+id/CardDetailImage"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
+                android:onClick="clickImageHomes"
+                android:scaleType="centerCrop"
                 android:src="@drawable/icon_missing_house"/>
 
             <!-- Botón de Favorito -->
