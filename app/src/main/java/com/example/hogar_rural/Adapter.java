@@ -166,14 +166,34 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
             imageGalery.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    index++;
+                   index++;
                     configSwipeImage();
 
                 }
+            });/*
+imageGalery.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        //Check between +- 10px jsu tto have some are to hit
+                        int centerX = (v.getWidth() /2);
+                        if(event.getX() > centerX  ) {
+                            index++;
+                            Toast.makeText(context,"de  inde: "+index, Toast.LENGTH_LONG).show();
+
+                        }else{
+
+                            index--;
+                            Toast.makeText(context,"izq  inde: "+index, Toast.LENGTH_LONG).show();
+
+                        }
+                         configSwipeImage();
+                    }
+                    return true;
+                }
             });
 
-
-
+*/
 
 
         }
@@ -181,7 +201,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         private void configSwipeImage(){
             if(index == imgGallery.size()-1){
                 index = 0;
+            }else if(index < 0){
+                index = imgGallery.size()-1;
             }
+
            /* Animation aniFadeOut = AnimationUtils.loadAnimation(context,R.anim.animation_fade_out);
             imageGalery.startAnimation(aniFadeOut);*/
             cargarImagen(imgGallery.get(index), imageGalery);
