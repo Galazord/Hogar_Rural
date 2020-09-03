@@ -2,9 +2,13 @@ package com.example.hogar_rural;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,19 +17,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.hogar_rural.Model.Home;
-import com.example.hogar_rural.Model.House;
-import com.example.hogar_rural.Utils.Constant;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
     //--> VARIABLES
     private LayoutInflater inflater;
     private ArrayList<Home> model;
     private Context context;
+    FirebaseStorage firebaseStorage;
+
+
 
     //--> CONSTRCUTOR
     public Adapter(Context context, ArrayList<Home> model) {
@@ -59,7 +70,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             typeRental = "Habitaciones";
         }
 
-        String imgGalery = "gs://hogarapp-77df0.appspot.com/homes/default_house.png";
+        List<String> imgGallery = model.get(position).getImages();
+        for(String url: imgGallery){
+            cargarImagen(url,holder.imageGalery);
+        }
+
         String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
         String numPerson = String.valueOf(model.get(position).getAmount()).concat(this.context.getString(R.string.adapter_people));
         String numOpinion = "4".concat(this.context.getString(R.string.adapter_comments));
@@ -82,11 +97,29 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
 
     }
+    private void cargarImagen(String nombre , final ImageView imageView){
+
+
+        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(nombre);
+        gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    Glide.with(context).load(task.getResult()).into(imageView);
+                }
+            }
+
+        });
+
+
+    }
 
     @Override
     public int getItemCount() {
         return model.size();
     }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -116,6 +149,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
                 }
             });
 
+            firebaseStorage  = FirebaseStorage.getInstance();
             // Relacionar las variables con la parte gráfica
             txtPlace = itemView.findViewById(R.id.txtPlace);
             txtRental = itemView.findViewById(R.id.txtRental);

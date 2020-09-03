@@ -20,6 +20,7 @@
             android:id="@+id/CardGaleryImage"
             android:layout_width="match_parent"
             android:layout_height="220dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"/>
 
         <!-- Icono de favorito -->
