@@ -269,7 +269,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     }
 
     // Botón para enviar un email al propietario de la casa
-    public void clickEmailOwner(View view) {
+    public void clickEmailOwner(View vinoew) {
 
 
     }
