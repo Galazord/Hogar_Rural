@@ -370,6 +370,11 @@ public class HouseUpActivity extends AppCompatActivity {
 
     // Seleccionar fechas disponibles
     public void clickSelectDateAvailable(View view) {
+
+        // Ir a la ventana se seleccionar fechas
+        Intent intentDate = new Intent (getApplicationContext(), DiponibilityActivity.class);
+        startActivity(intentDate);
+
     }
 
     // Acción para seleccionar ON/OFF los iconos de los servicios

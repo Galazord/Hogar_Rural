@@ -172,31 +172,27 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
                 }
             });
-imageGalery.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if(event.getAction() == MotionEvent.ACTION_DOWN){
-                        //Check between +- 10px jsu tto have some are to hit
-                        int centerX = (v.getWidth() /2);
-                        if(event.getX() > centerX  ) {
-                            index++;
-                           Log.i("INDEX",index+"");
+            imageGalery.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                                    //Check between +- 10px jsu tto have some are to hit
+                                    int centerX = (v.getWidth() /2);
+                                    if(event.getX() > centerX  ) {
+                                        index++;
+                                       Log.i("INDEX",index+"");
 
-                        }else{
+                                    }else{
 
-                            index--;
-                            Log.i("INDEX",index+"");
+                                        index--;
+                                        Log.i("INDEX",index+"");
 
-                        }
-                         configSwipeImage();
-                    }
-                    return true;
-                }
-            });
-
-
-
-
+                                    }
+                                     configSwipeImage();
+                                }
+                                return true;
+                            }
+                        });
         }
 
         private void configSwipeImage(){

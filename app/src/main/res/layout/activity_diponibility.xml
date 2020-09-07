@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DiponibilityActivity"
+    android:background="@color/background_grey">
+
+    <!-- Texto informativo 1 -->
+    <TextView
+        android:id="@+id/tv_dipo_info_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/disponibility_info"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/green_dark"/>
+
+    <!-- Texto informativo 2 -->
+    <TextView
+        android:id="@+id/tv_dipo_info_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@id/tv_dipo_info_1"
+        android:text="@string/disponibility_info2"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/green_dark"/>
+
+    <!-- Cuadrado rojo -->
+    <ImageView
+        android:id="@+id/iv_dispo_square_red"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@color/toast_red"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@id/tv_dipo_info_2" />
+
+    <!-- Texto informativo 3 -->
+    <TextView
+        android:id="@+id/tv_dipo_info_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginVertical="15dp"
+        android:layout_below="@id/tv_dipo_info_2"
+        android:text="@string/disponibility_info3"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/green_dark"
+        android:layout_toEndOf="@id/iv_dispo_square_red"/>
+
+    <!-- Calendario -->
+    <ImageView
+        android:id="@+id/iv_Calendar"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@color/toast_blue"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@id/tv_dipo_info_3" />
+
+    <!-- Botón solicitar fechas seleccionadas-->
+    <Button
+        android:id="@+id/btnConfirmDisponibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@id/iv_Calendar"
+        android:background="@drawable/gradient_green"
+        android:fontFamily="@font/kanit_semibold"
+        android:text="@string/disponibility_btnConfirm"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:textColor="@color/white_text"
+        android:onClick="btnConfirmDisponibility" />
+
+
+</RelativeLayout>

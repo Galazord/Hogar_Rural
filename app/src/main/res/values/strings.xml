@@ -173,5 +173,10 @@
     <string name="adapter_rental_1">Íntegro</string>
     <string name="adapter_rental_2">Habitaciones</string>
 
+    <!-- DIPONIBILIDAD DE FECHAS -->
+    <string name="disponibility_info">Seleccione una fecha disponible y reserve plaza en el botón "Reservar en la fecha indicada".</string>
+    <string name="disponibility_info2">Recuerde que necesita iniciar sesión de usuario para realizar reservas.</string>
+    <string name="disponibility_info3">Días ya ocupados o no disponibles.</string>
+    <string name="disponibility_btnConfirm">Reservar en la fecha indicada</string>
 
 </resources>

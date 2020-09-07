@@ -229,6 +229,9 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Botón de disponibilidad de fechas
     public void clickShowDisponibility(View view) {
 
+        // Ir a la ventana se seleccionar fechas
+        Intent intentDate = new Intent (getApplicationContext(), DiponibilityActivity.class);
+        startActivity(intentDate);
 
     }
 
