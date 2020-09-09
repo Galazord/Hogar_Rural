@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Acceder al menu de la app
             Intent intentExplorer = new Intent (getApplicationContext(), ExplorerActivity.class);
+            intentExplorer.putExtra("destiny", valueDestiny);
             startActivity(intentExplorer);
         }
 
@@ -73,9 +74,7 @@ public class MainActivity extends AppCompatActivity {
             soundError.start();
         }
         else{
-
-            // Comprobar que el destino exista en la BD (------------------- PENDIENTE ---------------------)
-
+            // Se reconoce la palabra
             return true;
         }
 

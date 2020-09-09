@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.House;
@@ -38,6 +39,7 @@ public class ExplorerActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapterList;
     private Button btnFilters, btnMap;
     private MediaPlayer soundError;
+    private String destiny;
 
     // RecyclerView
     private RecyclerView recyclerView;
@@ -68,6 +70,12 @@ public class ExplorerActivity extends AppCompatActivity {
     // Iniciar componentes
     private void initComponent() {
 
+        // Recoger la palabra de destino
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            destiny = b.getString("destiny");
+        }
+
         // Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -81,8 +89,6 @@ public class ExplorerActivity extends AppCompatActivity {
         btnFilters = (Button) findViewById(R.id.btnFilters);
         btnMap = (Button) findViewById(R.id.btnMap);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
-
-
 
         //--> MENÚ DE NAVEGACIÓN INFERIOR
         // Menu de Navegación: Establecer este icono como marcado en el actual

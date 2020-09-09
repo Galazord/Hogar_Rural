@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
+    android:background="@color/background_grey">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <!-- Imagen de la casa -->
+        <ImageView
+            android:id="@+id/cvComment_avatar"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_avatar_default"/>
+
+        <!-- Nombre del usuario -->
+        <TextView
+            android:id="@+id/tvComment_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/cvComment_avatar"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Nombre del usuario"
+            android:textColor="@color/green_icon"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Iconos valoraciones -->
+        <LinearLayout
+            android:id="@+id/LLComments_icons_valoration"
+            android:layout_width="110dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/tvComment_name"
+            android:layout_toEndOf="@id/cvComment_avatar"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/iconTemp"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_leaf_off" />
+            <ImageView
+                android:id="@+id/iconTemp2"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_leaf_off" />
+            <ImageView
+                android:id="@+id/iconTemp3"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_leaf_off" />
+            <ImageView
+                android:id="@+id/iconTemp4"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_leaf_off" />
+            <ImageView
+                android:id="@+id/iconTemp5"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_leaf_off" />
+
+        </LinearLayout>
+
+        <!-- Titulo del comentario -->
+        <TextView
+            android:id="@+id/tvComment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/LLComments_icons_valoration"
+            android:layout_toEndOf="@id/cvComment_avatar"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Título del comentario"
+            android:textColor="@color/green_dark"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!-- Texto del comentario -->
+        <TextView
+            android:id="@+id/tvComment_txtBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvComment_title"
+            android:layout_toEndOf="@id/cvComment_avatar"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Texto explicativo del comentario..."
+            android:textColor="@color/green_light_icon"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

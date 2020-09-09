@@ -2,6 +2,7 @@ package com.example.hogar_rural;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -34,11 +35,12 @@ public class DetailHouseActivity extends AppCompatActivity {
 
     //--> VARIABLES
     private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName;
-    private ImageView CardDetailImage, ivDetail_avatarProperty;
+    private ImageView CardDetailImage, ivDetail_avatarProperty, ivDetail_avatarUser;
     private DbRetrofitApi dbRetrofitApi;
     private MediaPlayer soundError;
     private String idHouse, idProperty;
     private User user;
+    private RecyclerView recyclerViewComments;
 
     // firebase
     private FirebaseAuth mAuth;
@@ -102,15 +104,16 @@ public class DetailHouseActivity extends AppCompatActivity {
             }
         });
 
-
-
         ivDetail_avatarProperty = (ImageView) findViewById(R.id.ivDetail_avatarProperty);
+        ivDetail_avatarUser = (ImageView) findViewById(R.id.ivDetail_avatarUser);
+        recyclerViewComments = (RecyclerView) findViewById(R.id.recyclerViewComments);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
 
         // Recibir los parámetros del intent procedente de Adapter.java
         Intent i = getIntent();
         idHouse = i.getStringExtra("idHouse");
 
+        // Cargar el contenido de la vivienda
         loadHomeFromDB();
 
     }
@@ -148,9 +151,12 @@ public class DetailHouseActivity extends AppCompatActivity {
                         // Cargar la galería de imágenes de la casa actual
                          loadHomeGallery(listUrlImages.get(index));
 
-                        // Cargar y mostrar los datos del usuario logado en ese momento
+                        // Cargar y mostrar los datos del propietario de la casa actual
                         idProperty = home.getOwner();
-                        loadUserFromDB(idProperty);
+                        loadPropertyFromDB(idProperty);
+
+                        // cargar la imagen del usuario logado en ese momento
+                        loadUserFromDB();
 
                     }
                     else{
@@ -180,8 +186,8 @@ public class DetailHouseActivity extends AppCompatActivity {
 
 
 
-    // Cargar y mostrar los datos del usuario logado en ese momento
-    private void loadUserFromDB(String idProperty){
+    // Cargar y mostrar los datos del propietario de la casa
+    private void loadPropertyFromDB(String idProperty){
 
         DocumentReference docRef = db.collection("users").document(idProperty);
 
@@ -198,7 +204,7 @@ public class DetailHouseActivity extends AppCompatActivity {
                         tvPropertyName.setText(user.getNickname());
 
                         // Cargar la imagen de usuario por defecto o la suya
-                        loadUserImage(user);
+                        loadPropertyImage(user);
 
                     }
                     else{
@@ -212,7 +218,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     }
 
     // Cargar la imagen del propietario
-    private void loadUserImage(User user){
+    private void loadPropertyImage(User user){
 
         StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());
         gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -220,6 +226,49 @@ public class DetailHouseActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()){
                     Glide.with(getApplicationContext()).load(task.getResult()).into(ivDetail_avatarProperty);
+                }
+            }
+        });
+    }
+
+    // Cargar y mostrar los datos del usuario logado en ese momento
+    private void loadUserFromDB(){
+
+        DocumentReference docRef = db.collection("users").document(mAuth.getUid());
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
+
+                        // Recoger los datos del usuario
+                        user = doc.toObject(User.class);
+
+                        // Cargar la imagen de usuario por defecto o la suya
+                        loadUserImage(user);
+
+                    }
+                    else{
+                        Log.i("ERROR USER NOT EXIST", task.getResult().toString());
+                    }
+                }else{
+                    Log.i("ERROR GET USER", task.getResult().toString());
+                }
+            }
+        });
+    }
+
+    // Cargar la imagen del usuario actual
+    private void loadUserImage(User user){
+
+        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());
+        gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    Glide.with(getApplicationContext()).load(task.getResult()).into(ivDetail_avatarUser);
                 }
             }
         });

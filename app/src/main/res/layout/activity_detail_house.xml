@@ -172,27 +172,27 @@
                     <ImageView
                         android:id="@+id/iconTemp"
                         android:layout_width="22dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_leaf_on" />
                     <ImageView
                         android:id="@+id/iconTemp2"
                         android:layout_width="22dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_leaf_on" />
                     <ImageView
                         android:id="@+id/iconTemp3"
                         android:layout_width="22dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_leaf_on" />
                     <ImageView
                         android:id="@+id/iconTemp4"
                         android:layout_width="22dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_leaf_on" />
                     <ImageView
                         android:id="@+id/iconTemp5"
                         android:layout_width="22dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_leaf_on" />
 
 
@@ -486,8 +486,8 @@
                 android:textColor="@color/green_icon"/>
 
             <!-- Listado de comentarios -->
-            <TextView
-                android:id="@+id/DetailTextMultiLine5"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewComments"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="10dp"
@@ -495,41 +495,38 @@
                 android:layout_marginEnd="65dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:inputType="textMultiLine"
-                android:layout_below="@+id/DetailPanelTitle5"
-                android:text="@string/house_showComments"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/green_dark"
-                android:textSize="14sp" />
+                android:layout_below="@+id/DetailPanelTitle5" />
 
             <!-- Barra separadora de: mostrar más -> 1 -->
             <View
                 android:id="@+id/dividerComents1"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_below="@+id/DetailTextMultiLine5"
+                android:layout_below="@+id/recyclerViewComments"
                 android:layout_marginHorizontal="30dp"
                 android:background="@color/green_light_icon" />
 
             <!-- Botón Ver más: Comentarios -->
+
+            <!-- Barra separadora de: mostrar más -> 2 -->
             <Button
                 android:id="@+id/btnShowMoreComents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/showMore"
-                android:layout_below="@+id/DetailTextMultiLine5"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="65dp"
+                android:layout_below="@+id/recyclerViewComments"
                 android:layout_centerHorizontal="true"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="-1dp"
+                android:layout_marginEnd="65dp"
+                android:background="?android:attr/selectableItemBackground"
                 android:fontFamily="@font/roboto_medium"
+                android:onClick="clickShowMoreComments"
+                android:text="@string/showMore2"
+                android:textAllCaps="false"
                 android:textColor="@color/green_dark"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:textAllCaps="false"
-                android:background="?android:attr/selectableItemBackground"
-                android:onClick="clickShowMoreComments"/>
+                android:textStyle="bold" />
 
-            <!-- Barra separadora de: mostrar más -> 2 -->
             <View
                 android:id="@+id/dividerComents2"
                 android:layout_width="match_parent"
@@ -538,32 +535,44 @@
                 android:layout_marginHorizontal="30dp"
                 android:background="@color/green_light_icon" />
 
+            <!-- Texto informativo -->
+            <TextView
+                android:id="@+id/tv_detail_txtComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="65dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:layout_below="@+id/dividerComents2"
+                android:text="@string/house_info_comments"
+                android:fontFamily="@font/roboto_medium"
+                android:textColor="@color/green_dark"
+                android:textSize="14sp" />
+
             <!-- LinearLayout: Añadir más comentarios -->
             <LinearLayout
                 android:id="@+id/LinearLayoutMoreComents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
-                android:layout_below="@+id/dividerComents2"
+                android:layout_below="@+id/tv_detail_txtComment"
                 android:orientation="horizontal"
                 android:layout_marginHorizontal="30dp">
 
-                <!-- Icono de + -->
-                <TextView
-                    android:id="@+id/tvDetail_plusComents"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="@string/filters_symbol_plus"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/green_dark"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                <!-- Imagen de perfil del usuario logado -->
+                <ImageView
+                    android:id="@+id/ivDetail_avatarUser"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_avatar_default"
+                    android:layout_gravity="center_vertical"/>
 
                 <!-- Campo de texto para escribir el nuevo comentario -->
                 <EditText
                     android:id="@+id/etDetail_addComent"
-                    android:layout_width="220dp"
+                    android:layout_width="270dp"
                     android:layout_height="50dp"
                     android:inputType="textMultiLine"
                     android:layout_marginStart="25dp"
@@ -576,14 +585,66 @@
                     android:textColorHint="@color/green_hint"
                     android:paddingStart="20dp"/>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLFilter_valorations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="30dp"
+                android:layout_marginVertical="5dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/LinearLayoutMoreComents" >
+
+                <!-- Iconos valoraciones -->
+                <LinearLayout
+                    android:id="@+id/LL_detail_valoration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iconTempOff1"
+                        android:layout_width="28dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/ic_leaf_off" />
+                    <ImageView
+                        android:id="@+id/iconTempOff2"
+                        android:layout_width="28dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/ic_leaf_off" />
+                    <ImageView
+                        android:id="@+id/iconTempOff3"
+                        android:layout_width="28dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/ic_leaf_off" />
+                    <ImageView
+                        android:id="@+id/iconTempOff4"
+                        android:layout_width="28dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/ic_leaf_off" />
+                    <ImageView
+                        android:id="@+id/iconTempOff5"
+                        android:layout_width="28dp"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/ic_leaf_off" />
+
+                </LinearLayout>
+
                 <!-- Botón para enviar el comentario -->
                 <Button
                     android:id="@+id/btnOKComent"
-                    android:layout_width="50dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:background="@drawable/gradient_green"
                     android:fontFamily="@font/kanit_semibold"
-                    android:text="@string/ok"
+                    android:text="@string/send"
                     android:textAllCaps="false"
                     android:textSize="14sp"
                     android:textScaleX="1.2"
@@ -592,6 +653,7 @@
 
             </LinearLayout>
 
+
             <!-- LinearLayout: Datos del propietario -->
             <LinearLayout
                 android:id="@+id/LinearLayoutProperty"
@@ -599,7 +661,7 @@
                 android:layout_height="100dp"
                 android:background="@color/white_background"
                 android:layout_marginVertical="30dp"
-                android:layout_below="@+id/LinearLayoutMoreComents"
+                android:layout_below="@+id/LLFilter_valorations"
                 android:orientation="horizontal" >
 
                 <!-- Imagen del avatar del Propietario-->

@@ -11,7 +11,9 @@
     <string name="btnBack">VOLVER</string>
     <string name="loremIpsum">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500.</string>
     <string name="showMore">Ver más</string>
+    <string name="showMore2">Mostrar más</string>
     <string name="ok">OK</string>
+    <string name="send">Enviar</string>
     <string name="input_mail">Introduce el email de usuario</string>
     <string name="input_passw">Introduce la contraseña</string>
 
@@ -86,6 +88,7 @@
     <string name="house_addComment">Añadir un comentario…</string>
     <string name="house_owner">El propietario</string>
     <string name="house_lastUpdate">última actualización: X días</string>
+    <string name="house_info_comments">Incluye tu comentario y tu puntuación a esta casa:</string>
 
     <!-- RECYCLERVIEW DE EXPLORAR -->
     <string name="customExplore_namePlace">Lugar de la casa</string>

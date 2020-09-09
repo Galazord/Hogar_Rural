@@ -34,10 +34,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     private LayoutInflater inflater;
     private ArrayList<Home> model;
     private Context context;
-    FirebaseStorage firebaseStorage;
-    List<String> imgGallery;
-
-
+    private FirebaseStorage firebaseStorage;
+    private List<String> imgGallery;
 
     //--> CONSTRCUTOR
     public Adapter(Context context, ArrayList<Home> model) {
