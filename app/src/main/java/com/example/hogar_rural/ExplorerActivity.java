@@ -2,26 +2,35 @@ package com.example.hogar_rural;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.House;
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
@@ -47,7 +56,7 @@ public class ExplorerActivity extends AppCompatActivity {
     private Adapter adapter;
     private ArrayList<Home> list_home = new ArrayList<Home>();
     private ImageView imgEmpty;
-
+    MenuItem itemResultados;
     // firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -57,14 +66,15 @@ public class ExplorerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explorer);
 
-        // Subtitulo en la toolbar (número de resultados de búsqueda)
-        getSupportActionBar().setSubtitle(getString(R.string.app_sub));
-
         // Iniciar componentes
         initComponent();
 
         // Llamar a firebase para recoger los datos y mostrarlos
         loadFromFirebase();
+
+
+        getSupportActionBar().setTitle("Destino: "+destiny);
+
 
     }
 
@@ -84,6 +94,7 @@ public class ExplorerActivity extends AppCompatActivity {
 
         // Inicializar y/o asignar VARIABLES a la parte gráfica
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navegation);
+        bottomNavigationView.setItemIconSize(120);
         recyclerView = findViewById(R.id.exploreRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -166,8 +177,10 @@ public class ExplorerActivity extends AppCompatActivity {
                         }
 
                         // Cargar/ mostrar la información en el recyclerView
+                        getSupportActionBar().setTitle("Destino: "+destiny+" ("+list_home.size()+")");
+
                         if(list_home.size()!=0){
-                            imgEmpty.setVisibility(View.INVISIBLE);
+                           imgEmpty.setVisibility(View.INVISIBLE);
                             loadRecyclerView();
                         }else{
                             imgEmpty.setVisibility(View.VISIBLE);
@@ -181,34 +194,33 @@ public class ExplorerActivity extends AppCompatActivity {
 
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
-        Adapter adapter = new Adapter(getApplicationContext(), list_home);
-        recyclerView.setAdapter(adapter);
+
+            Adapter adapter = new Adapter(getApplicationContext(), list_home);
+            recyclerView.setAdapter(adapter);
+
+
     }
 
     // Menú superior: Resolver la búsqueda
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_top, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_actionbar, menu);
 
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Introduce tu valor de búsqueda");
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapterList.getFilter().filter(newText);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.item_menu_search:
+                showInputAlertDialog();
                 return true;
-            }
-        });
 
-        return super.onCreateOptionsMenu(menu);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 
@@ -225,6 +237,53 @@ public class ExplorerActivity extends AppCompatActivity {
         // Ir a la sección Mapa
         Intent intentMap = new Intent (getApplicationContext(), MapActivity.class);
         startActivity(intentMap);
+
+    }
+
+    public   void showInputAlertDialog(){
+        final String[] strReturn = {""};
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.alertdialog_custom, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.custom_dialog_text);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Buscar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+
+                                strReturn[0] = userInput.getText().toString();
+                               /* Intent intentExplorer = new Intent (getApplicationContext(), ExplorerActivity.class);
+                                intentExplorer.putExtra("destiny", strReturn[0]);
+                                startActivity(intentExplorer);
+                                finish();*/
+                               destiny = strReturn[0];
+                               loadFromFirebase();
+                            }
+                        })
+                .setNegativeButton("CANCELAR",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
 
     }
 

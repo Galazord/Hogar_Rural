@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Ocultar en esta vista la toolbar
-        getSupportActionBar().hide();
 
         // Inicializar componentes
         initComponent();

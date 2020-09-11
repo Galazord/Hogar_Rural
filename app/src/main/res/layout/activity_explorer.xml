@@ -9,13 +9,9 @@
     tools:context=".ExplorerActivity"
     android:background="@color/background_grey">
 
-    <!-- Contenido central
-    <ListView
-        android:id="@+id/myList"
-        android:layout_width="match_parent"
-        android:layout_height="588dp" />-->
 
-    <!-- Barra de opciones: Filtrar y Mapa -->
+
+
     <LinearLayout
         android:id="@+id/exploreLinearLayout"
         android:layout_width="match_parent"

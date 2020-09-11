@@ -1,10 +1,23 @@
 package com.example.hogar_rural.Model;
 
+import com.google.firebase.firestore.DocumentReference;
+
+import java.util.List;
+
 public class User {
 
     // VARIABLES
     private String id, email, nickname, password, name, lastname, image, dni, birthday, phone, address, postal, municipality, province;
     private boolean advertising;
+    List<DocumentReference> favorites;
+
+    public List<DocumentReference> getListFav() {
+        return favorites;
+    }
+
+    public void setListFav(List<DocumentReference> listFav) {
+        this.favorites = listFav;
+    }
 
     public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province, boolean advertising) {
         this.email = email;

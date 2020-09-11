@@ -27,9 +27,10 @@
         <ImageView
             android:id="@+id/iconFavorite"
             android:layout_width="50dp"
+            android:clickable="true"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_favo_off" />
+            />
 
         <RelativeLayout
             android:id="@+id/ExploreCardLinearLayout"
