@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class ExplorerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Adapter adapter;
     private ArrayList<Home> list_home = new ArrayList<Home>();
+    private ImageView imgEmpty;
 
     // firebase
     private FirebaseAuth mAuth;
@@ -88,6 +90,7 @@ public class ExplorerActivity extends AppCompatActivity {
         //recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),2)));
         btnFilters = (Button) findViewById(R.id.btnFilters);
         btnMap = (Button) findViewById(R.id.btnMap);
+        imgEmpty = (ImageView) findViewById(R.id.imgEmpty);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
 
         //--> MENÚ DE NAVEGACIÓN INFERIOR
@@ -154,12 +157,22 @@ public class ExplorerActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : value) {
 
                             Home h = document.toObject(Home.class);
-                            list_home.add(h);
+
+                            if(destiny.toLowerCase().equals(h.getProvince().toLowerCase())){
+                                list_home.add(h);
+                            }
+
                             Log.d("QUERY DB", document.getId() + " => " + document.getData());
                         }
 
                         // Cargar/ mostrar la información en el recyclerView
-                        loadRecyclerView();
+                        if(list_home.size()!=0){
+                            imgEmpty.setVisibility(View.INVISIBLE);
+                            loadRecyclerView();
+                        }else{
+                            imgEmpty.setVisibility(View.VISIBLE);
+                            //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
+                        }
                     }
                 });
 
