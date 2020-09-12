@@ -177,7 +177,7 @@ public class ExplorerActivity extends AppCompatActivity {
                         }
 
                         // Cargar/ mostrar la información en el recyclerView
-                        getSupportActionBar().setTitle("Destino: "+destiny+" ("+list_home.size()+")");
+                        getSupportActionBar().setTitle(destiny+"\n --> "+list_home.size()+" resultados");
 
                         if(list_home.size()!=0){
                            imgEmpty.setVisibility(View.INVISIBLE);

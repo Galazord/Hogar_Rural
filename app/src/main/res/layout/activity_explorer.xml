@@ -9,9 +9,6 @@
     tools:context=".ExplorerActivity"
     android:background="@color/background_grey">
 
-
-
-
     <LinearLayout
         android:id="@+id/exploreLinearLayout"
         android:layout_width="match_parent"

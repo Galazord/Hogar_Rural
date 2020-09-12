@@ -29,6 +29,9 @@
     <string name="explorer_filters">FILTROS</string>
     <string name="explorer_map">MAPA</string>
 
+    <!-- BUSCAR -->
+    <string name="search_insert">Introduce un nuevo destino... </string>
+
     <!-- FILTROS -->
     <string name="filters_symbol_less">-</string>
     <string name="filters_nPersons">- Número de personas -</string>
