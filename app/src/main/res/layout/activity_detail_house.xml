@@ -35,6 +35,8 @@
                 android:background="@drawable/ic_favo_off"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
+                android:id="@+id/btnFavorite"
+                android:onClick="clickFavorite"
                 android:layout_marginEnd="15dp"/>
 
             <!-- ************** DATOS PRINCIPALES ************** -->
@@ -274,7 +276,7 @@
             <TextView
                 android:id="@+id/DetailTextMultiLine1"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="65dp"
@@ -294,13 +296,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/showMore"
-                android:layout_above="@+id/DetailPanelTitle2"
+                android:layout_below="@+id/DetailTextMultiLine1"
                 android:layout_marginStart="25dp"
-                android:layout_marginEnd="65dp"
-                android:layout_alignParentEnd="true"
+                android:textAlignment="textStart"
+                android:layout_alignParentStart="true"
+                android:layout_centerHorizontal="true"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
                 android:background="?android:attr/selectableItemBackground"
@@ -313,7 +316,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:src="@drawable/hr_panel_title"
-                android:layout_below="@+id/DetailTextMultiLine1"
+                android:layout_below="@+id/btnShowMore1"
                 android:layout_marginTop="15dp"
                 android:alpha="0.7"/>
 
@@ -322,7 +325,7 @@
                 android:id="@+id/DetailTitleActivities"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/DetailTextMultiLine1"
+                android:layout_below="@+id/btnShowMore1"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
@@ -333,7 +336,7 @@
             <TextView
                 android:id="@+id/DetailTextMultiLine2"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="65dp"
@@ -352,13 +355,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/showMore"
-                android:layout_above="@+id/DetailPanelTitle3"
+                android:layout_below="@+id/DetailTextMultiLine2"
                 android:layout_marginStart="25dp"
-                android:layout_marginEnd="65dp"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="textStart"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:textAllCaps="false"
                 android:background="?android:attr/selectableItemBackground"
@@ -371,7 +375,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:src="@drawable/hr_panel_title"
-                android:layout_below="@+id/DetailTextMultiLine2"
+                android:layout_below="@+id/btnShowMore2"
                 android:layout_marginTop="15dp"
                 android:alpha="0.7"/>
 
@@ -380,7 +384,7 @@
                 android:id="@+id/DetailTitleInterest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/DetailTextMultiLine2"
+                android:layout_below="@+id/btnShowMore2"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
@@ -391,7 +395,7 @@
             <TextView
                 android:id="@+id/DetailTextMultiLine3"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="65dp"
@@ -410,13 +414,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/showMore"
-                android:layout_above="@+id/DetailPanelTitle4"
+                android:layout_below="@+id/DetailTextMultiLine3"
                 android:layout_marginStart="25dp"
-                android:layout_marginEnd="65dp"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerHorizontal="true"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
-                android:textSize="18sp"
+                android:textSize="14sp"
+                android:textAlignment="textStart"
                 android:textStyle="bold"
                 android:textAllCaps="false"
                 android:background="?android:attr/selectableItemBackground"
@@ -429,7 +434,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:src="@drawable/hr_panel_title"
-                android:layout_below="@+id/DetailTextMultiLine3"
+                android:layout_below="@+id/btnShowMore3"
                 android:layout_marginTop="15dp"
                 android:alpha="0.7"/>
 
@@ -438,7 +443,7 @@
                 android:id="@+id/DetailTitleServices"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/DetailTextMultiLine3"
+                android:layout_below="@+id/btnShowMore3"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:fontFamily="@font/lemon"
@@ -486,13 +491,24 @@
                 android:textColor="@color/green_icon"/>
 
             <!-- Listado de comentarios -->
+            <TextView
+                android:id="@+id/tvEmptyComment"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recyclerViewComments"
+
+                android:text="TextView" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewComments"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="65dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:ems="10"
                 android:gravity="start|top"
                 android:layout_below="@+id/DetailPanelTitle5" />
@@ -509,7 +525,7 @@
             <!-- Botón Ver más: Comentarios -->
 
             <!-- Barra separadora de: mostrar más -> 2 -->
-            <Button
+        <Button
                 android:id="@+id/btnShowMoreComents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -531,7 +547,7 @@
                 android:id="@+id/dividerComents2"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_below="@+id/btnShowMoreComents"
+                android:layout_below="@+id/dividerComents1"
                 android:layout_marginHorizontal="30dp"
                 android:background="@color/green_light_icon" />
 
@@ -545,7 +561,7 @@
                 android:layout_marginEnd="65dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:layout_below="@+id/dividerComents2"
+                android:layout_below="@+id/btnShowMoreComents"
                 android:text="@string/house_info_comments"
                 android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
@@ -606,40 +622,50 @@
                     <ImageView
                         android:id="@+id/iconTempOff1"
                         android:layout_width="28dp"
+                        android:clickable="true"
+                        android:tag="1"
                         android:layout_height="50dp"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/ic_leaf_off" />
+                         />
                     <ImageView
                         android:id="@+id/iconTempOff2"
                         android:layout_width="28dp"
                         android:layout_height="50dp"
+                        android:clickable="true"
+                        android:tag="2"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/ic_leaf_off" />
+                         />
                     <ImageView
                         android:id="@+id/iconTempOff3"
                         android:layout_width="28dp"
+                        android:clickable="true"
+                        android:tag="3"
                         android:layout_height="50dp"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/ic_leaf_off" />
+                        />
                     <ImageView
                         android:id="@+id/iconTempOff4"
                         android:layout_width="28dp"
                         android:layout_height="50dp"
+                        android:clickable="true"
+                        android:tag="4"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/ic_leaf_off" />
+                          />
                     <ImageView
                         android:id="@+id/iconTempOff5"
                         android:layout_width="28dp"
+                        android:clickable="true"
+                        android:tag="5"
                         android:layout_height="50dp"
                         android:layout_marginHorizontal="10dp"
-                        android:src="@drawable/ic_leaf_off" />
+                         />
 
                 </LinearLayout>
 
                 <!-- Botón para enviar el comentario -->
                 <Button
                     android:id="@+id/btnOKComent"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:background="@drawable/gradient_green"
@@ -729,6 +755,8 @@
                     android:onClick="clickEmailOwner"/>
 
             </LinearLayout>
+
+
 
         </RelativeLayout>
 

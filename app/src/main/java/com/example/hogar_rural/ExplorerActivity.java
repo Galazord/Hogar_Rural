@@ -195,10 +195,19 @@ public class ExplorerActivity extends AppCompatActivity {
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
 
-            Adapter adapter = new Adapter(getApplicationContext(), list_home);
+            Adapter adapter = new Adapter(getApplicationContext(), list_home, destiny);
             recyclerView.setAdapter(adapter);
 
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode ==RESULT_OK){
+          destiny =  data.getStringExtra("destine");
+        }
     }
 
     // Menú superior: Resolver la búsqueda

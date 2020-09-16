@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     app:cardCornerRadius="3dp"
-    app:cardElevation="3dp"
+    app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
     android:background="@color/background_grey">
 
@@ -51,52 +51,33 @@
             <ImageView
                 android:id="@+id/iconTemp"
                 android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_leaf_off" />
+                android:layout_height="25dp" />
             <ImageView
                 android:id="@+id/iconTemp2"
                 android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_leaf_off" />
+                android:layout_height="25dp" />
             <ImageView
                 android:id="@+id/iconTemp3"
                 android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_leaf_off" />
+                android:layout_height="25dp" />
             <ImageView
                 android:id="@+id/iconTemp4"
                 android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_leaf_off" />
+                android:layout_height="25dp" />
             <ImageView
                 android:id="@+id/iconTemp5"
                 android:layout_width="22dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_leaf_off" />
+                android:layout_height="25dp" />
 
         </LinearLayout>
 
-        <!-- Titulo del comentario -->
-        <TextView
-            android:id="@+id/tvComment_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/LLComments_icons_valoration"
-            android:layout_toEndOf="@id/cvComment_avatar"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@font/roboto_medium"
-            android:text="Título del comentario"
-            android:textColor="@color/green_dark"
-            android:textSize="14sp"
-            android:textStyle="bold" />
 
         <!-- Texto del comentario -->
         <TextView
             android:id="@+id/tvComment_txtBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvComment_title"
+            android:layout_below="@id/LLComments_icons_valoration"
             android:layout_toEndOf="@id/cvComment_avatar"
             android:layout_marginStart="20dp"
             android:layout_marginTop="3dp"

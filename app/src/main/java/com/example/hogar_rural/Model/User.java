@@ -9,15 +9,9 @@ public class User {
     // VARIABLES
     private String id, email, nickname, password, name, lastname, image, dni, birthday, phone, address, postal, municipality, province;
     private boolean advertising;
-    List<DocumentReference> favorites;
+    private List<DocumentReference> favorites;
 
-    public List<DocumentReference> getListFav() {
-        return favorites;
-    }
 
-    public void setListFav(List<DocumentReference> listFav) {
-        this.favorites = listFav;
-    }
 
     public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province, boolean advertising) {
         this.email = email;
@@ -34,6 +28,23 @@ public class User {
         this.municipality = municipality;
         this.province = province;
         this.advertising = advertising;
+    }
+    public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province, boolean advertising, List<DocumentReference> favorites) {
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.name = name;
+        this.lastname = lastname;
+        this.image = image;
+        this.dni = dni;
+        this.birthday = birthday;
+        this.phone = phone;
+        this.address = address;
+        this.postal = postal;
+        this.municipality = municipality;
+        this.province = province;
+        this.advertising = advertising;
+        this.favorites = favorites;
     }
 
     // CONTRUCTOR
@@ -160,4 +171,11 @@ public class User {
         this.advertising = advertising;
     }
 
+    public List<DocumentReference> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<DocumentReference> listFav) {
+        this.favorites = listFav;
+    }
 }

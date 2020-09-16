@@ -61,7 +61,15 @@ public class UtilMethod {
         toast.show();
     }
 
+    static public String subStringText(String text, int number_char, String symbol){
 
+        if(text.length()>number_char){
+            return text.substring(0,number_char).concat(symbol);
+        }else{
+            return text.concat(symbol);
+        }
+
+    }
     // Generar una clave ID aleatoria.
     static public String getUIID(){
 

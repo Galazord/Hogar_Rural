@@ -1,52 +1,83 @@
 package com.example.hogar_rural;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.hogar_rural.Interface.DbRetrofitApi;
+import com.example.hogar_rural.Model.Comment;
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.User;
+import com.example.hogar_rural.Utils.TypeToast;
+import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class DetailHouseActivity extends AppCompatActivity {
 
     //--> VARIABLES
-    private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName;
-    private ImageView CardDetailImage, ivDetail_avatarProperty, ivDetail_avatarUser;
+    private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions,tvEmptyComment, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName;
+    private ImageView CardDetailImage, ivDetail_avatarProperty, ivDetail_avatarUser,iconTempOff1,iconTempOff2,iconTempOff3,iconTempOff4,iconTempOff5;
+    private ImageView[] arrValoration;
+    private Button btnFavorite,btnShowMore1,btnShowMore2,btnShowMore3;
     private DbRetrofitApi dbRetrofitApi;
     private MediaPlayer soundError;
-    private String idHouse, idProperty;
+    private String idHouse, idProperty,destine;
     private User user;
     private RecyclerView recyclerViewComments;
-
+    private List<Comment> comments;
+    private Home home;
+    private int pagination = 2;
+    private Long valoration_comment = -1L;
+    private EditText etDetail_addComent;
+    private Boolean isFavorite = false;
+    private Boolean activeDetailRental = true, activeDetailActivities= true, activePlaces= true;
     // firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseStorage firebaseStorage;
-
+    private List<DocumentReference> favorites  = new ArrayList<>();;
     private List<String> listUrlImages;
     private int index = 0;
 
@@ -60,6 +91,40 @@ public class DetailHouseActivity extends AppCompatActivity {
 
     }
 
+    // Menú superior: Resolver la búsqueda
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_details_house, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_shared:
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Quiero compartir contigo esta casa que he visto en HOGAR APP");
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+                return true;
+            case android.R.id.home:
+                Intent result = new Intent();
+                result.putExtra("destine", destine);
+                setResult(RESULT_OK, result);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
@@ -68,20 +133,28 @@ public class DetailHouseActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         firebaseStorage  = FirebaseStorage.getInstance();
-
+        comments = new ArrayList<>();
         // Relaccionar las variables con la parte gráfica
+        etDetail_addComent = (EditText) findViewById(R.id.etDetail_addComent);
         DetailPlace = (TextView) findViewById(R.id.DetailPlace);
         DetailRental = (TextView) findViewById(R.id.DetailRental);
         DetailPeople = (TextView) findViewById(R.id.DetailPeople);
         DetailPrice = (TextView) findViewById(R.id.DetailPrice);
         DetailNumOpinions = (TextView) findViewById(R.id.DetailNumOpinions);
         DetailValorations = (TextView) findViewById(R.id.DetailValorations);
+        btnShowMore1 = (Button) findViewById(R.id.btnShowMore1);
+        btnShowMore2 = (Button) findViewById(R.id.btnShowMore2);
+        btnShowMore3 = (Button) findViewById(R.id.btnShowMore3);
         DetailTextMultiLine1 = (TextView) findViewById(R.id.DetailTextMultiLine1);
         DetailTextMultiLine2 = (TextView) findViewById(R.id.DetailTextMultiLine2);
         DetailTextMultiLine3 = (TextView) findViewById(R.id.DetailTextMultiLine3);
         DetailTextMultiLine4 = (TextView) findViewById(R.id.DetailTextMultiLine4);
+
         tvPropertyName = (TextView) findViewById(R.id.tvPropertyName);
+        tvEmptyComment = (TextView) findViewById(R.id.tvEmptyComment);
+        btnFavorite = (Button) findViewById(R.id.btnFavorite);
         CardDetailImage = (ImageView) findViewById(R.id.CardDetailImage);
+
         CardDetailImage.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -104,20 +177,90 @@ public class DetailHouseActivity extends AppCompatActivity {
             }
         });
 
+        iconTempOff1 = (ImageView) findViewById(R.id.iconTempOff1);
+        iconTempOff2 = (ImageView) findViewById(R.id.iconTempOff2);
+        iconTempOff3 = (ImageView) findViewById(R.id.iconTempOff3);
+        iconTempOff4 = (ImageView) findViewById(R.id.iconTempOff4);
+        iconTempOff5 = (ImageView) findViewById(R.id.iconTempOff5);
+
+        arrValoration = new  ImageView[]{iconTempOff1,iconTempOff2,iconTempOff3,iconTempOff4,iconTempOff5};
+        initValorationImages();
+        for (ImageView iv: arrValoration
+             ) {
+
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UtilMethod.showToast(TypeToast.INFO,DetailHouseActivity.this,v.getTag().toString());
+                    cargarValoracion(Long.valueOf(v.getTag().toString()));
+                }
+            });
+        }
+
         ivDetail_avatarProperty = (ImageView) findViewById(R.id.ivDetail_avatarProperty);
         ivDetail_avatarUser = (ImageView) findViewById(R.id.ivDetail_avatarUser);
         recyclerViewComments = (RecyclerView) findViewById(R.id.recyclerViewComments);
+        recyclerViewComments.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerViewComments.setNestedScrollingEnabled(false);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
 
         // Recibir los parámetros del intent procedente de Adapter.java
         Intent i = getIntent();
         idHouse = i.getStringExtra("idHouse");
 
+        if(i.getExtras()!=null && i.getStringExtra("destine")!=null){
+
+            destine = i.getStringExtra("destine");
+        }else{
+
+            destine = "";
+        }
+
         // Cargar el contenido de la vivienda
         loadHomeFromDB();
 
+
+    }
+    private void loadCommentFirestore(){
+        db.collection("comments").orderBy("date", Query.Direction.DESCENDING).limit(pagination)
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        comments.removeAll(comments);
+
+                           for (QueryDocumentSnapshot document : value) {
+
+                            Comment comment = document.toObject(Comment.class);
+
+                            if(comment.getId_homes().equals(home.getId())){
+                                comments.add(comment);
+                            }
+
+                        }
+
+                        if(comments.size()!=0){
+                            tvEmptyComment.setVisibility(View.INVISIBLE);
+                            loadRecyclerView();
+                        }else{
+                            tvEmptyComment.setVisibility(View.VISIBLE);
+                            //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
+                        }
+                    }
+                });
+
+
     }
 
+    // Cargar/ mostrar la información en el recyclerView
+    private void loadRecyclerView(){
+
+        AdapterComment adapter = new AdapterComment(getApplicationContext(), comments);
+        recyclerViewComments.setAdapter(adapter);
+
+
+    }
     // Cargar y mostrar los datos del usuario logado en ese momento
     private void loadHomeFromDB(){
 
@@ -131,7 +274,7 @@ public class DetailHouseActivity extends AppCompatActivity {
                     if(doc.exists()){
 
                         // Recoger los datos de la casa
-                        Home home = doc.toObject(Home.class);
+                         home = doc.toObject(Home.class);
                         // Mostrar los datos de la casa en los campos correspondientes
                         DetailPlace.setText(home.getName());
                         DetailPrice.setText(String.valueOf(home.getPrice()).concat(getApplicationContext().getString(R.string.adapter_price)));
@@ -147,6 +290,8 @@ public class DetailHouseActivity extends AppCompatActivity {
                         DetailTextMultiLine1.setText(home.getDescription());
                         DetailTextMultiLine2.setText(home.getActivities());
                         DetailTextMultiLine3.setText(home.getInteresting_places());
+                        hideViewMore();
+
                         listUrlImages = home.getImages();
                         // Cargar la galería de imágenes de la casa actual
                          loadHomeGallery(listUrlImages.get(index));
@@ -167,6 +312,32 @@ public class DetailHouseActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void hideViewMore(){
+        DetailTextMultiLine1.setText(UtilMethod.subStringText(DetailTextMultiLine1.getText().toString(),250,"..."));
+        DetailTextMultiLine2.setText(UtilMethod.subStringText(DetailTextMultiLine2.getText().toString(),250,"..."));
+        DetailTextMultiLine3.setText(UtilMethod.subStringText(DetailTextMultiLine3.getText().toString(),250,"..."));
+        DetailTextMultiLine4.setText(UtilMethod.subStringText(DetailTextMultiLine4.getText().toString(),250,"..."));
+
+    }
+    private void initValorationImages(){
+        for (int i = 0; i<arrValoration.length; i++){
+            arrValoration[i].setBackgroundResource(R.drawable.ic_leaf_off);
+        }
+    }
+    private void cargarValoracion(Long val ){
+        valoration_comment = val;
+        for (int i = 0; i<val; i++){
+
+            arrValoration[i].setBackgroundResource(R.drawable.ic_leaf_on);
+        }
+
+        for (int i = val.intValue(); i<arrValoration.length; i++){
+
+            arrValoration[i].setBackgroundResource(R.drawable.ic_leaf_off);
+        }
+
+
     }
 
     private void loadHomeGallery(String img){
@@ -248,7 +419,8 @@ public class DetailHouseActivity extends AppCompatActivity {
 
                         // Cargar la imagen de usuario por defecto o la suya
                         loadUserImage(user);
-
+                        loadFavorite();
+                        loadCommentFirestore();
                     }
                     else{
                         Log.i("ERROR USER NOT EXIST", task.getResult().toString());
@@ -258,6 +430,8 @@ public class DetailHouseActivity extends AppCompatActivity {
                 }
             }
         });
+
+
     }
 
     // Cargar la imagen del usuario actual
@@ -274,6 +448,67 @@ public class DetailHouseActivity extends AppCompatActivity {
         });
     }
 
+    private void loadFavorite(){
+        if(mAuth.getCurrentUser()!=null){
+            btnFavorite.setVisibility(View.VISIBLE);
+
+            if(user.getFavorites()!=null){
+                favorites = user.getFavorites();
+                DocumentReference documentReference = db.collection("homes").document(home.getId());
+
+                if(favorites.contains(documentReference)){
+                    btnFavorite.setBackgroundResource(R.drawable.ic_favo_on);
+                    isFavorite = true;
+                }
+
+            }
+
+
+        }else{
+            btnFavorite.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void saveFav(){
+        // Recoger el ID del usuario logado
+        DocumentReference documentReference = db.collection("homes").document(home.getId());
+
+        if(favorites.size()!=0){
+
+            if(isFavorite){
+                favorites.remove(documentReference);
+                btnFavorite.setBackgroundResource(R.drawable.ic_favo_off);
+                isFavorite = false;
+            }else{
+
+                favorites.add(documentReference);
+                btnFavorite.setBackgroundResource(R.drawable.ic_favo_on);
+                isFavorite = true;
+            }
+
+
+        }else{
+            favorites.add(documentReference);
+            btnFavorite.setBackgroundResource(R.drawable.ic_favo_on);
+            isFavorite = true;
+        }
+
+        db.collection("users").document(user.getId())
+                .update("favorites",favorites).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "DocumentSnapshot successfully updated!");
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error updating document", e);
+                    }
+                });
+
+
+    }
     //--> CLICK BOTONES
     // Botón de disponibilidad de fechas
     public void clickShowDisponibility(View view) {
@@ -286,37 +521,107 @@ public class DetailHouseActivity extends AppCompatActivity {
 
     // Ver más información de las características
     public void clickShowMoreFeatures(View view) {
+        if(activeDetailRental){
+            DetailTextMultiLine1.setText(home.getDescription());
+            activeDetailRental = false;
+            btnShowMore1.setText("Ver menos");
+        }else{
+            DetailTextMultiLine1.setText(UtilMethod.subStringText(DetailTextMultiLine1.getText().toString(),250,"..."));
 
+            activeDetailRental = true;
+            btnShowMore1.setText("Ver más");
+        }
 
     }
 
     // Ver más información de las actividades
     public void clickShowMoreActivities(View view) {
+        if(activeDetailActivities){
+            DetailTextMultiLine2.setText(home.getActivities());
+            activeDetailActivities = false;
+            btnShowMore2.setText("Ver menos");
 
+        }else{
+            DetailTextMultiLine2.setText(UtilMethod.subStringText(DetailTextMultiLine2.getText().toString(),250,"..."));
+
+            activeDetailActivities = true;
+            btnShowMore2.setText("Ver más");
+        }
 
     }
 
     // Ver más información de los lugares de interés
     public void clickShowMorePlaceInterest(View view) {
+        if(activePlaces){
+            DetailTextMultiLine3.setText(home.getInteresting_places());
+            activePlaces = false;
+            btnShowMore3.setText("Ver menos");
+        }else{
+            DetailTextMultiLine3.setText(UtilMethod.subStringText(DetailTextMultiLine3.getText().toString(),250,"..."));
 
+            activePlaces = true;
+            btnShowMore3.setText("Ver más");
+        }
 
     }
 
     // Ver más información de los comentarios
     public void clickShowMoreComments(View view) {
 
-
+        pagination = pagination+2;
+        loadCommentFirestore();
     }
 
     // Botón OK para enviar el comentario
     public void clickSendComment(View view) {
 
 
-    }
+        if(!TextUtils.isEmpty(etDetail_addComent.getText())){
+            String id_comment = UtilMethod.getUIID();
+            String comment = etDetail_addComent.getText().toString();
+            String id_user = user.getId();
+            String name_user = user.getName();
+            String id_homes = home.getId();
 
+            Comment c = new Comment(id_comment,id_homes,comment,id_user,name_user,valoration_comment,Timestamp.now());
+
+            registerCommentFirestore(c);
+
+        }else{
+          UtilMethod.showToast(TypeToast.INFO,this,"Debes de escribir un comentario");
+        }
+
+    }
+    // Subir los datos de usuario a firebase
+    private void registerCommentFirestore(Comment com){
+
+        // Generar una ID para cada casa
+        final String id = com.getId();
+
+        // Gestionar el registro final
+        db.collection("comments")
+                .document(id)
+                .set(com)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        etDetail_addComent.setText("");
+                        loadRecyclerView();
+                        initValorationImages();
+                        pagination = 2;
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        UtilMethod.showToast(TypeToast.ERROR, DetailHouseActivity.this,"ERROR Al guardar comentario.");
+                        soundError.start();
+                        Log.e("ERROR FIRESTORE USER: ", e.getMessage());
+                    }
+                });
+    }
     // Botón para llamar al propietario de la casa
     public void clickCallOwner(View view) {
-
 
     }
 
@@ -341,5 +646,9 @@ public class DetailHouseActivity extends AppCompatActivity {
     public void clickImageHomes(View view) {
        /* index++;
         configSwipeImage();*/
+    }
+
+    public void clickFavorite(View view) {
+        saveFav();
     }
 }

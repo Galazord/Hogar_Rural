@@ -55,6 +55,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     private FirebaseFirestore db;
     private List<String> imgGallery;
     private String idUser;
+    private String destine;
 
     public List<DocumentReference> favorites;
 
@@ -63,6 +64,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         this.inflater = LayoutInflater.from(context);
         this.model = model;
         this.context = context;
+    }
+
+    public Adapter(Context context, ArrayList<Home> model,String destine) {
+        this.inflater = LayoutInflater.from(context);
+        this.model = model;
+        this.context = context;
+        this.destine = destine;
     }
 
     // Los 3 métodos implementados del RecyclerView.Adapter
@@ -177,7 +185,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
                     Intent in = new Intent(view.getContext(), DetailHouseActivity.class);
                     in.putExtra("idHouse", model.get(getAdapterPosition()).getId());
-
+                   if(destine!=null){
+                       in.putExtra("destine", destine);
+                   }
                     in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     // Abrir actividad: DetailHouseActivity
