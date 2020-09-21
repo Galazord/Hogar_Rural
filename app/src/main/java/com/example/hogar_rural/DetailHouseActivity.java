@@ -606,9 +606,9 @@ public class DetailHouseActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         etDetail_addComent.setText("");
+                        pagination = 2;
                         loadRecyclerView();
                         initValorationImages();
-                        pagination = 2;
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -622,7 +622,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     }
     // Botón para llamar al propietario de la casa
     public void clickCallOwner(View view) {
-
+        
     }
 
     // Botón para enviar un email al propietario de la casa
