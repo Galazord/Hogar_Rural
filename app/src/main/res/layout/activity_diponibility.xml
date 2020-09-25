@@ -56,12 +56,20 @@
         android:textColor="@color/green_dark"
         android:layout_toEndOf="@id/iv_dispo_square_red"/>
 
-    <!-- Calendario -->
+
+    <sun.bob.mcalendarview.MCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:context=".DiponibilityActivity"
+        android:layout_above="@id/btnConfirmDisponibility"
+        tools:ignore="MissingClass" />
+
     <ImageView
         android:id="@+id/iv_Calendar"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:src="@color/toast_blue"
+        android:visibility="invisible"
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="10dp"
         android:layout_below="@id/tv_dipo_info_3" />
@@ -81,6 +89,8 @@
         android:textAllCaps="false"
         android:textColor="@color/white_text"
         android:onClick="btnConfirmDisponibility" />
+
+
 
 
 </RelativeLayout>

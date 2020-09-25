@@ -109,7 +109,17 @@ public class UtilMethod {
         return simpleDateFormat.format(date);
 
     }
-
+    // Convertir el formato fecha en Timestamp
+    public static Long  getLongDate(Timestamp date){
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date converTmstp = date.toDate();
+            Date parsedDate = dateFormat.parse(converTmstp.toString());
+           return parsedDate.getTime();
+        } catch(Exception e) { //this generic but you can control another types of exception
+            return null;
+        }
+    }
 
     // Método que comprueba si un icono de servicios está incluido/ seleccionado en la lista (ON/OFF)
     public static List<String> checkServicesList(List<String> services, String new_service){

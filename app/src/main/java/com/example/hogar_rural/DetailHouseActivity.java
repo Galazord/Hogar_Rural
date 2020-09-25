@@ -24,11 +24,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.example.hogar_rural.Interface.DbRetrofitApi;
 import com.example.hogar_rural.Model.Comment;
 import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.Service;
 import com.example.hogar_rural.Model.User;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
@@ -50,6 +52,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -60,13 +64,17 @@ public class DetailHouseActivity extends AppCompatActivity {
     private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions,tvEmptyComment, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName;
     private ImageView CardDetailImage, ivDetail_avatarProperty, ivDetail_avatarUser,iconTempOff1,iconTempOff2,iconTempOff3,iconTempOff4,iconTempOff5;
     private ImageView[] arrValoration;
+    private ToggleButton tbFilterDetail_adapted, tbFilterDetail_air, tbFilterDetail_barbecue, tbFilterDetail_bath, tbFilterDetail_pool, tbFilterDetail_climatized, tbFilterDetail_garden, tbFilterDetail_heating, tbFilterDetail_jacuzzi, tbFilterDetail_kitchen, tbFilterDetail_mountain, tbFilterDetail_parking, tbFilterDetail_beach, tbFilterDetail_breakfast, tbFilterDetail_children, tbFilterDetail_fireplace, tbFilterDetail_pets, tbFilterDetail_spa, tbFilterDetail_tv, tbFilterDetail_wifi;
+    private List<ToggleButton> servicesIcon;
     private Button btnFavorite,btnShowMore1,btnShowMore2,btnShowMore3;
     private DbRetrofitApi dbRetrofitApi;
     private MediaPlayer soundError;
     private String idHouse, idProperty,destine;
     private User user;
+    private User ownerHome;
     private RecyclerView recyclerViewComments;
     private List<Comment> comments;
+    private List<Service> serviciosFinalHome;
     private Home home;
     private int pagination = 2;
     private Long valoration_comment = -1L;
@@ -150,6 +158,47 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine3 = (TextView) findViewById(R.id.DetailTextMultiLine3);
         DetailTextMultiLine4 = (TextView) findViewById(R.id.DetailTextMultiLine4);
 
+        tbFilterDetail_adapted = (ToggleButton) findViewById(R.id.tbFilterDetail_adapted);
+        tbFilterDetail_air = (ToggleButton) findViewById(R.id.tbFilterDetail_air);
+        tbFilterDetail_barbecue = (ToggleButton) findViewById(R.id.tbFilterDetail_barbecue);
+        tbFilterDetail_bath = (ToggleButton) findViewById(R.id.tbFilterDetail_bath);
+        tbFilterDetail_pool = (ToggleButton) findViewById(R.id.tbFilterDetail_pool);
+        tbFilterDetail_climatized = (ToggleButton) findViewById(R.id.tbFilterDetail_climatized);
+        tbFilterDetail_garden = (ToggleButton) findViewById(R.id.tbFilterDetail_garden);
+        tbFilterDetail_heating = (ToggleButton) findViewById(R.id.tbFilterDetail_heating);
+        tbFilterDetail_jacuzzi = (ToggleButton) findViewById(R.id.tbFilterDetail_jacuzzi);
+        tbFilterDetail_kitchen = (ToggleButton) findViewById(R.id.tbFilterDetail_kitchen);
+        tbFilterDetail_mountain = (ToggleButton) findViewById(R.id.tbFilterDetail_mountain);
+        tbFilterDetail_parking = (ToggleButton) findViewById(R.id.tbFilterDetail_parking);
+        tbFilterDetail_beach = (ToggleButton) findViewById(R.id.tbFilterDetail_beach);
+        tbFilterDetail_breakfast = (ToggleButton) findViewById(R.id.tbFilterDetail_breakfast);
+        tbFilterDetail_children = (ToggleButton) findViewById(R.id.tbFilterDetail_children);
+        tbFilterDetail_fireplace = (ToggleButton) findViewById(R.id.tbFilterDetail_fireplace);
+        tbFilterDetail_pets = (ToggleButton) findViewById(R.id.tbFilterDetail_pets);
+        tbFilterDetail_spa = (ToggleButton) findViewById(R.id.tbFilterDetail_spa);
+        tbFilterDetail_tv = (ToggleButton) findViewById(R.id.tbFilterDetail_tv);
+        tbFilterDetail_wifi = (ToggleButton) findViewById(R.id.tbFilterDetail_wifi);
+        servicesIcon = new ArrayList<>();
+        Collections.addAll(servicesIcon, tbFilterDetail_adapted,
+                tbFilterDetail_air,
+                tbFilterDetail_barbecue,
+                tbFilterDetail_bath,
+                tbFilterDetail_pool,
+                tbFilterDetail_climatized,
+                tbFilterDetail_garden,
+                tbFilterDetail_heating,
+                tbFilterDetail_jacuzzi,
+                tbFilterDetail_kitchen,
+                tbFilterDetail_mountain,
+                tbFilterDetail_parking,
+                tbFilterDetail_beach,
+                tbFilterDetail_breakfast,
+                tbFilterDetail_children,
+                tbFilterDetail_fireplace,
+                tbFilterDetail_pets,
+                tbFilterDetail_spa,
+                tbFilterDetail_tv,
+                tbFilterDetail_wifi);
         tvPropertyName = (TextView) findViewById(R.id.tvPropertyName);
         tvEmptyComment = (TextView) findViewById(R.id.tvEmptyComment);
         btnFavorite = (Button) findViewById(R.id.btnFavorite);
@@ -220,6 +269,8 @@ public class DetailHouseActivity extends AppCompatActivity {
         loadHomeFromDB();
 
 
+
+
     }
     private void loadCommentFirestore(){
         db.collection("comments").orderBy("date", Query.Direction.DESCENDING).limit(pagination)
@@ -275,6 +326,7 @@ public class DetailHouseActivity extends AppCompatActivity {
 
                         // Recoger los datos de la casa
                          home = doc.toObject(Home.class);
+                        loadServices();
                         // Mostrar los datos de la casa en los campos correspondientes
                         DetailPlace.setText(home.getName());
                         DetailPrice.setText(String.valueOf(home.getPrice()).concat(getApplicationContext().getString(R.string.adapter_price)));
@@ -287,9 +339,9 @@ public class DetailHouseActivity extends AppCompatActivity {
                         DetailRental.setText(typeRental);
                         DetailPeople.setText(String.valueOf(home.getAmount()).concat(getApplicationContext().getString(R.string.adapter_people)));
                         DetailNumOpinions.setText("Pendiente".concat(getApplicationContext().getString(R.string.adapter_comments)));
-                        DetailTextMultiLine1.setText(home.getDescription());
-                        DetailTextMultiLine2.setText(home.getActivities());
-                        DetailTextMultiLine3.setText(home.getInteresting_places());
+                        DetailTextMultiLine1.setText(home.getDescription().replace("\\n", "\n"));
+                        DetailTextMultiLine2.setText(home.getActivities().replace("\\n", "\n"));
+                        DetailTextMultiLine3.setText(home.getInteresting_places().replace("\\n", "\n"));
                         hideViewMore();
 
                         listUrlImages = home.getImages();
@@ -339,7 +391,33 @@ public class DetailHouseActivity extends AppCompatActivity {
 
 
     }
+    private void loadServices(){
+        Service service = new Service();
+        List<String> serviciosHome = home.getServices();
+       serviciosFinalHome = new ArrayList<>();
+        for (Service s: service.getServices(this)
+             ) {
 
+            if(serviciosHome.contains(s.getName())){
+                serviciosFinalHome.add(s);
+            }
+        }
+
+        for (Service s: serviciosFinalHome
+        ) {
+
+            for (ToggleButton tb: servicesIcon
+            ) {
+                if(tb.getTag().equals(s.getName())){
+                    tb.setBackgroundResource(s.getIcon());
+                }
+            }
+
+        }
+
+        Log.i("TAG",serviciosFinalHome.size()+"");
+
+    }
     private void loadHomeGallery(String img){
 
 
@@ -387,7 +465,31 @@ public class DetailHouseActivity extends AppCompatActivity {
             }
         });
     }
+    private void loadInfoOwner(){
 
+        DocumentReference docRef = db.collection("users").document(home.getOwner());
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
+
+                        // Recoger los datos del usuario
+                        ownerHome = doc.toObject(User.class);
+
+
+                    }
+                    else{
+                        Log.i("ERROR USER NOT EXIST", task.getResult().toString());
+                    }
+                }else{
+                    Log.i("ERROR GET USER", task.getResult().toString());
+                }
+            }
+        });
+    }
     // Cargar la imagen del propietario
     private void loadPropertyImage(User user){
 
@@ -421,6 +523,7 @@ public class DetailHouseActivity extends AppCompatActivity {
                         loadUserImage(user);
                         loadFavorite();
                         loadCommentFirestore();
+                        loadInfoOwner();
                     }
                     else{
                         Log.i("ERROR USER NOT EXIST", task.getResult().toString());
@@ -515,6 +618,7 @@ public class DetailHouseActivity extends AppCompatActivity {
 
         // Ir a la ventana se seleccionar fechas
         Intent intentDate = new Intent (getApplicationContext(), DiponibilityActivity.class);
+        intentDate.putExtra("ID_HOUSE",home.getId());
         startActivity(intentDate);
 
     }
@@ -622,13 +726,20 @@ public class DetailHouseActivity extends AppCompatActivity {
     }
     // Botón para llamar al propietario de la casa
     public void clickCallOwner(View view) {
-        
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        callIntent.setData(Uri.parse("tel:"+ownerHome.getPhone()));
+        startActivity(callIntent);
     }
 
     // Botón para enviar un email al propietario de la casa
     public void clickEmailOwner(View vinoew) {
 
-
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("plain/text");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { ownerHome.getEmail() });
+        intent.putExtra(Intent.EXTRA_SUBJECT, "¡Hola amigo! Mira que casa he visto en la APP HOGAR RURAL");
+        intent.putExtra(Intent.EXTRA_TEXT, home.getName()+" "+home.getPrice());
+        startActivity(Intent.createChooser(intent, ""));
     }
     private void configSwipeImage(){
         if(index == listUrlImages.size()){
@@ -650,5 +761,10 @@ public class DetailHouseActivity extends AppCompatActivity {
 
     public void clickFavorite(View view) {
         saveFav();
+    }
+
+    public void clickGoToMap(View view) {
+        Intent i =new Intent(this, MapActivity.class);
+        startActivity(i);
     }
 }

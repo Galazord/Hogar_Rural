@@ -411,6 +411,7 @@ public class HouseUpActivity extends AppCompatActivity {
             String activities = etHouse_input_activities.getText().toString();
             String interest_places = etHouse_input_interest.getText().toString();
 
+
             // Fecha de hoy para la creación/actualización
             Timestamp date_now = Timestamp.now();
             // Tipo de vivienda (Ïntegra/ habitaciones)
