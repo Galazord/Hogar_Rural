@@ -99,6 +99,8 @@ public class DetailHouseActivity extends AppCompatActivity {
 
     }
 
+
+
     // Menú superior: Resolver la búsqueda
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

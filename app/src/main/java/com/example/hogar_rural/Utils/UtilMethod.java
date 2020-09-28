@@ -91,6 +91,14 @@ public class UtilMethod {
         return -1L;
     }
 
+    public static Date getDateFromSting(String dateStr){
+        try {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return   dateFormat.parse(dateStr);
+        } catch(Exception e) { //this generic but you can control another types of exception
+            return null;
+        }
+    }
     // Convertir el formato fecha en Timestamp
     public static Timestamp  getTimestamp(String date){
         try {
@@ -101,7 +109,17 @@ public class UtilMethod {
             return null;
         }
     }
-
+    // Convertir el formato fecha en Timestamp
+    public static Timestamp  getTimestampTomorrow(String date){
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = dateFormat.parse(date);
+            parsedDate = new Date(parsedDate.getTime() + (1000 * 60 * 60 * 24));
+            return new Timestamp(parsedDate);
+        } catch(Exception e) { //this generic but you can control another types of exception
+            return null;
+        }
+    }
     // Formato fecha de hoy
     public static String getDate(Date date){
         String pattern = "dd-MM-yyyy";

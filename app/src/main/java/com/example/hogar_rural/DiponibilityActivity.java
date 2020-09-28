@@ -34,12 +34,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import okhttp3.internal.Util;
 import sun.bob.mcalendarview.MCalendarView;
 import sun.bob.mcalendarview.MarkStyle;
+import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.vo.DateData;
 
 public class DiponibilityActivity extends AppCompatActivity {
@@ -50,6 +52,7 @@ public class DiponibilityActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String idHouse;
     private List<Timestamp> dates_reserved;
+    private List<Timestamp> dates_new_reserved;
     MCalendarView calendar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +76,29 @@ public class DiponibilityActivity extends AppCompatActivity {
 
     private void initComponent() {
         dates_reserved = new ArrayList<>();
+        dates_new_reserved = new ArrayList<>();
         // Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         // Relaccionar la parte gráfica con las variables
         calendar = (MCalendarView)findViewById(R.id.calendarView);
-        calendar.setDateCell(Color.TRANSPARENT);
+
+        calendar.setOnDateClickListener(new OnDateClickListener() {
+            @Override
+            public void onDateClick(View view, DateData date) {
+               Timestamp dateSelected =  UtilMethod.getTimestamp(date.getYear()+"-"+date.getMonth()+"-"+date.getDay());
+
+                    if(dates_new_reserved.contains(dateSelected)){
+                        dates_new_reserved.remove(dateSelected);
+                        calendar.unMarkDate(new DateData(date.getYear(),date.getMonth(),date.getDay()));
+                    }else{
+                        dates_new_reserved.add(dateSelected);
+                        calendar.markDate(new DateData(date.getYear(),date.getMonth(),date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GREEN)));
+                    }
+
+
+            }
+        });
     }
     private void loadHomeFromDB(){
 
@@ -105,7 +125,8 @@ public class DiponibilityActivity extends AppCompatActivity {
         for (Timestamp tmp :
                 dates_reserved) {
 
-            Date date = new Date(tmp.toDate().getTime() + (1000 * 60 * 60 * 24));
+            //Date date = new Date(tmp.toDate().getTime() + (1000 * 60 * 60 * 24));
+            Date date = tmp.toDate();
             String dateStr =  UtilMethod.getDate(date);
             String parts[] = dateStr.split("-");
             int day = Integer.parseInt(parts[0]);
@@ -120,9 +141,46 @@ public class DiponibilityActivity extends AppCompatActivity {
             }
 
     }
+
+
+
+    // Subir los datos de usuario a firebase
+    private void saveReserved(){
+        for (Timestamp t: dates_new_reserved
+             ) {
+            dates_reserved.add(t);
+        }
+        Available available = new Available(idHouse,dates_reserved,mAuth.getCurrentUser().getUid());
+
+        // Gestionar el registro final
+        db.collection("availables")
+                .document(idHouse)
+                .set(available)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        UtilMethod.showToast(TypeToast.SUCCESS, DiponibilityActivity.this,"Se ha realizado la reserva correctamente");
+                        finish();
+
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        UtilMethod.showToast(TypeToast.ERROR, DiponibilityActivity.this,"ERROR GENERAL.");
+
+                        Log.e("ERROR FIRESTORE USER: ", e.getMessage());
+                    }
+                });
+    }
+
+
     //--> BOTONES
     // Confimar fechas seleccionadas en el calendario
     public void btnConfirmDisponibility(View view) {
+        saveReserved();
 
     }
 }
