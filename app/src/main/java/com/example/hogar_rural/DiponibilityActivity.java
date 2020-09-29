@@ -75,8 +75,8 @@ public class DiponibilityActivity extends AppCompatActivity {
     // Inicializar componentes
 
     private void initComponent() {
-        dates_reserved = new ArrayList<>();
-        dates_new_reserved = new ArrayList<>();
+        dates_reserved = new ArrayList<>(); // lista de reserva
+        dates_new_reserved = new ArrayList<>(); // Lista de nuevas reservas
         // Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -88,9 +88,11 @@ public class DiponibilityActivity extends AppCompatActivity {
             public void onDateClick(View view, DateData date) {
                Timestamp dateSelected =  UtilMethod.getTimestamp(date.getYear()+"-"+date.getMonth()+"-"+date.getDay());
 
+                    // Si está en verde deseleccionar
                     if(dates_new_reserved.contains(dateSelected)){
                         dates_new_reserved.remove(dateSelected);
                         calendar.unMarkDate(new DateData(date.getYear(),date.getMonth(),date.getDay()));
+                        // Si está deselecionado marcar en verde
                     }else{
                         dates_new_reserved.add(dateSelected);
                         calendar.markDate(new DateData(date.getYear(),date.getMonth(),date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GREEN)));
@@ -121,19 +123,22 @@ public class DiponibilityActivity extends AppCompatActivity {
 
     }
 
+    // Mostrar las reservas que ya tiene
     private void selectReservedDate(){
+
+        // Coger las fechas reservadas de firebase
         for (Timestamp tmp :
                 dates_reserved) {
 
             //Date date = new Date(tmp.toDate().getTime() + (1000 * 60 * 60 * 24));
-            Date date = tmp.toDate();
-            String dateStr =  UtilMethod.getDate(date);
-            String parts[] = dateStr.split("-");
-            int day = Integer.parseInt(parts[0]);
-            int month = Integer.parseInt(parts[1]);
-            int year = Integer.parseInt(parts[2]);
+            Date date = tmp.toDate(); // Convertir en formato fecha (timeStamp --> date)
+            String dateStr =  UtilMethod.getDate(date); // Convertirlo en String y separar por partes
+            String parts[] = dateStr.split("-"); // Separar por partes
+            int day = Integer.parseInt(parts[0]); // DÍA
+            int month = Integer.parseInt(parts[1]); // MES
+            int year = Integer.parseInt(parts[2]); // AÑO
 
-
+            // Marcar en rojo las que ya están reservadas
             calendar.markDate(
                     new DateData(year, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.RED)
                     ));

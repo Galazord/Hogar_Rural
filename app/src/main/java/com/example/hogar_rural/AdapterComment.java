@@ -143,11 +143,7 @@ public class AdapterComment extends RecyclerView.Adapter<AdapterComment.ViewHold
             imgVal5 = itemView.findViewById(R.id.iconTemp5);
             arrImgVal = new ImageView[]{ imgVal1, imgVal2, imgVal3, imgVal4, imgVal5};
 
-
-
         }
-
-
 
     }
 

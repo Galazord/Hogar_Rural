@@ -3,7 +3,6 @@ package com.example.hogar_rural;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
@@ -52,8 +52,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -61,7 +61,7 @@ import static android.content.ContentValues.TAG;
 public class DetailHouseActivity extends AppCompatActivity {
 
     //--> VARIABLES
-    private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions,tvEmptyComment, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName;
+    private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions,tvEmptyComment, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName, tvPropertyUpdate, tvPropertyUpdateData;
     private ImageView CardDetailImage, ivDetail_avatarProperty, ivDetail_avatarUser,iconTempOff1,iconTempOff2,iconTempOff3,iconTempOff4,iconTempOff5;
     private ImageView[] arrValoration;
     private ToggleButton tbFilterDetail_adapted, tbFilterDetail_air, tbFilterDetail_barbecue, tbFilterDetail_bath, tbFilterDetail_pool, tbFilterDetail_climatized, tbFilterDetail_garden, tbFilterDetail_heating, tbFilterDetail_jacuzzi, tbFilterDetail_kitchen, tbFilterDetail_mountain, tbFilterDetail_parking, tbFilterDetail_beach, tbFilterDetail_breakfast, tbFilterDetail_children, tbFilterDetail_fireplace, tbFilterDetail_pets, tbFilterDetail_spa, tbFilterDetail_tv, tbFilterDetail_wifi;
@@ -87,7 +87,9 @@ public class DetailHouseActivity extends AppCompatActivity {
     private FirebaseStorage firebaseStorage;
     private List<DocumentReference> favorites  = new ArrayList<>();;
     private List<String> listUrlImages;
-    private int index = 0;
+    private int index = 0, countComments = -1;
+    // Música & Sonidos
+    private MediaPlayer soundSuccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,42 +101,6 @@ public class DetailHouseActivity extends AppCompatActivity {
 
     }
 
-
-
-    // Menú superior: Resolver la búsqueda
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_details_house, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_shared:
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Quiero compartir contigo esta casa que he visto en HOGAR APP");
-                sendIntent.setType("text/plain");
-
-                Intent shareIntent = Intent.createChooser(sendIntent, null);
-                startActivity(shareIntent);
-                return true;
-            case android.R.id.home:
-                Intent result = new Intent();
-                result.putExtra("destine", destine);
-                setResult(RESULT_OK, result);
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
@@ -180,6 +146,7 @@ public class DetailHouseActivity extends AppCompatActivity {
         tbFilterDetail_spa = (ToggleButton) findViewById(R.id.tbFilterDetail_spa);
         tbFilterDetail_tv = (ToggleButton) findViewById(R.id.tbFilterDetail_tv);
         tbFilterDetail_wifi = (ToggleButton) findViewById(R.id.tbFilterDetail_wifi);
+
         servicesIcon = new ArrayList<>();
         Collections.addAll(servicesIcon, tbFilterDetail_adapted,
                 tbFilterDetail_air,
@@ -201,8 +168,11 @@ public class DetailHouseActivity extends AppCompatActivity {
                 tbFilterDetail_spa,
                 tbFilterDetail_tv,
                 tbFilterDetail_wifi);
+
         tvPropertyName = (TextView) findViewById(R.id.tvPropertyName);
         tvEmptyComment = (TextView) findViewById(R.id.tvEmptyComment);
+        tvPropertyUpdate = (TextView) findViewById(R.id.tvPropertyUpdate);
+        tvPropertyUpdateData = (TextView) findViewById(R.id.tvPropertyUpdateData);
         btnFavorite = (Button) findViewById(R.id.btnFavorite);
         CardDetailImage = (ImageView) findViewById(R.id.CardDetailImage);
 
@@ -235,7 +205,10 @@ public class DetailHouseActivity extends AppCompatActivity {
         iconTempOff5 = (ImageView) findViewById(R.id.iconTempOff5);
 
         arrValoration = new  ImageView[]{iconTempOff1,iconTempOff2,iconTempOff3,iconTempOff4,iconTempOff5};
+
+        // Cargar imagen de avatar del comentario
         initValorationImages();
+
         for (ImageView iv: arrValoration
              ) {
 
@@ -243,7 +216,8 @@ public class DetailHouseActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     UtilMethod.showToast(TypeToast.INFO,DetailHouseActivity.this,v.getTag().toString());
-                    cargarValoracion(Long.valueOf(v.getTag().toString()));
+                    // Cargar listado de valoraciones
+                    loadValoration(Long.valueOf(v.getTag().toString()));
                 }
             });
         }
@@ -254,6 +228,7 @@ public class DetailHouseActivity extends AppCompatActivity {
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerViewComments.setNestedScrollingEnabled(false);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
+        soundSuccess = MediaPlayer.create(this, R.raw.sound_correct);
 
         // Recibir los parámetros del intent procedente de Adapter.java
         Intent i = getIntent();
@@ -270,11 +245,53 @@ public class DetailHouseActivity extends AppCompatActivity {
         // Cargar el contenido de la vivienda
         loadHomeFromDB();
 
-
-
-
     }
+
+    // Menú superior: Resolver la búsqueda
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_details_house, menu);
+
+        return true;
+    }
+
+    // Botón de compartir vivienda
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_shared:
+                // Ejecuta la función de compartir vivienda
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Quiero compartir contigo esta casa que he visto en HOGAR RURAL.");
+                sendIntent.setType("text/plain");
+
+                Intent shareIntent = Intent.createChooser(sendIntent, null);
+                startActivity(shareIntent);
+                return true;
+
+            case android.R.id.home:
+                // Opción para que conserve el destino al volver a la vista de Explorar
+                Intent result = new Intent();
+                result.putExtra("destine", destine);
+                setResult(RESULT_OK, result);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Cargar los comentarios existentes en firebase sobre la vivienda seleccionada
     private void loadCommentFirestore(){
+
+        // inicializar el número de comentarios.
+        countComments = 0;
+
         db.collection("comments").orderBy("date", Query.Direction.DESCENDING).limit(pagination)
 
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -289,20 +306,28 @@ public class DetailHouseActivity extends AppCompatActivity {
 
                             if(comment.getId_homes().equals(home.getId())){
                                 comments.add(comment);
+
+                                //sumar +1 al totald e comentarios
+                                countComments+=1;
+                                //Toast.makeText(getApplicationContext(), "nº: " + countComments, Toast.LENGTH_SHORT).show();
                             }
 
                         }
-
+                           // En el caso de que haya o no comentarios
                         if(comments.size()!=0){
                             tvEmptyComment.setVisibility(View.INVISIBLE);
+                            tvEmptyComment.setText("");
                             loadRecyclerView();
                         }else{
                             tvEmptyComment.setVisibility(View.VISIBLE);
+                            tvEmptyComment.setText("No hay comentarios");
                             //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
                         }
                     }
                 });
 
+        // Indicar el total de opiniones de esta vivienda
+        //DetailNumOpinions.setText(getResources().getString(R.string.house_nOpinion) + countComments);
 
     }
 
@@ -314,6 +339,7 @@ public class DetailHouseActivity extends AppCompatActivity {
 
 
     }
+
     // Cargar y mostrar los datos del usuario logado en ese momento
     private void loadHomeFromDB(){
 
@@ -344,6 +370,15 @@ public class DetailHouseActivity extends AppCompatActivity {
                         DetailTextMultiLine1.setText(home.getDescription().replace("\\n", "\n"));
                         DetailTextMultiLine2.setText(home.getActivities().replace("\\n", "\n"));
                         DetailTextMultiLine3.setText(home.getInteresting_places().replace("\\n", "\n"));
+
+                        Date date = home.getUpdate_date().toDate(); // Convertir en formato fecha (timeStamp --> date)
+                        String dateStr =  UtilMethod.getDate(date); // Convertirlo en String y separar por partes
+                        String parts[] = dateStr.split("-"); // Separar por partes
+                        String dateUpdateLast = parts[0] + "/" + parts[1] + "/" + parts[2];
+                        tvPropertyUpdate.setText(getResources().getString(R.string.house_lastUpdate));
+                        tvPropertyUpdateData.setText(dateUpdateLast);
+
+                        // Limitar el núemro de caracteres y poner puntos suspensivos a los bloques de texto
                         hideViewMore();
 
                         listUrlImages = home.getImages();
@@ -367,6 +402,8 @@ public class DetailHouseActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Limitar el núemro de caracteres y poner puntos suspensivos a los bloques de texto
     private void hideViewMore(){
         DetailTextMultiLine1.setText(UtilMethod.subStringText(DetailTextMultiLine1.getText().toString(),250,"..."));
         DetailTextMultiLine2.setText(UtilMethod.subStringText(DetailTextMultiLine2.getText().toString(),250,"..."));
@@ -374,12 +411,16 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine4.setText(UtilMethod.subStringText(DetailTextMultiLine4.getText().toString(),250,"..."));
 
     }
+
+    // Cargar imagen de avatar del comentario
     private void initValorationImages(){
         for (int i = 0; i<arrValoration.length; i++){
             arrValoration[i].setBackgroundResource(R.drawable.ic_leaf_off);
         }
     }
-    private void cargarValoracion(Long val ){
+
+    // Cargar listado de valoraciones
+    private void loadValoration(Long val ){
         valoration_comment = val;
         for (int i = 0; i<val; i++){
 
@@ -393,6 +434,8 @@ public class DetailHouseActivity extends AppCompatActivity {
 
 
     }
+
+    // Cargar los iconos activos de los servicios
     private void loadServices(){
         Service service = new Service();
         List<String> serviciosHome = home.getServices();
@@ -400,11 +443,13 @@ public class DetailHouseActivity extends AppCompatActivity {
         for (Service s: service.getServices(this)
              ) {
 
+            // Comprueba si el servicio está en el array de Firebase. Y si está guarda el servicio entero.
             if(serviciosHome.contains(s.getName())){
                 serviciosFinalHome.add(s);
             }
         }
 
+        // Se dibuja el icono activo
         for (Service s: serviciosFinalHome
         ) {
 
@@ -417,11 +462,12 @@ public class DetailHouseActivity extends AppCompatActivity {
 
         }
 
-        Log.i("TAG",serviciosFinalHome.size()+"");
+        //Log.i("TAG",serviciosFinalHome.size()+"");
 
     }
-    private void loadHomeGallery(String img){
 
+    // Cargar la galería de imágenes de la vivienda actual
+    private void loadHomeGallery(String img){
 
         StorageReference gsReference = firebaseStorage.getReferenceFromUrl(img);
         gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -467,6 +513,8 @@ public class DetailHouseActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Recoger los datos del usuario propietario de la vivienda actual
     private void loadInfoOwner(){
 
         DocumentReference docRef = db.collection("users").document(home.getOwner());
@@ -553,10 +601,12 @@ public class DetailHouseActivity extends AppCompatActivity {
         });
     }
 
+    // Carga las viviendas qeu están marcadas como favoritas
     private void loadFavorite(){
         if(mAuth.getCurrentUser()!=null){
             btnFavorite.setVisibility(View.VISIBLE);
 
+            // Cuando el usuario está logado
             if(user.getFavorites()!=null){
                 favorites = user.getFavorites();
                 DocumentReference documentReference = db.collection("homes").document(home.getId());
@@ -568,24 +618,27 @@ public class DetailHouseActivity extends AppCompatActivity {
 
             }
 
-
+        // Si el usuario NO está logado el icono no se mostrará
         }else{
             btnFavorite.setVisibility(View.INVISIBLE);
         }
     }
 
+    // Guardar/ eliminar el icono de favorito de la casa seleccionada
     private void saveFav(){
         // Recoger el ID del usuario logado
         DocumentReference documentReference = db.collection("homes").document(home.getId());
 
+        // Si la lista de favoritos del usuario logado ya tiene alguno...
         if(favorites.size()!=0){
 
+            //... comprueba si está en ON...
             if(isFavorite){
                 favorites.remove(documentReference);
                 btnFavorite.setBackgroundResource(R.drawable.ic_favo_off);
                 isFavorite = false;
             }else{
-
+                //... o en OFF
                 favorites.add(documentReference);
                 btnFavorite.setBackgroundResource(R.drawable.ic_favo_on);
                 isFavorite = true;
@@ -598,6 +651,7 @@ public class DetailHouseActivity extends AppCompatActivity {
             isFavorite = true;
         }
 
+        // Guarda la información del estado del favorito en la base de datos
         db.collection("users").document(user.getId())
                 .update("favorites",favorites).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -614,6 +668,8 @@ public class DetailHouseActivity extends AppCompatActivity {
 
 
     }
+
+
     //--> CLICK BOTONES
     // Botón de disponibilidad de fechas
     public void clickShowDisponibility(View view) {
@@ -681,7 +737,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Botón OK para enviar el comentario
     public void clickSendComment(View view) {
 
-
+        // Comprobar que hay al menos un comentario para poder enviarlo
         if(!TextUtils.isEmpty(etDetail_addComent.getText())){
             String id_comment = UtilMethod.getUIID();
             String comment = etDetail_addComent.getText().toString();
@@ -742,7 +798,16 @@ public class DetailHouseActivity extends AppCompatActivity {
         intent.putExtra(Intent.EXTRA_SUBJECT, "¡Hola amigo! Mira que casa he visto en la APP HOGAR RURAL");
         intent.putExtra(Intent.EXTRA_TEXT, home.getName()+" "+home.getPrice());
         startActivity(Intent.createChooser(intent, ""));
+
+        /*
+        // Mensaje satisfactorio
+        UtilMethod.showToast(TypeToast.SUCCESS, this,"Gracias, su mensaje ha sido enviado.");
+        soundSuccess.start();
+         */
+
     }
+
+    // Efecto de pasar imágenes en la galería
     private void configSwipeImage(){
         if(index == listUrlImages.size()){
             index = 0;
@@ -756,15 +821,18 @@ public class DetailHouseActivity extends AppCompatActivity {
         Animation aniFade = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.animation_fade_in);
         CardDetailImage.startAnimation(aniFade);
     }
+
     public void clickImageHomes(View view) {
        /* index++;
         configSwipeImage();*/
     }
 
+    // Activar/ desactivar icono de favorito
     public void clickFavorite(View view) {
         saveFav();
     }
 
+    // Ir al mapa de "cómo llegar"
     public void clickGoToMap(View view) {
         Intent i =new Intent(this, MapActivity.class);
         startActivity(i);

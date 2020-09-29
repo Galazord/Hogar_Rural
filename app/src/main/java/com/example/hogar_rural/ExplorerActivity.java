@@ -198,7 +198,6 @@ public class ExplorerActivity extends AppCompatActivity {
             Adapter adapter = new Adapter(getApplicationContext(), list_home, destiny);
             recyclerView.setAdapter(adapter);
 
-
     }
 
     @Override

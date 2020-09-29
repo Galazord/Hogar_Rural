@@ -77,7 +77,7 @@
     <string name="house_rental">Alquiler: tipo</string>
     <string name="house_nPerson">nº personas</string>
     <string name="house_price">Precio €/día</string>
-    <string name="house_nOpinion">nº opiniones</string>
+    <string name="house_nOpinion"> opiniones</string>
     <string name="house_valoration">Valoraciones</string>
     <string name="house_arrive">Cómo llegar:</string>
     <string name="house_disponibility">Consulta precios y disponibilidad</string>
@@ -90,7 +90,7 @@
     <string name="house_showComments">Aquí se mostrarán los comentarios</string>
     <string name="house_addComment">Añadir un comentario…</string>
     <string name="house_owner">El propietario</string>
-    <string name="house_lastUpdate">última actualización: X días</string>
+    <string name="house_lastUpdate">última actualización: </string>
     <string name="house_info_comments">Incluye tu comentario y tu puntuación a esta casa:</string>
 
     <!-- RECYCLERVIEW DE EXPLORAR -->
