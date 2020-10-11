@@ -52,7 +52,10 @@ public class DiponibilityActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String idHouse;
     private List<Timestamp> dates_reserved;
+    private List<DocumentReference> users_reserved;
+    private List<DocumentReference> users_new_reserved;
     private List<Timestamp> dates_new_reserved;
+    DocumentReference documentReferenceUser;
     MCalendarView calendar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +77,22 @@ public class DiponibilityActivity extends AppCompatActivity {
     //--> MÉTODOS
     // Inicializar componentes
 
+
     private void initComponent() {
         dates_reserved = new ArrayList<>(); // lista de reserva
         dates_new_reserved = new ArrayList<>(); // Lista de nuevas reservas
+        users_reserved = new ArrayList<>();
+        users_new_reserved = new ArrayList<>();
         // Firebase
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         // Relaccionar la parte gráfica con las variables
         calendar = (MCalendarView)findViewById(R.id.calendarView);
+
+
+
+
+        documentReferenceUser = db.collection("users").document(mAuth.getCurrentUser().getUid());
 
         calendar.setOnDateClickListener(new OnDateClickListener() {
             @Override
@@ -91,11 +102,13 @@ public class DiponibilityActivity extends AppCompatActivity {
                     // Si está en verde deseleccionar
                     if(dates_new_reserved.contains(dateSelected)){
                         dates_new_reserved.remove(dateSelected);
+                        users_new_reserved.remove(documentReferenceUser);
                         calendar.unMarkDate(new DateData(date.getYear(),date.getMonth(),date.getDay()));
                         // Si está deselecionado marcar en verde
                     }else{
                         dates_new_reserved.add(dateSelected);
                         calendar.markDate(new DateData(date.getYear(),date.getMonth(),date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GREEN)));
+                        users_new_reserved.add(documentReferenceUser);
                     }
 
 
@@ -115,8 +128,9 @@ public class DiponibilityActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : value) {
                             Available available = document.toObject(Available.class);
                             dates_reserved = available.getDates_reserved();
+                            users_reserved = available.getUsers_reserved();
                         }
-                        Log.i("size",dates_reserved.size()+"");
+
                         selectReservedDate();
                     }
                 });
@@ -154,8 +168,14 @@ public class DiponibilityActivity extends AppCompatActivity {
         for (Timestamp t: dates_new_reserved
              ) {
             dates_reserved.add(t);
+
         }
-        Available available = new Available(idHouse,dates_reserved,mAuth.getCurrentUser().getUid());
+        for (DocumentReference df: users_new_reserved
+        ) {
+            users_reserved.add(df);
+
+        }
+        Available available = new Available(idHouse,dates_reserved,users_reserved);
 
         // Gestionar el registro final
         db.collection("availables")

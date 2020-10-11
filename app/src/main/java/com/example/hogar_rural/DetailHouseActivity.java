@@ -3,6 +3,7 @@ package com.example.hogar_rural;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -72,7 +73,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     private String idHouse, idProperty,destine;
     private User user;
     private User ownerHome;
-    private RecyclerView recyclerViewComments;
+    private RecyclerView recyclerViewComments, recyclerViewServices;
     private List<Comment> comments;
     private List<Service> serviciosFinalHome;
     private Home home;
@@ -87,7 +88,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     private FirebaseStorage firebaseStorage;
     private List<DocumentReference> favorites  = new ArrayList<>();;
     private List<String> listUrlImages;
-    private int index = 0, countComments = -1;
+    private int index = 0;
     // Música & Sonidos
     private MediaPlayer soundSuccess;
 
@@ -124,9 +125,8 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine1 = (TextView) findViewById(R.id.DetailTextMultiLine1);
         DetailTextMultiLine2 = (TextView) findViewById(R.id.DetailTextMultiLine2);
         DetailTextMultiLine3 = (TextView) findViewById(R.id.DetailTextMultiLine3);
-        DetailTextMultiLine4 = (TextView) findViewById(R.id.DetailTextMultiLine4);
 
-        tbFilterDetail_adapted = (ToggleButton) findViewById(R.id.tbFilterDetail_adapted);
+      /*  tbFilterDetail_adapted = (ToggleButton) findViewById(R.id.tbFilterDetail_adapted);
         tbFilterDetail_air = (ToggleButton) findViewById(R.id.tbFilterDetail_air);
         tbFilterDetail_barbecue = (ToggleButton) findViewById(R.id.tbFilterDetail_barbecue);
         tbFilterDetail_bath = (ToggleButton) findViewById(R.id.tbFilterDetail_bath);
@@ -168,7 +168,7 @@ public class DetailHouseActivity extends AppCompatActivity {
                 tbFilterDetail_spa,
                 tbFilterDetail_tv,
                 tbFilterDetail_wifi);
-
+*/
         tvPropertyName = (TextView) findViewById(R.id.tvPropertyName);
         tvEmptyComment = (TextView) findViewById(R.id.tvEmptyComment);
         tvPropertyUpdate = (TextView) findViewById(R.id.tvPropertyUpdate);
@@ -227,6 +227,10 @@ public class DetailHouseActivity extends AppCompatActivity {
         recyclerViewComments = (RecyclerView) findViewById(R.id.recyclerViewComments);
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerViewComments.setNestedScrollingEnabled(false);
+
+        recyclerViewServices = (RecyclerView) findViewById(R.id.rvServices);
+        recyclerViewServices.setLayoutManager(new GridLayoutManager(getApplicationContext(),4));
+        recyclerViewServices.setNestedScrollingEnabled(false);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
         soundSuccess = MediaPlayer.create(this, R.raw.sound_correct);
 
@@ -289,8 +293,6 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Cargar los comentarios existentes en firebase sobre la vivienda seleccionada
     private void loadCommentFirestore(){
 
-        // inicializar el número de comentarios.
-        countComments = 0;
 
         db.collection("comments").orderBy("date", Query.Direction.DESCENDING).limit(pagination)
 
@@ -307,10 +309,7 @@ public class DetailHouseActivity extends AppCompatActivity {
                             if(comment.getId_homes().equals(home.getId())){
                                 comments.add(comment);
 
-                                //sumar +1 al totald e comentarios
-                                countComments+=1;
-                                //Toast.makeText(getApplicationContext(), "nº: " + countComments, Toast.LENGTH_SHORT).show();
-                            }
+                                   }
 
                         }
                            // En el caso de que haya o no comentarios
@@ -326,16 +325,51 @@ public class DetailHouseActivity extends AppCompatActivity {
                     }
                 });
 
-        // Indicar el total de opiniones de esta vivienda
-        //DetailNumOpinions.setText(getResources().getString(R.string.house_nOpinion) + countComments);
+
 
     }
+    private void countComments(){
 
+        // inicializar el número de comentarios.
+
+
+        db.collection("comments")
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                          int cont = 0;
+                        for (QueryDocumentSnapshot document : value) {
+
+                            Comment comment = document.toObject(Comment.class);
+
+                            if(comment.getId_homes().equals(home.getId())){
+                                cont++;
+                            }
+
+                        }
+                        DetailNumOpinions.setText(cont+" "+getResources().getString(R.string.house_nOpinion));
+
+                    }
+                });
+
+
+
+    }
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
 
         AdapterComment adapter = new AdapterComment(getApplicationContext(), comments);
         recyclerViewComments.setAdapter(adapter);
+
+
+    }
+
+    private void loadRecyclerViewServices(List<Service> services){
+
+        AdapterService adapter = new AdapterService(getApplicationContext(), services);
+        recyclerViewServices.setAdapter(adapter);
 
 
     }
@@ -366,7 +400,7 @@ public class DetailHouseActivity extends AppCompatActivity {
                         }
                         DetailRental.setText(typeRental);
                         DetailPeople.setText(String.valueOf(home.getAmount()).concat(getApplicationContext().getString(R.string.adapter_people)));
-                        DetailNumOpinions.setText("Pendiente".concat(getApplicationContext().getString(R.string.adapter_comments)));
+                        DetailNumOpinions.setText("");
                         DetailTextMultiLine1.setText(home.getDescription().replace("\\n", "\n"));
                         DetailTextMultiLine2.setText(home.getActivities().replace("\\n", "\n"));
                         DetailTextMultiLine3.setText(home.getInteresting_places().replace("\\n", "\n"));
@@ -390,7 +424,9 @@ public class DetailHouseActivity extends AppCompatActivity {
                         loadPropertyFromDB(idProperty);
 
                         // cargar la imagen del usuario logado en ese momento
-                        loadUserFromDB();
+                        if(mAuth.getCurrentUser()!=null){
+                            loadUserFromDB();
+                        }
 
                     }
                     else{
@@ -408,7 +444,6 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine1.setText(UtilMethod.subStringText(DetailTextMultiLine1.getText().toString(),250,"..."));
         DetailTextMultiLine2.setText(UtilMethod.subStringText(DetailTextMultiLine2.getText().toString(),250,"..."));
         DetailTextMultiLine3.setText(UtilMethod.subStringText(DetailTextMultiLine3.getText().toString(),250,"..."));
-        DetailTextMultiLine4.setText(UtilMethod.subStringText(DetailTextMultiLine4.getText().toString(),250,"..."));
 
     }
 
@@ -449,20 +484,7 @@ public class DetailHouseActivity extends AppCompatActivity {
             }
         }
 
-        // Se dibuja el icono activo
-        for (Service s: serviciosFinalHome
-        ) {
-
-            for (ToggleButton tb: servicesIcon
-            ) {
-                if(tb.getTag().equals(s.getName())){
-                    tb.setBackgroundResource(s.getIcon());
-                }
-            }
-
-        }
-
-        //Log.i("TAG",serviciosFinalHome.size()+"");
+        loadRecyclerViewServices(serviciosFinalHome);
 
     }
 
@@ -571,6 +593,7 @@ public class DetailHouseActivity extends AppCompatActivity {
 
                         // Cargar la imagen de usuario por defecto o la suya
                         loadUserImage(user);
+                        countComments();
                         loadFavorite();
                         loadCommentFirestore();
                         loadInfoOwner();
@@ -684,11 +707,11 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Ver más información de las características
     public void clickShowMoreFeatures(View view) {
         if(activeDetailRental){
-            DetailTextMultiLine1.setText(home.getDescription());
+            DetailTextMultiLine1.setText(home.getDescription().replace("\\n", "\n"));
             activeDetailRental = false;
             btnShowMore1.setText("Ver menos");
         }else{
-            DetailTextMultiLine1.setText(UtilMethod.subStringText(DetailTextMultiLine1.getText().toString(),250,"..."));
+            DetailTextMultiLine1.setText(UtilMethod.subStringText(DetailTextMultiLine1.getText().toString().replace("\\n", "\n"),250,"..."));
 
             activeDetailRental = true;
             btnShowMore1.setText("Ver más");
@@ -699,12 +722,12 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Ver más información de las actividades
     public void clickShowMoreActivities(View view) {
         if(activeDetailActivities){
-            DetailTextMultiLine2.setText(home.getActivities());
+            DetailTextMultiLine2.setText(home.getActivities().replace("\\n", "\n"));
             activeDetailActivities = false;
             btnShowMore2.setText("Ver menos");
 
         }else{
-            DetailTextMultiLine2.setText(UtilMethod.subStringText(DetailTextMultiLine2.getText().toString(),250,"..."));
+            DetailTextMultiLine2.setText(UtilMethod.subStringText(DetailTextMultiLine2.getText().toString().replace("\\n", "\n"),250,"..."));
 
             activeDetailActivities = true;
             btnShowMore2.setText("Ver más");
@@ -715,11 +738,11 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Ver más información de los lugares de interés
     public void clickShowMorePlaceInterest(View view) {
         if(activePlaces){
-            DetailTextMultiLine3.setText(home.getInteresting_places());
+            DetailTextMultiLine3.setText(home.getInteresting_places().replace("\\n", "\n"));
             activePlaces = false;
             btnShowMore3.setText("Ver menos");
         }else{
-            DetailTextMultiLine3.setText(UtilMethod.subStringText(DetailTextMultiLine3.getText().toString(),250,"..."));
+            DetailTextMultiLine3.setText(UtilMethod.subStringText(DetailTextMultiLine3.getText().toString().replace("\\n", "\n"),250,"..."));
 
             activePlaces = true;
             btnShowMore3.setText("Ver más");

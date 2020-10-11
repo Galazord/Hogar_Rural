@@ -42,8 +42,8 @@
             android:parentActivityName=".ExplorerActivity" /> <!-- MAPA -->
         <activity
             android:name=".MyProfileActivity"
-            android:parentActivityName=".ExplorerActivity"> <!-- MI PERFIL -->
-        </activity>
+            /> <!-- MI PERFIL -->
+
         <activity
             android:name=".LoginFormActivity"
             android:parentActivityName=".MyProfileActivity"> <!-- FORMULARIO PARA REGISTRARSE -->

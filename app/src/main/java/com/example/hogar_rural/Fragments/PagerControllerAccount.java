@@ -9,11 +9,16 @@ public class PagerControllerAccount extends FragmentPagerAdapter {
 
     //--> VARIABLES
     int numsOfTabs;
-
+    String destine;
     //--> CONSTRUCTOR
     public PagerControllerAccount(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
         this.numsOfTabs = behavior;
+    } //--> CONSTRUCTOR
+    public PagerControllerAccount(@NonNull FragmentManager fm, int behavior,String destine) {
+        super(fm, behavior);
+        this.numsOfTabs = behavior;
+        this.destine = destine;
     }
 
     //--> MÉTODOS
@@ -24,7 +29,7 @@ public class PagerControllerAccount extends FragmentPagerAdapter {
         switch(position){
 
             case 0:
-                return new MyProfileFragment();
+                return new MyProfileFragment(destine);
             case 1:
                 return new MyHousesFragment();
             default:

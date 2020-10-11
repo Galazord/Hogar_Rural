@@ -253,8 +253,8 @@ public class HouseUpActivity extends AppCompatActivity {
             // Recorrer cada imagen y subirla a firebase en una carpeta propia
             for(Uri u: filePath) {
                 String nameImage = idHomes+"_"+cont;
-                StorageReference ref = storageReference.child("homes/" + idUser+"/"+nameImage);
-                images.add(Constant.URL_GS_IMAGE_HOME.concat(idUser+"/"+nameImage));
+                StorageReference ref = storageReference.child("homes/" + idHomes+"/"+nameImage);
+                images.add(Constant.URL_GS_IMAGE_HOME.concat(idHomes+"/"+nameImage));
                 ref.putFile(u)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override

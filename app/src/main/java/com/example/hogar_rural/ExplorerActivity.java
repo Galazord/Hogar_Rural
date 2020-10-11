@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.House;
+import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -118,9 +119,13 @@ public class ExplorerActivity extends AppCompatActivity {
                     case R.id.MyProfile: // MI PERFIL
                         //Existe un usuario logueado
                         if(mAuth.getCurrentUser()!=null){
-                            startActivity(new Intent(getApplicationContext(), UserAccountActivity.class));
+                            Intent i =new Intent(getApplicationContext(), UserAccountActivity.class);
+                            i.putExtra("destine",destiny);
+                            startActivity(i);
                         }else{
-                            startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+                            Intent i =new Intent(getApplicationContext(), MyProfileActivity.class);
+                            i.putExtra("destine",destiny);
+                            startActivity(i);
                         }
 
                         overridePendingTransition(0,0);

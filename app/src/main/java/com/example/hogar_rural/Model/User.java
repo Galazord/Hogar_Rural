@@ -29,7 +29,8 @@ public class User {
         this.province = province;
         this.advertising = advertising;
     }
-    public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province, boolean advertising, List<DocumentReference> favorites) {
+
+    public User(String email, String nickname, String password, String name, String lastname, String image, String dni, String birthday, String phone, String address, String postal, String municipality, String province, boolean advertising, List<DocumentReference> favorites, List<DocumentReference> avaiables) {
         this.email = email;
         this.nickname = nickname;
         this.password = password;
@@ -46,7 +47,6 @@ public class User {
         this.advertising = advertising;
         this.favorites = favorites;
     }
-
     // CONTRUCTOR
     public User() {}
 
@@ -178,4 +178,8 @@ public class User {
     public void setFavorites(List<DocumentReference> listFav) {
         this.favorites = listFav;
     }
+
+
+
+
 }

@@ -21,6 +21,7 @@ public class UserAccountActivity extends AppCompatActivity {
     TabItem tabMyProfile, tabMyHouses;
     PagerControllerAccount pagerAdapter;
     BottomNavigationView bottomNavigationView;
+    String destine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,12 @@ public class UserAccountActivity extends AppCompatActivity {
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
+        if(getIntent().getExtras()!=null && getIntent().getStringExtra("destine")!=null){
+            destine = getIntent().getStringExtra("destine");
+        }else{
+
+            destine = "";
+        }
 
         // Relaccionar las variables con la parte gráfica
         tabLayoutAccount = (TabLayout) findViewById(R.id.tabLayoutAccount);
@@ -44,7 +51,7 @@ public class UserAccountActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navegation);
 
         // Seleccionar y gestionar los diferentes tabs (Mi perfil y Mis casas)
-        pagerAdapter = new PagerControllerAccount(getSupportFragmentManager(), tabLayoutAccount.getTabCount());
+        pagerAdapter = new PagerControllerAccount(getSupportFragmentManager(), tabLayoutAccount.getTabCount(),destine);
         viewPagerAccount.setAdapter(pagerAdapter);
         tabLayoutAccount.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -76,6 +83,7 @@ public class UserAccountActivity extends AppCompatActivity {
         // BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual
         bottomNavigationView.setSelectedItemId(R.id.MyProfile);
+        bottomNavigationView.setItemIconSize(120);
         // Incorporar ItemSelectedListener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -83,7 +91,9 @@ public class UserAccountActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()){
                     case R.id.SearchList: // EXPLORAR
-                        startActivity(new Intent(getApplicationContext(), ExplorerActivity.class));
+                        Intent i = new Intent(getApplicationContext(), ExplorerActivity.class);
+                        i.putExtra("destiny",destine);
+                        startActivity(i);
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.MyProfile: // MI PERFIL

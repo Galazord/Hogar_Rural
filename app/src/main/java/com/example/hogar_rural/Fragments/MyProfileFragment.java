@@ -46,9 +46,13 @@ public class MyProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseStorage firebaseStorage;
+    private String destine;
 
     public MyProfileFragment() {
 
+    }
+    public MyProfileFragment(String destine) {
+this.destine=destine;
     }
 
     public static MyProfileFragment newInstance() {
@@ -132,6 +136,7 @@ public class MyProfileFragment extends Fragment {
 
                                 // Ir a la vista del explorador de casas
                                 Intent i = new Intent(getContext(), ExplorerActivity.class);
+                                i.putExtra("destiny",destine);
                                 startActivity(i);
 
                             }

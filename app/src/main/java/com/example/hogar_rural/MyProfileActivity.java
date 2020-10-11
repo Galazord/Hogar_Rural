@@ -31,6 +31,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private BottomNavigationView bottomNavigationView;
     private MediaPlayer soundError, soundCorrect;
+    String destine;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -47,7 +48,13 @@ public class MyProfileActivity extends AppCompatActivity {
     private void initComponent(){
         //Iniciamos FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
+        if(getIntent().getExtras()!=null && getIntent().getStringExtra("destine")!=null){
 
+            destine = getIntent().getStringExtra("destine");
+        }else{
+
+            destine = "";
+        }
         // Relacionar variables con la parte gráfica
         tv_infoProfile = (TextView) findViewById(R.id.tv_infoProfile);
         et_input_mail = (EditText) findViewById(R.id.et_input_email);
@@ -55,6 +62,7 @@ public class MyProfileActivity extends AppCompatActivity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         bottomNavigationView = findViewById(R.id.bottom_navegation);
+        bottomNavigationView.setItemIconSize(120);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
         soundCorrect = MediaPlayer.create(this, R.raw.sound_correct);
 
@@ -68,7 +76,9 @@ public class MyProfileActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()){
                     case R.id.SearchList: // EXPLORAR
-                        startActivity(new Intent(getApplicationContext(), ExplorerActivity.class));
+                        Intent i = new Intent(getApplicationContext(), ExplorerActivity.class);
+                        i.putExtra("destiny",destine);
+                        startActivity(i);
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.MyProfile: // MI PERFIL
@@ -99,6 +109,7 @@ public class MyProfileActivity extends AppCompatActivity {
 
                             // Acceder a la sección de usuario (UserAccountActivity)
                             Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
+                            intent.putExtra("destine",destine);
                             startActivity(intent);
                             finish();
                         } else {

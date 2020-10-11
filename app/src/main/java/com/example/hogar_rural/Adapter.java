@@ -20,7 +20,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.hogar_rural.Model.Comment;
 import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.Image;
 import com.example.hogar_rural.Model.User;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
@@ -40,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -98,10 +101,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
             typeRental = "Habitaciones";
         }
 
-        imgGallery = model.get(position).getImages();
+        holder.home = model.get(position);
 
-        cargarImagen(imgGallery.get(holder.getIndex()),holder.imageGalery);
-
+        imgGallery = new ArrayList<>();
+        imgGallery = holder.home.getImages();
+        cargarImagen(imgGallery.get(0),holder.imageGalery);
+        countComments(model.get(position).getId(),holder.txtNumOpinions);
+        loadFavorite(holder.imageFavorite, model.get(position).getId());
 
         String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
         String numPerson = String.valueOf(model.get(position).getAmount()).concat(this.context.getString(R.string.adapter_people));
@@ -125,6 +131,68 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
 
     }
+    private void loadFavorite(final ImageView ivFavorite,final String idHome){
+        if(mAuth.getCurrentUser()!=null){
+            String idUser = mAuth.getCurrentUser().getUid();
+
+            db.collection("users").document(idUser).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                    User user  = documentSnapshot.toObject(User.class);
+                    if(user.getFavorites()!=null){
+                        Log.i("ADAPTER_FAV",idHome+" 1FAV");
+                        DocumentReference documentReference = db.collection("homes").document(idHome);
+
+                        if(user.getFavorites().contains(documentReference)){
+                            ivFavorite.setBackgroundResource(R.drawable.ic_favo_on);
+                        }
+
+                    }else{
+                        Log.i("ADAPTER_FAV",idHome+" 0FAV");
+                    }
+
+
+
+                }
+
+
+            });
+
+        }
+    }
+    private void countComments(final String idHome, final TextView textView){
+
+        // inicializar el número de comentarios.
+
+
+        db.collection("comments")
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        int cont = 0;
+                        for (QueryDocumentSnapshot document : value) {
+
+                            Comment comment = document.toObject(Comment.class);
+
+                            if(comment.getId_homes().equals(idHome)){
+                                cont++;
+                            }
+
+                        }
+                        textView.setText(cont+" "+context.getResources().getString(R.string.house_nOpinion));
+
+                    }
+                });
+
+
+
+    }
+
+
     private void cargarImagen(String nombre , final ImageView imageView){
 
 
@@ -143,16 +211,24 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     }
 
     private List<DocumentReference> getFavoritesFromUser(){
-        List<DocumentReference> myFavorites = null;
-
-       /* db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        final List<DocumentReference>[] myFavorites = new List[]{null};
+        String idUser = mAuth.getCurrentUser().getUid();
+        db.collection("users").document(idUser).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-            }
-        })*/
+                         User user  = documentSnapshot.toObject(User.class);
+                         if(user.getFavorites()!=null){
+                             myFavorites[0] = user.getFavorites();
+                         }
 
-       return myFavorites;
+
+            }
+
+
+        });
+
+       return myFavorites[0];
     }
 
     @Override
@@ -171,6 +247,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         int index;
         TextView txtPlace, txtRental, txtPeople, txtPrice, txtNumOpinions;
         ImageView imageGalery, imageFavorite;
+        Home home;
 
         // CONTRUCTOR DEL ViewHolder
         public ViewHolder(@NonNull View itemView) {
@@ -210,6 +287,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
             txtNumOpinions = itemView.findViewById(R.id.txtNumOpinions);
             imageGalery = itemView.findViewById(R.id.CardGaleryImage);
             imageFavorite = itemView.findViewById(R.id.iconFavorite);
+
             imageFavorite.setBackgroundResource(R.drawable.ic_favo_off);
             if(mAuth.getCurrentUser()!=null){
                 imageFavorite.setVisibility(View.VISIBLE);
@@ -251,19 +329,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         }
 
         private void configSwipeImage(){
-            if(index == imgGallery.size()){
+            if(index == home.getImages().size()){
                 index = 0;
             }else if(index < 0){
-                index = imgGallery.size()-1;
+                index = home.getImages().size()-1;
             }
 
-            Log.i("INDEX post",index+"");
-           /* Animation aniFadeOut = AnimationUtils.loadAnimation(context,R.anim.animation_fade_out);
-            imageGalery.startAnimation(aniFadeOut);*/
-            cargarImagen(imgGallery.get(index), imageGalery);
+            Log.i("TAG",home.getImages().get(index)+" tam");
+
+            cargarImagen(home.getImages().get(index), imageGalery);
             Animation aniFade = AnimationUtils.loadAnimation(context,R.anim.animation_fade_in);
             imageGalery.startAnimation(aniFade);
         }
+
+
         private void saveFav(String idHome){
             // Recoger el ID del usuario logado
             DocumentReference documentReference = db.collection("homes").document(idHome);
