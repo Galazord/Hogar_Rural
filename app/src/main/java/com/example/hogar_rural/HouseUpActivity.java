@@ -206,8 +206,14 @@ public class HouseUpActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
 
                         UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Usuario registrado con éxito");
-                        uploadImage(mAuth.getCurrentUser().getUid(), homeId);
-                        soundCorrect.start();
+                        try {
+                            Thread.sleep(3000);
+                            uploadImage(mAuth.getCurrentUser().getUid(), homeId);
+                            soundCorrect.start();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
 
 
 
