@@ -55,9 +55,10 @@ dependencies {
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
 
+    // Mapas de Google - GoogleMaps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
-
+    // Para mostrar y seleccionar un calendario
     implementation 'sun.bob:mcalendarview:1.0.0'
 
 

@@ -73,7 +73,6 @@ public class ExplorerActivity extends AppCompatActivity {
         // Llamar a firebase para recoger los datos y mostrarlos
         loadFromFirebase();
 
-
         getSupportActionBar().setTitle("Destino: "+destiny);
 
 
@@ -253,7 +252,7 @@ public class ExplorerActivity extends AppCompatActivity {
 
     }
 
-    public   void showInputAlertDialog(){
+    public void showInputAlertDialog(){
         final String[] strReturn = {""};
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(this);

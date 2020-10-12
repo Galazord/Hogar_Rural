@@ -282,7 +282,7 @@
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
                 android:fontFamily="@font/roboto_medium"
-                android:text="@string/houseUp_amount"
+                android:text="@string/house_price2"
                 android:textColor="@color/green_dark"
                 android:textSize="16sp" />
 

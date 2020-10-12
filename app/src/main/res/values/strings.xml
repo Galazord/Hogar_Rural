@@ -77,6 +77,7 @@
     <string name="house_rental">Alquiler: tipo</string>
     <string name="house_nPerson">nº personas</string>
     <string name="house_price">Precio €/día</string>
+    <string name="house_price2">Indica el coste por persona de la estancia por día (€/día)</string>
     <string name="house_nOpinion"> opiniones</string>
     <string name="house_valoration">Valoraciones</string>
     <string name="house_arrive">Cómo llegar:</string>

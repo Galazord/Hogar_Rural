@@ -70,6 +70,7 @@
         app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_navegation" />
 
+    <!-- Imagen de "No disponible" si no encuentra el destino -->
     <ImageView
         android:id="@+id/imgEmpty"
         android:layout_width="match_parent"
@@ -77,7 +78,6 @@
         android:layout_below="@+id/exploreLinearLayout"
         android:layout_alignBottom="@+id/exploreRecyclerView"
         android:scaleType="centerCrop"
-
         android:visibility="invisible"
         app:srcCompat="@drawable/hr_destiny_missing_background" />
 

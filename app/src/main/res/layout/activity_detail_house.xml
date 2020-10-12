@@ -456,6 +456,8 @@
                 android:fontFamily="@font/lemon"
                 android:text="@string/filters_services"
                 android:textColor="@color/green_icon"/>
+
+            <!-- Listado de servisios disponibles -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvServices"
                 android:padding="8dp"
@@ -464,8 +466,6 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/DetailTitleServices"
                 />
-
-
 
             <!-- **************** 5º BLOOUE **************** -->
             <!-- Panel Título 5 -->
@@ -499,9 +499,7 @@
                 android:textSize="20dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recyclerViewComments"
-
                 android:text="TextView" />
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewComments"
                 android:layout_width="match_parent"
