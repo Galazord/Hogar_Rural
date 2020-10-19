@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.example.hogar_rural.Model.Filter;
 import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.HomeFilter;
 import com.example.hogar_rural.Model.House;
 import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
@@ -52,7 +53,8 @@ public class ExplorerActivity extends AppCompatActivity {
     private Button btnFilters, btnMap;
     private MediaPlayer soundError;
     private String destiny;
-
+    private Boolean searchWithFilters = false;
+    Filter filter = null;
     // RecyclerView
     private RecyclerView recyclerView;
     private Adapter adapter;
@@ -71,8 +73,14 @@ public class ExplorerActivity extends AppCompatActivity {
         // Iniciar componentes
         initComponent();
 
-        // Llamar a firebase para recoger los datos y mostrarlos
-        loadFromFirebase();
+
+        if(searchWithFilters){
+            // Llamar a firebase para recoger los datos y mostrarlos
+            loadFromFirebaseFilters();
+        }else{
+            // Llamar a firebase para recoger los datos y mostrarlos
+            loadFromFirebase();
+        }
 
         getSupportActionBar().setTitle("Destino: "+destiny);
 
@@ -87,10 +95,9 @@ public class ExplorerActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             destiny = b.getString("destiny");
-
-            Filter filter =b.getParcelable("filter");
+             filter = b.getParcelable("filter");
             if(filter!=null){
-                Log.i("1",filter.getDateEntrace());
+                searchWithFilters = true;
             }
 
         }
@@ -202,7 +209,89 @@ public class ExplorerActivity extends AppCompatActivity {
 
 
     }
+    // Llamar a firebase para recoger los datos y mostrarlos
+    private void loadFromFirebaseFilters(){
 
+
+
+        db.collection("homes")
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+
+                        // Empezar con la lista vacía antes de mostrar
+                        list_home.removeAll(list_home);
+
+                        // Recorrer firebase y guardar cada infomación de la casa en un objeto tipo Home y en una lista (list_home)
+                        for (QueryDocumentSnapshot document : value) {
+
+                            Home h = document.toObject(Home.class);
+
+                            if(destiny.toLowerCase().equals(h.getProvince().toLowerCase())){
+                                HomeFilter homeFilter = new HomeFilter(filter,h);
+                                boolean isFilter = false;
+                                if(homeFilter.filterNumberPeopleActive()){
+
+                                    if(homeFilter.filterNumberPeople()){
+                                        isFilter = true;
+                                    }
+                                }
+                                /* if(homeFilter.filterRangeOfDateActive()){
+
+                                   if(homeFilter.filterRangeOfDate(ava)){
+                                        isFilter = true;
+                                    }
+                                }*/
+                                if(homeFilter.filterValorationsActive()){
+
+                                    if(homeFilter.filterValorations()){
+                                        isFilter = true;
+                                    }
+                                }
+
+                                 //El precio no tiene un valor por defecto siempre busca por el.
+                                if(homeFilter.filterPrice()){
+                                    isFilter = true;
+                                }
+                                if(homeFilter.filterRoomsActive()){
+
+                                    if(homeFilter.filterRooms()){
+                                        isFilter = true;
+                                    }
+                                }
+                                if(homeFilter.filterServicesActive()){
+
+                                    if(homeFilter.filterServices()){
+                                        isFilter = true;
+                                    }
+                                }
+
+                                if(isFilter){
+                                    list_home.add(h);
+                                }
+
+                            }
+
+
+                        }
+
+                        // Cargar/ mostrar la información en el recyclerView
+                        getSupportActionBar().setTitle(destiny+"\n --> "+list_home.size()+" resultados");
+
+                        if(list_home.size()!=0){
+                            imgEmpty.setVisibility(View.INVISIBLE);
+                            loadRecyclerView();
+                        }else{
+                            imgEmpty.setVisibility(View.VISIBLE);
+                            //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
+                        }
+                    }
+                });
+
+
+    }
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
 

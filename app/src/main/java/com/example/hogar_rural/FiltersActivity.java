@@ -49,7 +49,7 @@ public class FiltersActivity extends AppCompatActivity {
     private SeekBar sbFilter_priceSelector;
     private DatePickerDialog.OnDateSetListener setListener;
     private MediaPlayer soundError;
-    private int numPeople = 1, numValoration = 0;
+    private int numPeople = 0, numValoration = 0;
     private int price = PRICE_MIN;
     private CheckBox cbFilter_cheaper, cbFilter_expensive, cbFilter_MoreValor, cbFilter_Comentary;
     private Boolean isIntegro= false, isHabitaciones = false;
