@@ -36,7 +36,7 @@
             android:parentActivityName=".ExplorerActivity" /> <!-- DETALLE DE LA CASA -->
         <activity
             android:name=".FiltersActivity"
-            android:parentActivityName=".ExplorerActivity" /> <!-- FILTROS -->
+            /> <!-- FILTROS -->
         <activity
             android:name=".MapActivity"
             android:parentActivityName=".ExplorerActivity" /> <!-- MAPA -->

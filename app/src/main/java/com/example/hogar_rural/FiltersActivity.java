@@ -1,6 +1,8 @@
 package com.example.hogar_rural;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -9,21 +11,30 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.example.hogar_rural.Model.Filter;
 import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.Service;
 import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import static com.example.hogar_rural.Utils.Constant.PRICE_MIN;
 
@@ -32,6 +43,8 @@ public class FiltersActivity extends AppCompatActivity {
     //--> VARIABLES
     private TextView tvFilter_priceIndicator, tvFilter_input_entrance, tvFilter_input_exit, tvFilter_nPersons;
     private Button btnLessPerson, btnPlusPerson, btnLessValoration, btnPlusValoration, btnPrice_plus, btnPrice_less;
+    private ImageView iconTemp, iconTemp2,iconTemp3,iconTemp4,iconTemp5;
+    private ImageView[] valorationsImg;
     private ToggleButton tbFilter_complete, tbFilter_room;
     private SeekBar sbFilter_priceSelector;
     private DatePickerDialog.OnDateSetListener setListener;
@@ -39,6 +52,12 @@ public class FiltersActivity extends AppCompatActivity {
     private int numPeople = 1, numValoration = 0;
     private int price = PRICE_MIN;
     private CheckBox cbFilter_cheaper, cbFilter_expensive, cbFilter_MoreValor, cbFilter_Comentary;
+    private Boolean isIntegro= false, isHabitaciones = false;
+    private RecyclerView rvServices;
+    private List<Service> serviciosFinalHome;
+    private AdapterService adapter;
+    private int typeRoom = -1;
+    private String destiny;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +66,22 @@ public class FiltersActivity extends AppCompatActivity {
 
         // Iniciar componentes
         initComponent();
+        loadServices();
 
     }
+
 
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
-
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            destiny = b.getString("destiny");
+        }
         // Relacionar las variables con la parte gráfica
+        rvServices = (RecyclerView) findViewById(R.id.rvServices);
+        rvServices.setLayoutManager(new GridLayoutManager(getApplicationContext(),4));
+        rvServices.setNestedScrollingEnabled(false);
         tvFilter_priceIndicator = (TextView) findViewById(R.id.tvFilter_priceIndicator);
         tvFilter_input_entrance = (TextView) findViewById(R.id.tvFilter_input_entrance);
         tvFilter_input_exit = (TextView) findViewById(R.id.tvFilter_input_exit);
@@ -73,7 +100,12 @@ public class FiltersActivity extends AppCompatActivity {
         cbFilter_expensive = (CheckBox) findViewById(R.id.cbFilter_expensive);
         cbFilter_MoreValor = (CheckBox) findViewById(R.id.cbFilter_MoreValor);
         cbFilter_Comentary = (CheckBox) findViewById(R.id.cbFilter_Comentary);
-
+        iconTemp = (ImageView)findViewById(R.id.iconTemp);
+        iconTemp2 = (ImageView)findViewById(R.id.iconTemp2);
+        iconTemp3 = (ImageView)findViewById(R.id.iconTemp3);
+        iconTemp4 = (ImageView)findViewById(R.id.iconTemp4);
+        iconTemp5 = (ImageView)findViewById(R.id.iconTemp5);
+        valorationsImg = new ImageView[]{iconTemp,iconTemp2,iconTemp3,iconTemp4,iconTemp5};
         // Mostrar calendario para la fecha de llegada
         activateCalendar(tvFilter_input_entrance);
         // Mostrar calendario para la fecha de salida
@@ -122,6 +154,28 @@ public class FiltersActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+    }
+
+
+    private void loadRecyclerViewServices(List<Service> services){
+
+        adapter = new AdapterService(getApplicationContext(), services);
+        rvServices.setAdapter(adapter);
+
+
+    }
+    // Cargar los iconos activos de los servicios
+    private void loadServices(){
+        Service service = new Service();
+        List<String> serviciosHome = new Home().getServices();
+        List<Service> serviciosFinalHome = new ArrayList<>();
+        for (Service s: service.getServices(this)
+        ) {
+             serviciosFinalHome.add(s);
+        }
+
+        loadRecyclerViewServices(serviciosFinalHome);
 
     }
 
@@ -185,40 +239,45 @@ public class FiltersActivity extends AppCompatActivity {
         }
     }
 
+
     // Añadir + valoración
     public void clickAddValoration(View view) {
 
-        // Cambiar color para indicar que se puede llegar al mínimo posible
-        btnLessValoration.setBackgroundResource(R.drawable.gradient_green);
-
-        // Sumar 1
-        numValoration++;
+        if(numValoration<=valorationsImg.length-1) {
+            numValoration++;
+            for (int i = 0; i < numValoration; i++) {
+                valorationsImg[i].setBackgroundResource(R.drawable.ic_leaf_on);
+            }
+            for (int i = numValoration; i < valorationsImg.length; i++) {
+                valorationsImg[i].setBackgroundResource(R.drawable.ic_leaf_off);
+            }
+        }
 
     }
 
     // Añadir - personas
     public void clickLessValoration(View view) {
-        if(numValoration==1){
 
-            // Cambiar color para indicar que se ha llegado al mínimo posible
-            btnLessValoration.setBackgroundResource(R.drawable.gradient_grey);
-
-        }else{
-
-            // Restar 1
+        if(numValoration>0) {
             numValoration--;
-
+            for (int i = 0; i < numValoration; i++) {
+                valorationsImg[i].setBackgroundResource(R.drawable.ic_leaf_on);
+            }
+            for (int i = numValoration; i < valorationsImg.length; i++) {
+                valorationsImg[i].setBackgroundResource(R.drawable.ic_leaf_off);
+            }
         }
+
     }
 
     // Confirmar la selección de filtros
     public void clickConfirmFilters(View view) {
 
         // Recoger valores de los campos
-        int totalPeople = numPeople;
+
         String dateEntrance = tvFilter_input_entrance.getText().toString();
         String dateExit = tvFilter_input_exit.getText().toString();
-        Long typeRoom = -1L;
+
         String priceDay = tvFilter_priceIndicator.getText().toString();
         boolean checkCheaper = false;
         if(cbFilter_cheaper.isChecked()){
@@ -243,7 +302,15 @@ public class FiltersActivity extends AppCompatActivity {
         // Tipo de vivienda (Ïntegra/ habitaciones)
 
 
-        // Realizar la gestión del filtro
+        // Realizar la gestión del filtro*/
+        Filter filter = new Filter(numPeople,dateEntrance,dateExit,numValoration,typeRoom,price,adapter.getSelectedServices(),null);
+
+        Intent data = new Intent(getApplicationContext(),ExplorerActivity.class);
+        data.putExtra("destiny", destiny);
+        data.putExtra("filter", filter);
+        startActivity(data);
+        finish();
+
 
     }
 
@@ -251,6 +318,7 @@ public class FiltersActivity extends AppCompatActivity {
     public void clickBackFilters(View view) {
 
         Intent intent = new Intent (getApplicationContext(), ExplorerActivity.class);
+        intent.putExtra("destiny", destiny);
         startActivity(intent);
         finish();
 
@@ -260,13 +328,30 @@ public class FiltersActivity extends AppCompatActivity {
     public void OnDefaultToggleClickComplete(View view) {
         //UtilMethod.showToast(TypeToast.SUCCESS, this,"OnDefaultToggleClickComplete");
 
-        // Indicar que sólo pueda haber uno seleccinado en cuanto al tipo de casa
-        if(tbFilter_complete.isChecked()){
-            tbFilter_room.setChecked(false);
+        if(view.getTag().toString().equals(getResources().getString(R.string.filters_rooms))){
+            if(isHabitaciones){
+                isHabitaciones = false;
+                typeRoom = -1;
+            }else{
+                isHabitaciones= true;
+                typeRoom = 2;
+            }
+            isIntegro = false;
+        }else if(view.getTag().toString().equals(getResources().getString(R.string.filters_complete))){
+            if(isIntegro){
+                isIntegro = false;
+                typeRoom = -1;
+            }else{
+                isIntegro= true;
+                typeRoom = 1;
+            }
+            isHabitaciones= false;
         }
-        if(tbFilter_room.isChecked()){
-            tbFilter_complete.setChecked(false);
-        }
+
+        tbFilter_room.setChecked(isHabitaciones);
+        tbFilter_complete.setChecked(isIntegro);
+
+
 
     }
 

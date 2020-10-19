@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.hogar_rural.Model.Filter;
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.House;
 import com.example.hogar_rural.Utils.Constant;
@@ -86,6 +87,12 @@ public class ExplorerActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             destiny = b.getString("destiny");
+
+            Filter filter =b.getParcelable("filter");
+            if(filter!=null){
+                Log.i("1",filter.getDateEntrace());
+            }
+
         }
 
         // Firebase
@@ -204,14 +211,22 @@ public class ExplorerActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode ==RESULT_OK){
+
+    if(resultCode ==RESULT_OK){
           destiny =  data.getStringExtra("destine");
+          if(requestCode == 1001){
+              Filter filter =data.getParcelableExtra("filter");
+              if(filter!=null){
+                  Log.i("1",filter.getDateEntrace());
+              }
+          }
+
         }
-    }
+        super.onActivityResult(requestCode, resultCode, data);
+    }*/
 
     // Menú superior: Resolver la búsqueda
     @Override
@@ -240,8 +255,9 @@ public class ExplorerActivity extends AppCompatActivity {
     // Ir a la sección Filtrar
     public void clickGoFilters(View view) {
 
-        Intent intentFilter = new Intent (getApplicationContext(), FiltersActivity.class);
-        startActivity(intentFilter);
+        Intent i =new Intent(getApplicationContext(), FiltersActivity.class);
+        i.putExtra("destiny",destiny);
+        startActivity(i);
     }
 
     public void clickGoMap(View view) {

@@ -29,8 +29,10 @@ import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -46,6 +48,7 @@ import java.util.List;
 
 import static com.example.hogar_rural.Utils.Constant.PRICE_MAX;
 import static com.example.hogar_rural.Utils.Constant.PRICE_MIN;
+import static java.lang.Thread.sleep;
 
 public class HouseUpActivity extends AppCompatActivity {
 
@@ -205,20 +208,18 @@ public class HouseUpActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
 
-                        UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Usuario registrado con éxito");
-                        try {
-                            Thread.sleep(3000);
-                            uploadImage(mAuth.getCurrentUser().getUid(), homeId);
-                            soundCorrect.start();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        Log.e("TAG", "her");
 
 
 
 
                     }
-                })
+                }).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+            }
+        })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -227,6 +228,16 @@ public class HouseUpActivity extends AppCompatActivity {
                         Log.e("ERROR FIRESTORE USER: ", e.getMessage());
                     }
                 });
+
+        UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Guardando...");
+
+        try{
+            sleep(3000);
+            uploadImage(mAuth.getCurrentUser().getUid(), homeId);
+
+        }catch (Exception exe){
+
+        }
     }
 
     // Para seleccionar una o varias imagenes
@@ -258,30 +269,36 @@ public class HouseUpActivity extends AppCompatActivity {
 
             // Recorrer cada imagen y subirla a firebase en una carpeta propia
             for(Uri u: filePath) {
-                String nameImage = idHomes+"_"+cont;
-                StorageReference ref = storageReference.child("homes/" + idHomes+"/"+nameImage);
-                images.add(Constant.URL_GS_IMAGE_HOME.concat(idHomes+"/"+nameImage));
-                ref.putFile(u)
+                String nameImage = idHomes + "_" + cont;
+                StorageReference ref = storageReference.child("homes/" + idHomes + "/" + nameImage);
+                images.add(Constant.URL_GS_IMAGE_HOME.concat(idHomes + "/" + nameImage));
+
+
+
+
+                    ref.putFile(u)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 progressDialog.dismiss();
-
-
+                                Log.e("STORAGE: ", "ONsUCCESS");
 
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                Log.e("ERROR STORAGE: ", e.getMessage());
                                 progressDialog.dismiss();
                                 UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this, "ERROR: No se ha subido la imagen" + e.getMessage());
                             }
+
                         })
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
 
+                                Log.e("STORAGE: ", "ONpROGRESS");
                                 // Barra de progreso al subir la imagen
                                 double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                                 progressDialog.setMessage("Subida " + (int) progress + "%");
@@ -289,11 +306,13 @@ public class HouseUpActivity extends AppCompatActivity {
                         });
 
                 cont++; // +1 al número de imágenes
+
+
             }
 
             //Guardo en la base de datos el array de string con todas las rutas de las imagenes seleccionadas
-            updateUrlImage(idHomes);
 
+            updateUrlImage(idHomes);
         }
     }
 
@@ -327,10 +346,11 @@ public class HouseUpActivity extends AppCompatActivity {
             if(data.getClipData() != null ) {
 
                 drawImage(bitmap, data.getClipData().getItemAt(0).getUri());
-
+              String a =  data.getClipData().getItemAt(0).getUri().getLastPathSegment();
                 int count = data.getClipData().getItemCount();
                 for(int i = 0; i < count; i++) {
                     Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    String z = imageUri.getLastPathSegment();
                     filePath.add(imageUri);
                 }
 

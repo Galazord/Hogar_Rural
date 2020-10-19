@@ -1,6 +1,7 @@
 package com.example.hogar_rural;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,13 +33,14 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
     private LayoutInflater inflater;
     private  List<Service> services;
     private Context context;
-
+    private List<String> selectedServices;
 
     //--> CONSTRCUTOR
     public AdapterService(Context context, List<Service> services) {
         this.inflater = LayoutInflater.from(context);
         this.services = services;
         this.context = context;
+        this.selectedServices = new ArrayList<>();
     }
 
 
@@ -70,6 +72,9 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
         return services.size();
     }
 
+    public List<String> getSelectedServices(){
+        return this.selectedServices;
+    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -81,17 +86,42 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
         int index;
         TextView txtName;
         ImageView imageAvatar;
+        ImageView imageViewSelected;
         // CONTRUCTOR DEL ViewHolder
         public ViewHolder(@NonNull View itemView) {
 
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Service service = services.get(getAdapterPosition());
+                    setCheckedService(service.getName());
 
+
+
+                }
+            });
             index = 0;
 
             imageAvatar = itemView.findViewById(R.id.cvServiceIcon);
+            imageViewSelected = itemView.findViewById(R.id.imageViewSelected);
             txtName = itemView.findViewById(R.id.cvServiceName);
 
         }
+
+        private void setCheckedService(String serviceName){
+
+                if(selectedServices.contains(serviceName)){
+                    selectedServices.remove(serviceName);
+                    imageViewSelected.setVisibility(View.INVISIBLE);
+                }else{
+                    selectedServices.add(serviceName);
+                    imageViewSelected.setVisibility(View.VISIBLE);
+                }
+
+        }
+
+
 
     }
 

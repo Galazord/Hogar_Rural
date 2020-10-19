@@ -8,6 +8,13 @@
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
     android:background="@color/background_grey">
+    <ImageView
+        android:id="@+id/imageViewSelected"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_gravity="right"
+        android:visibility="invisible"
+        android:background="@drawable/ic_leaf_on" />
 
     <LinearLayout
         android:orientation="vertical"
