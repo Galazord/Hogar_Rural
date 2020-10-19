@@ -4,11 +4,21 @@ package com.example.hogar_rural.Model;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.firebase.Timestamp;
 
+import java.util.Date;
 import java.util.List;
 
 public class HomeFilter {
 
     private Filter filter;
+
+    public Home getHome() {
+        return home;
+    }
+
+    public void setHome(Home home) {
+        this.home = home;
+    }
+
     private Home home;
 
     public HomeFilter(Filter filter, Home home) {
@@ -29,12 +39,20 @@ public class HomeFilter {
     }
     public boolean filterRangeOfDate(Available available){
 
-        Timestamp fromFilter = UtilMethod.getTimestamp(filter.getDateEntrace());
-        Timestamp sinceFilter = UtilMethod.getTimestamp(filter.getDateExit());
+        Date fromFilter = UtilMethod.getDateFromStingUS(filter.getDateEntrace());
+        Date sinceFilter = UtilMethod.getDateFromStingUS((filter.getDateExit()));
 
+        for (Timestamp timestamp: available.getDates_reserved()
+             ) {
 
-        List<Timestamp> dates_reserved = available.getDates_reserved();
-        return (dates_reserved.contains(fromFilter) || dates_reserved.contains(sinceFilter));
+            Date tmpToDate = UtilMethod.getDateFromSting(new Date(timestamp.toDate().getTime() + (1000 * 60 * 60 * 24)));
+
+            if(tmpToDate.toString().equals(fromFilter.toString()) || tmpToDate.toString().equals(sinceFilter.toString())){
+                return false;
+            }
+        }
+
+        return true;
     }
     public boolean filterValorationsActive(){
         return filter.getValoration() != 0;

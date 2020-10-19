@@ -99,10 +99,36 @@ public class UtilMethod {
             return null;
         }
     }
+    public static Date getDateFromSting(Date dateComplete){
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return   dateFormat.parse(dateFormat.format(dateComplete));
+        } catch(Exception e) { //this generic but you can control another types of exception
+            return null;
+        }
+    }
+    public static Date getDateFromStingUS(String dateStr){
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            return   dateFormat.parse(dateStr);
+        } catch(Exception e) { //this generic but you can control another types of exception
+            return null;
+        }
+    }
     // Convertir el formato fecha en Timestamp
     public static Timestamp  getTimestamp(String date){
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = dateFormat.parse(date);
+            return new Timestamp(parsedDate);
+        } catch(Exception e) { //this generic but you can control another types of exception
+            return null;
+        }
+    }
+    // Convertir el formato fecha en Timestamp
+    public static Timestamp  getTimestampFormatUS(String date){
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date parsedDate = dateFormat.parse(date);
             return new Timestamp(parsedDate);
         } catch(Exception e) { //this generic but you can control another types of exception
@@ -134,7 +160,7 @@ public class UtilMethod {
             Date converTmstp = date.toDate();
             Date parsedDate = dateFormat.parse(converTmstp.toString());
            return parsedDate.getTime();
-        } catch(Exception e) { //this generic but you can control another types of exception
+        } catch(Exception e) {
             return null;
         }
     }

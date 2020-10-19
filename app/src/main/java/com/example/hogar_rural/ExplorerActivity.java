@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.hogar_rural.Model.Available;
 import com.example.hogar_rural.Model.Filter;
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.HomeFilter;
@@ -35,6 +37,7 @@ import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -43,6 +46,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExplorerActivity extends AppCompatActivity {
 
@@ -64,7 +68,8 @@ public class ExplorerActivity extends AppCompatActivity {
     // firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-
+    final boolean[] res = {false};
+    boolean isFilter = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,49 +236,51 @@ public class ExplorerActivity extends AppCompatActivity {
 
                             if(destiny.toLowerCase().equals(h.getProvince().toLowerCase())){
                                 HomeFilter homeFilter = new HomeFilter(filter,h);
-                                boolean isFilter = false;
-                                if(homeFilter.filterNumberPeopleActive()){
 
-                                    if(homeFilter.filterNumberPeople()){
-                                        isFilter = true;
+                                //El precio no tiene un valor por defecto siempre busca por el.
+
+                                  isFilter = homeFilter.filterPrice();
+
+                                if(homeFilter.filterNumberPeopleActive() && isFilter){
+
+
+                                        isFilter = homeFilter.filterNumberPeople();
+
+
+                                }
+
+                                if(homeFilter.filterValorationsActive() && isFilter){
+
+
+                                        isFilter = homeFilter.filterValorations();
+
+                                }
+
+
+                                if(homeFilter.filterRoomsActive() && isFilter){
+
+
+                                        isFilter = homeFilter.filterRooms();
+
+                                }
+                                if(homeFilter.filterServicesActive() && isFilter){
+
+
+                                        isFilter = homeFilter.filterServices();
+
+                                }
+                                if(homeFilter.filterRangeOfDateActive() && isFilter){
+
+                                    loadAvaible(h.getId(),homeFilter);
+
+                                }else{
+                                    if(isFilter){
+                                        list_home.add(homeFilter.getHome());
                                     }
                                 }
-                                /* if(homeFilter.filterRangeOfDateActive()){
 
-                                   if(homeFilter.filterRangeOfDate(ava)){
-                                        isFilter = true;
-                                    }
-                                }*/
-                                if(homeFilter.filterValorationsActive()){
-
-                                    if(homeFilter.filterValorations()){
-                                        isFilter = true;
-                                    }
-                                }
-
-                                 //El precio no tiene un valor por defecto siempre busca por el.
-                                if(homeFilter.filterPrice()){
-                                    isFilter = true;
-                                }
-                                if(homeFilter.filterRoomsActive()){
-
-                                    if(homeFilter.filterRooms()){
-                                        isFilter = true;
-                                    }
-                                }
-                                if(homeFilter.filterServicesActive()){
-
-                                    if(homeFilter.filterServices()){
-                                        isFilter = true;
-                                    }
-                                }
-
-                                if(isFilter){
-                                    list_home.add(h);
-                                }
 
                             }
-
 
                         }
 
@@ -401,6 +408,34 @@ public class ExplorerActivity extends AppCompatActivity {
         // show it
         alertDialog.show();
 
+
+    }
+
+    private void loadAvaible(String idHome, final HomeFilter homeFilter){
+
+
+        db.collection("availables").whereEqualTo("id",idHome)
+
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+
+                        for (QueryDocumentSnapshot document : value) {
+                            Available available = document.toObject(Available.class);
+                            //false -> no disponible | true -> disponible
+                            isFilter = homeFilter.filterRangeOfDate(available);
+
+                            if(isFilter){
+                                list_home.add(homeFilter.getHome());
+                            }
+                        }
+
+
+                    }
+                });
+            Log.i("asdas",isFilter+"");
 
     }
 
