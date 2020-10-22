@@ -34,14 +34,17 @@ import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.HomeFilter;
 import com.example.hogar_rural.Model.House;
 import com.example.hogar_rural.Utils.Constant;
+import com.example.hogar_rural.Utils.TypeOrder;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -217,10 +220,28 @@ public class ExplorerActivity extends AppCompatActivity {
     // Llamar a firebase para recoger los datos y mostrarlos
     private void loadFromFirebaseFilters(){
 
+        Query collectionReference = null;
+
+        if(filter.getOrder()!=null){
+
+            if(filter.getOrder() == TypeOrder.VALORATION){
+                collectionReference = db.collection("homes").orderBy("valoration",Query.Direction.DESCENDING);
+            }else if(filter.getOrder() == TypeOrder.PRICE_ASC){
+                collectionReference = db.collection("homes").orderBy("price", Query.Direction.ASCENDING);
+            }else if(filter.getOrder() == TypeOrder.PRICE_DESC){
+                collectionReference = db.collection("homes").orderBy("price", Query.Direction.DESCENDING);
+            }else{
+                collectionReference = db.collection("homes");
+            }
 
 
-        db.collection("homes")
+        }else{
+            collectionReference = db.collection("homes");
+        }
 
+
+
+        collectionReference
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -233,13 +254,16 @@ public class ExplorerActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : value) {
 
                             Home h = document.toObject(Home.class);
-
+                            boolean noneFilter = true;
                             if(destiny.toLowerCase().equals(h.getProvince().toLowerCase())){
                                 HomeFilter homeFilter = new HomeFilter(filter,h);
 
-                                //El precio no tiene un valor por defecto siempre busca por el.
+                                isFilter=true;
+                                if(homeFilter.filterPriceActive()){
 
-                                  isFilter = homeFilter.filterPrice();
+                                    isFilter = homeFilter.filterPrice();
+
+                                }
 
                                 if(homeFilter.filterNumberPeopleActive() && isFilter){
 
@@ -277,11 +301,13 @@ public class ExplorerActivity extends AppCompatActivity {
                                     if(isFilter){
                                         list_home.add(homeFilter.getHome());
                                     }
+
+
                                 }
 
 
                             }
-
+                            isFilter=false;
                         }
 
                         // Cargar/ mostrar la información en el recyclerView
@@ -294,6 +320,7 @@ public class ExplorerActivity extends AppCompatActivity {
                             imgEmpty.setVisibility(View.VISIBLE);
                             //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
                         }
+
                     }
                 });
 
@@ -429,6 +456,18 @@ public class ExplorerActivity extends AppCompatActivity {
 
                             if(isFilter){
                                 list_home.add(homeFilter.getHome());
+                            }
+
+                            isFilter = false;
+                            // Cargar/ mostrar la información en el recyclerView
+                            getSupportActionBar().setTitle(destiny+"\n --> "+list_home.size()+" resultados");
+
+                            if(list_home.size()!=0){
+                                imgEmpty.setVisibility(View.INVISIBLE);
+                                loadRecyclerView();
+                            }else{
+                                imgEmpty.setVisibility(View.VISIBLE);
+                                //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
                             }
                         }
 

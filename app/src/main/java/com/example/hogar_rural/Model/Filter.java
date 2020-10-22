@@ -3,6 +3,8 @@ package com.example.hogar_rural.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.hogar_rural.Utils.TypeOrder;
+
 import java.util.List;
 
 public class Filter implements Parcelable {
@@ -13,9 +15,9 @@ public class Filter implements Parcelable {
     int typeRoom;
     int prices;
     List<String> services;
-    List<String> order;
+    TypeOrder order;
 
-    public Filter(int numPeople, String dateEntrace, String dateExit, int valoration, int typeRoom, int prices, List<String> services, List<String> order) {
+    public Filter(int numPeople, String dateEntrace, String dateExit, int valoration, int typeRoom, int prices, List<String> services, TypeOrder order) {
         this.numPeople = numPeople;
         this.dateEntrace = dateEntrace;
         this.dateExit = dateExit;
@@ -26,6 +28,7 @@ public class Filter implements Parcelable {
         this.order = order;
     }
 
+
     protected Filter(Parcel in) {
         numPeople = in.readInt();
         dateEntrace = in.readString();
@@ -34,7 +37,26 @@ public class Filter implements Parcelable {
         typeRoom = in.readInt();
         prices = in.readInt();
         services = in.createStringArrayList();
-        order = in.createStringArrayList();
+        order = TypeOrder.valueOf(in.readString());
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(numPeople);
+        dest.writeString(dateEntrace);
+        dest.writeString(dateExit);
+        dest.writeInt(valoration);
+        dest.writeInt(typeRoom);
+        dest.writeInt(prices);
+        dest.writeStringList(services);
+          dest.writeString(order.name());
+
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Filter> CREATOR = new Creator<Filter>() {
@@ -105,28 +127,12 @@ public class Filter implements Parcelable {
         this.services = services;
     }
 
-    public List<String> getOrder() {
+    public TypeOrder getOrder() {
         return order;
     }
 
-    public void setOrder(List<String> order) {
+    public void setOrder(TypeOrder order) {
         this.order = order;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(numPeople);
-        dest.writeString(dateEntrace);
-        dest.writeString(dateExit);
-        dest.writeInt(valoration);
-        dest.writeInt(typeRoom);
-        dest.writeInt(prices);
-        dest.writeStringList(services);
-        dest.writeStringList(order);
-    }
 }

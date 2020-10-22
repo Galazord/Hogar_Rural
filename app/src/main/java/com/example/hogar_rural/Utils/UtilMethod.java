@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -17,6 +18,7 @@ import androidx.cardview.widget.CardView;
 
 import com.google.firebase.Timestamp;
 import com.example.hogar_rural.R;
+import com.google.firebase.firestore.Query;
 
 import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
@@ -175,6 +177,22 @@ public class UtilMethod {
         }
 
         return services;
+    }
+
+    public static TypeOrder getOrder(CheckBox[] arr){
+        for (CheckBox cb:
+             arr) {
+           if(cb.isChecked()){
+               switch (cb.getTag().toString()){
+                   case "1": return TypeOrder.PRICE_ASC;
+                   case "2": return TypeOrder.PRICE_DESC;
+                   case "3": return TypeOrder.VALORATION;
+                   default: return TypeOrder.NONE;
+               }
+           }
+
+        }
+        return TypeOrder.NONE;
     }
 
 

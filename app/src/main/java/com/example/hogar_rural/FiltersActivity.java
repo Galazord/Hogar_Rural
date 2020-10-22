@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -28,6 +29,7 @@ import com.example.hogar_rural.Model.Filter;
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.Service;
 import com.example.hogar_rural.Utils.Constant;
+import com.example.hogar_rural.Utils.TypeOrder;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
 import com.google.firebase.Timestamp;
@@ -35,6 +37,8 @@ import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import okhttp3.internal.Util;
 
 import static com.example.hogar_rural.Utils.Constant.PRICE_MIN;
 
@@ -50,8 +54,9 @@ public class FiltersActivity extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener setListener;
     private MediaPlayer soundError;
     private int numPeople = 0, numValoration = 0;
-    private int price = PRICE_MIN;
-    private CheckBox cbFilter_cheaper, cbFilter_expensive, cbFilter_MoreValor, cbFilter_Comentary;
+    private int price = 0;
+    private CheckBox cbFilter_cheaper, cbFilter_expensive, cbFilter_MoreValor;
+    private CheckBox[] ordersCheck;
     private Boolean isIntegro= false, isHabitaciones = false;
     private RecyclerView rvServices;
     private List<Service> serviciosFinalHome;
@@ -99,7 +104,8 @@ public class FiltersActivity extends AppCompatActivity {
         cbFilter_cheaper = (CheckBox) findViewById(R.id.cbFilter_cheaper);
         cbFilter_expensive = (CheckBox) findViewById(R.id.cbFilter_expensive);
         cbFilter_MoreValor = (CheckBox) findViewById(R.id.cbFilter_MoreValor);
-        cbFilter_Comentary = (CheckBox) findViewById(R.id.cbFilter_Comentary);
+        ordersCheck =new CheckBox[] {cbFilter_cheaper,cbFilter_expensive,cbFilter_MoreValor};
+        checkOrderControl();
         iconTemp = (ImageView)findViewById(R.id.iconTemp);
         iconTemp2 = (ImageView)findViewById(R.id.iconTemp2);
         iconTemp3 = (ImageView)findViewById(R.id.iconTemp3);
@@ -115,7 +121,24 @@ public class FiltersActivity extends AppCompatActivity {
         generateSeekBar();
 
     }
+    private void checkOrderControl(){
+        for (final CheckBox chekbox:ordersCheck
+             ) {
+            chekbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                        for (CheckBox ch:ordersCheck){
+                            if(!ch.getTag().equals(chekbox.getTag())){
+                                ch.setChecked(false);
+                            }
+                        }
 
+                    }
+                }
+            });
+        }
+    }
     // Activar el efecto para mostrar un calendario e introducir una fecha
     private void activateCalendar(final TextView textView) {
 
@@ -279,31 +302,12 @@ public class FiltersActivity extends AppCompatActivity {
         String dateExit = tvFilter_input_exit.getText().toString();
 
         String priceDay = tvFilter_priceIndicator.getText().toString();
-        boolean checkCheaper = false;
-        if(cbFilter_cheaper.isChecked()){
-            checkCheaper = true;
-        }
-        boolean checkExpensive = false;
-        if(cbFilter_expensive.isChecked()){
-            checkCheaper = true;
-        }
-        boolean checkValoration = false;
-        if(cbFilter_MoreValor.isChecked()){
-            checkCheaper = true;
-        }
-        boolean checkComentary = false;
-        if(cbFilter_Comentary.isChecked()){
-            checkCheaper = true;
-        }
+        TypeOrder order = UtilMethod.getOrder(ordersCheck);
 
-        // Recoger valoraciones
-
-
-        // Tipo de vivienda (Ïntegra/ habitaciones)
 
 
         // Realizar la gestión del filtro*/
-        Filter filter = new Filter(numPeople,dateEntrance,dateExit,numValoration,typeRoom,price,adapter.getSelectedServices(),null);
+        Filter filter = new Filter(numPeople,dateEntrance,dateExit,numValoration,typeRoom,price,adapter.getSelectedServices(),order);
 
         Intent data = new Intent(getApplicationContext(),ExplorerActivity.class);
         data.putExtra("destiny", destiny);
@@ -361,8 +365,15 @@ public class FiltersActivity extends AppCompatActivity {
         // Cambiar color para indicar que se puede llegar al mínimo posible
         btnPrice_less.setBackgroundResource(R.drawable.gradient_green);
 
-        // Sumar 1
-        price++;
+        if(price == 0)
+        {
+            price =  PRICE_MIN;
+
+        }else{
+            price++;
+        }
+
+        sbFilter_priceSelector.setProgress(price);
         tvFilter_priceIndicator.setText(price+" € por persona");
 
     }
@@ -379,7 +390,7 @@ public class FiltersActivity extends AppCompatActivity {
 
             // Restar 1
             price--;
-
+            sbFilter_priceSelector.setProgress(price);
             // No bajar del mínimo
             if(price < PRICE_MIN){
                 price = PRICE_MIN;

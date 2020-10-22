@@ -68,6 +68,9 @@ public class HomeFilter {
         return filter.getTypeRoom() == home.getType();
     }
 
+    public boolean filterPriceActive(){
+        return filter.getPrices() != 0;
+    }
 
 
     public boolean filterPrice(){
