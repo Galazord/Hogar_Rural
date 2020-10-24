@@ -297,34 +297,20 @@ public class FiltersActivity extends AppCompatActivity {
     public void clickConfirmFilters(View view) {
 
         // Recoger valores de los campos
-
         String dateEntrance = tvFilter_input_entrance.getText().toString();
         String dateExit = tvFilter_input_exit.getText().toString();
-
-        String priceDay = tvFilter_priceIndicator.getText().toString();
         TypeOrder order = UtilMethod.getOrder(ordersCheck);
-
-
 
         // Realizar la gestión del filtro*/
         Filter filter = new Filter(numPeople,dateEntrance,dateExit,numValoration,typeRoom,price,adapter.getSelectedServices(),order);
 
+        // Pasar los datos del filtro al Explorer
         Intent data = new Intent(getApplicationContext(),ExplorerActivity.class);
         data.putExtra("destiny", destiny);
         data.putExtra("filter", filter);
         startActivity(data);
         finish();
 
-
-    }
-
-    // Volver a la vista de explorar
-    public void clickBackFilters(View view) {
-
-        Intent intent = new Intent (getApplicationContext(), ExplorerActivity.class);
-        intent.putExtra("destiny", destiny);
-        startActivity(intent);
-        finish();
 
     }
 
@@ -399,6 +385,14 @@ public class FiltersActivity extends AppCompatActivity {
             tvFilter_priceIndicator.setText(price+" € por persona");
         }
 
+    }
+
+    // Volver a la vista de explorar
+    public void clickBackFilters(View view) {
+        Intent intent = new Intent (getApplicationContext(), ExplorerActivity.class);
+        intent.putExtra("destiny", destiny);
+        startActivity(intent);
+        finish();
     }
 
 }

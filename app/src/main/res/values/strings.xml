@@ -7,7 +7,6 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="btnBack">VOLVER</string>
     <string name="loremIpsum">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500.</string>
     <string name="showMore">Ver más</string>
@@ -146,6 +145,7 @@
     <!-- CUENTA DE USUARIO -->
     <string name="accountUser_myProfile">Mi perfil</string>
     <string name="accountUser_myhouses">Mis casas</string>
+    <string name="accountUser_myBookings">Mis Reservas</string>
 
     <!-- MIS CASAS -->
     <string name="myHouses_addHouse">Añadir nueva casa</string>
@@ -185,5 +185,9 @@
     <string name="disponibility_info2">Recuerde que necesita iniciar sesión de usuario para realizar reservas.</string>
     <string name="disponibility_info3">Días ya ocupados o no disponibles.</string>
     <string name="disponibility_btnConfirm">Reservar en la fecha indicada</string>
+
+    <!-- CUSTOM VIEW BOOKINGS -->
+    <string name="customBookings_nameUser">Nombre de usuario</string>
+    <string name="customBookings_date">00 / 00 / 0000</string>
 
 </resources>

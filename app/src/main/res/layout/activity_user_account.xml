@@ -31,6 +31,13 @@
             android:text="@string/accountUser_myhouses"
             android:icon="@drawable/ic_icon_tab_houses"/>
 
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabMyBookings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accountUser_myBookings"
+            android:icon="@drawable/ic_icon_tab_bookings"/>
+
     </com.google.android.material.tabs.TabLayout>
 
     <!-- Cuerpo del contenido de cada apartado -->

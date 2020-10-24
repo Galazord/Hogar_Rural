@@ -48,9 +48,7 @@ public class MyProfileFragment extends Fragment {
     private FirebaseStorage firebaseStorage;
     private String destine;
 
-    public MyProfileFragment() {
-
-    }
+    public MyProfileFragment() { }
     public MyProfileFragment(String destine) {
 this.destine=destine;
     }
@@ -193,6 +191,7 @@ this.destine=destine;
 
     }
 
+    // Cargar la imagen de usuario
     private void loadUserImage(User user){
 
         StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());

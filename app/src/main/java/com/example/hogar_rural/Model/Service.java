@@ -22,6 +22,12 @@ public class Service {
         this.icon = icon;
     }
 
+    public Service(String name, int icon) {
+     
+        this.name = name;
+        this.icon = icon;
+    }
+
     public String getId() {
         return id;
     }

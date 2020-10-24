@@ -337,7 +337,7 @@
                 android:fontFamily="@font/roboto_medium"
                 android:hint="@string/formUser_municipatily"/>
 
-            <!-- Introducir la dirección de domicilio -->
+            <!-- Introducir la provincia -->
             <EditText
                 android:id="@+id/etForm_input_province"
                 android:layout_width="match_parent"

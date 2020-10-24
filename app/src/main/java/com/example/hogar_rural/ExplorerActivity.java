@@ -54,8 +54,6 @@ import java.util.List;
 public class ExplorerActivity extends AppCompatActivity {
 
     //--> VARIABLES
-    private ListView listView;
-    private String[] nameList = {"Pakistan", "Canada", "India", "Alemania", "Australia", "China", "España", "Francia", "Italia"};
     private ArrayAdapter<String> adapterList;
     private Button btnFilters, btnMap;
     private MediaPlayer soundError;
@@ -165,17 +163,6 @@ public class ExplorerActivity extends AppCompatActivity {
             }
         });
 
-        // Menú superior: Listado de búsqueda (Provisional)
-        // Buscar en la base de datos todas las ciudades y guardarlas en el array de String nameList (---------------- PENDIENTE -------------------)
-
-        /*
-        listView = (ListView) findViewById(R.id.myList);
-        adapterList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, nameList);
-        listView.setAdapter(adapterList);
-
-         */
-
-
     }
 
     // Llamar a firebase para recoger los datos y mostrarlos
@@ -217,11 +204,11 @@ public class ExplorerActivity extends AppCompatActivity {
 
 
     }
-    // Llamar a firebase para recoger los datos y mostrarlos
+    // Llamar a firebase para recoger los datos de filtros y mostrarlos
     private void loadFromFirebaseFilters(){
 
         Query collectionReference = null;
-
+        // Comprobar primero el orden en que se muestran
         if(filter.getOrder()!=null){
 
             if(filter.getOrder() == TypeOrder.VALORATION){
@@ -240,7 +227,7 @@ public class ExplorerActivity extends AppCompatActivity {
         }
 
 
-
+        // Ir preguntando a la clase HomeFilter si el valor por defecto ha cambiado para tenerlo en cuenta en la búsqueda.
         collectionReference
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -259,53 +246,36 @@ public class ExplorerActivity extends AppCompatActivity {
                                 HomeFilter homeFilter = new HomeFilter(filter,h);
 
                                 isFilter=true;
-                                if(homeFilter.filterPriceActive()){
-
-                                    isFilter = homeFilter.filterPrice();
-
-                                }
-
+                                // Filtro de número de personas
                                 if(homeFilter.filterNumberPeopleActive() && isFilter){
-
-
-                                        isFilter = homeFilter.filterNumberPeople();
-
-
+                                    isFilter = homeFilter.filterNumberPeople();
                                 }
-
-                                if(homeFilter.filterValorationsActive() && isFilter){
-
-
-                                        isFilter = homeFilter.filterValorations();
-
-                                }
-
-
-                                if(homeFilter.filterRoomsActive() && isFilter){
-
-
-                                        isFilter = homeFilter.filterRooms();
-
-                                }
-                                if(homeFilter.filterServicesActive() && isFilter){
-
-
-                                        isFilter = homeFilter.filterServices();
-
-                                }
+                                // Filtro de fechas disponibles
                                 if(homeFilter.filterRangeOfDateActive() && isFilter){
-
                                     loadAvaible(h.getId(),homeFilter);
-
-                                }else{
+                                }
+                                // Filtro de valoración
+                                if(homeFilter.filterValorationsActive() && isFilter){
+                                    isFilter = homeFilter.filterValorations();
+                                }
+                                // Filtro de tipo de vivienda (Íntegra/ Habitaciones)
+                                if(homeFilter.filterRoomsActive() && isFilter){
+                                    isFilter = homeFilter.filterRooms();
+                                }
+                                // Filtro de precio
+                                if(homeFilter.filterPriceActive()){
+                                    isFilter = homeFilter.filterPrice();
+                                }
+                                // Filtro de Servicios (iconos activos)
+                                if(homeFilter.filterServicesActive() && isFilter){
+                                        isFilter = homeFilter.filterServices();
+                                }
+                                // Si alguno de los filtros no se cumple, la búsqeuda se cancela y se vuelve a Explorer
+                                else{
                                     if(isFilter){
                                         list_home.add(homeFilter.getHome());
                                     }
-
-
                                 }
-
-
                             }
                             isFilter=false;
                         }
@@ -383,6 +353,7 @@ public class ExplorerActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    // Ir a la sección Mapas
     public void clickGoMap(View view) {
 
         // Ir a la sección Mapa
@@ -391,6 +362,7 @@ public class ExplorerActivity extends AppCompatActivity {
 
     }
 
+    // Sistema de alertas o errores
     public void showInputAlertDialog(){
         final String[] strReturn = {""};
         // get prompts.xml view
@@ -438,11 +410,10 @@ public class ExplorerActivity extends AppCompatActivity {
 
     }
 
+    // Filtro de fechas disponibles
     private void loadAvaible(String idHome, final HomeFilter homeFilter){
 
-
-        db.collection("availables").whereEqualTo("id",idHome)
-
+            db.collection("availables").whereEqualTo("id",idHome)
 
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override

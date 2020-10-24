@@ -167,7 +167,7 @@ public class LoginFormActivity extends AppCompatActivity {
 
     }
 
-    // mmostrar en los campos los datos del usuario logado actualmente
+    // Mostrar en los campos los datos del usuario logado actualmente
     private void showDataUser() {
 
         // Recoger el ID del usuario logado

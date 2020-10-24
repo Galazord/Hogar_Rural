@@ -8,6 +8,8 @@ import com.example.hogar_rural.Utils.TypeOrder;
 import java.util.List;
 
 public class Filter implements Parcelable {
+
+    // VARIABLES
     int numPeople;
     String dateEntrace;
     String dateExit;
@@ -17,6 +19,7 @@ public class Filter implements Parcelable {
     List<String> services;
     TypeOrder order;
 
+    // CONSTRUCTORES
     public Filter(int numPeople, String dateEntrace, String dateExit, int valoration, int typeRoom, int prices, List<String> services, TypeOrder order) {
         this.numPeople = numPeople;
         this.dateEntrace = dateEntrace;
@@ -41,6 +44,7 @@ public class Filter implements Parcelable {
 
     }
 
+    // MÉTODOS
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(numPeople);
@@ -71,6 +75,7 @@ public class Filter implements Parcelable {
         }
     };
 
+    // GET & SET
     public int getNumPeople() {
         return numPeople;
     }

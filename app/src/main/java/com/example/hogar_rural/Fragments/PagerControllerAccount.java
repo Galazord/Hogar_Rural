@@ -32,6 +32,8 @@ public class PagerControllerAccount extends FragmentPagerAdapter {
                 return new MyProfileFragment(destine);
             case 1:
                 return new MyHousesFragment();
+            case 2:
+                return new MyBookingsFragment();
             default:
                 return null;
         }

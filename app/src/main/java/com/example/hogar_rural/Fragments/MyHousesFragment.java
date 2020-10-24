@@ -38,7 +38,6 @@ public class MyHousesFragment extends Fragment {
     private Button btnCreateNewHouse;
     // RecyclerView
     private RecyclerView recyclerView;
-    private Adapter adapter;
     private ArrayList<Home> list_home = new ArrayList<Home>();
     // firebase
     private FirebaseAuth mAuth;

@@ -18,7 +18,7 @@ public class UserAccountActivity extends AppCompatActivity {
     //--> VARIABLES
     TabLayout tabLayoutAccount;
     ViewPager viewPagerAccount;
-    TabItem tabMyProfile, tabMyHouses;
+    TabItem tabMyProfile, tabMyHouses, tabMyBookings;
     PagerControllerAccount pagerAdapter;
     BottomNavigationView bottomNavigationView;
     String destine;
@@ -48,9 +48,10 @@ public class UserAccountActivity extends AppCompatActivity {
         viewPagerAccount = (ViewPager) findViewById(R.id.viewPagerAccount);
         tabMyProfile = (TabItem) findViewById(R.id.tabMyProfile);
         tabMyHouses = (TabItem) findViewById(R.id.tabMyHouses);
+        tabMyBookings = (TabItem) findViewById(R.id.tabMyBookings);
         bottomNavigationView = findViewById(R.id.bottom_navegation);
 
-        // Seleccionar y gestionar los diferentes tabs (Mi perfil y Mis casas)
+        // Seleccionar y gestionar los diferentes tabs (Mi perfil / Mis casas / Mis reservas)
         pagerAdapter = new PagerControllerAccount(getSupportFragmentManager(), tabLayoutAccount.getTabCount(),destine);
         viewPagerAccount.setAdapter(pagerAdapter);
         tabLayoutAccount.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -62,6 +63,9 @@ public class UserAccountActivity extends AppCompatActivity {
                     pagerAdapter.notifyDataSetChanged();
                 }
                 if(tab.getPosition() == 1){
+                    pagerAdapter.notifyDataSetChanged();;
+                }
+                if(tab.getPosition() == 2){
                     pagerAdapter.notifyDataSetChanged();;
                 }
 
