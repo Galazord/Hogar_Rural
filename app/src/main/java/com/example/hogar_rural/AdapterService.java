@@ -95,7 +95,7 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
                 @Override
                 public void onClick(View view) {
                     Service service = services.get(getAdapterPosition());
-                    setCheckedService(service.getName());
+                    setCheckedService(service.getName(),service.getIcon_on(),service.getIcon());
 
 
 
@@ -109,14 +109,15 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
 
         }
 
-        private void setCheckedService(String serviceName){
+        private void setCheckedService(String serviceName, int iconOn, int iconOff){
 
                 if(selectedServices.contains(serviceName)){
                     selectedServices.remove(serviceName);
-                    imageViewSelected.setVisibility(View.INVISIBLE);
+                    imageAvatar.setBackgroundResource(iconOff);
                 }else{
                     selectedServices.add(serviceName);
-                    imageViewSelected.setVisibility(View.VISIBLE);
+
+                    imageAvatar.setBackgroundResource(iconOn);
                 }
 
         }

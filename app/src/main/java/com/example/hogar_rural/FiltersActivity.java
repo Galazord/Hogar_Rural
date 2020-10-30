@@ -36,6 +36,7 @@ import com.google.firebase.Timestamp;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.internal.Util;
@@ -112,10 +113,35 @@ public class FiltersActivity extends AppCompatActivity {
         iconTemp4 = (ImageView)findViewById(R.id.iconTemp4);
         iconTemp5 = (ImageView)findViewById(R.id.iconTemp5);
         valorationsImg = new ImageView[]{iconTemp,iconTemp2,iconTemp3,iconTemp4,iconTemp5};
+        for (final ImageView image: valorationsImg
+             ) {
+
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.getTag();
+                    if(numValoration == Integer.valueOf(v.getTag().toString())){
+
+                        image.setBackgroundResource(R.drawable.ic_leaf_off);
+                        numValoration--;
+                    }else{
+                        numValoration = Integer.valueOf(v.getTag().toString());
+                        for (int i = 0; i < numValoration; i++) {
+                            valorationsImg[i].setBackgroundResource(R.drawable.ic_leaf_on);
+                        }
+                        for (int i = numValoration; i < valorationsImg.length; i++) {
+                            valorationsImg[i].setBackgroundResource(R.drawable.ic_leaf_off);
+                        }
+                    }
+
+                }
+            });
+
+        }
         // Mostrar calendario para la fecha de llegada
-        activateCalendar(tvFilter_input_entrance);
+        activateCalendar(tvFilter_input_entrance, false);
         // Mostrar calendario para la fecha de salida
-        activateCalendar(tvFilter_input_exit);
+        activateCalendar(tvFilter_input_exit, true);
 
         // Gestión del SeekBar para seleccionar el precio
         generateSeekBar();
@@ -140,13 +166,14 @@ public class FiltersActivity extends AppCompatActivity {
         }
     }
     // Activar el efecto para mostrar un calendario e introducir una fecha
-    private void activateCalendar(final TextView textView) {
+    private void activateCalendar(final TextView textView, final boolean compare) {
 
         // Gestión de la opción del calendario
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
         final int month = calendar.get(Calendar.MONTH);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
+
 
         // Generar la ventana del calendario
         textView.setOnClickListener(new View.OnClickListener() {
@@ -168,12 +195,35 @@ public class FiltersActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(FiltersActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
-                        month = month + 1;
-                        String date = day + "/" + month + "/" + year;
-                        textView.setText(date);
+
+                        if(compare){
+                            if(tvFilter_input_entrance.getText().toString().equals("")){
+                                UtilMethod.showToast(TypeToast.INFO,FiltersActivity.this, "Indica una fecha de entrada");
+
+                            }else{
+                                Date inputdate = UtilMethod.getDateFromStingUS(tvFilter_input_entrance.getText().toString());
+                                month = month + 1;
+                                Date newDate = UtilMethod.getDateFromStingUS( day + "/" + month + "/" + year);
+
+                                if(inputdate.after(newDate)){
+                                    UtilMethod.showToast(TypeToast.INFO,FiltersActivity.this, "La fecha de salida no puede ser inferior\n a la de entrada");
+                                    textView.setText("");
+                                }else{
+                                    //month = month + 1;
+                                    String date = day + "/" + month + "/" + year;
+                                    textView.setText(date);
+                                }
+                            }
+
+                        }else{
+                            month = month + 1;
+                            String date = day + "/" + month + "/" + year;
+                            textView.setText(date);
+                        }
+
                     }
                 }, year, month, day);
-
+                datePickerDialog.getDatePicker().setMinDate(Calendar.getInstance().getTimeInMillis());
                 datePickerDialog.show();
             }
         });
@@ -191,9 +241,8 @@ public class FiltersActivity extends AppCompatActivity {
     // Cargar los iconos activos de los servicios
     private void loadServices(){
         Service service = new Service();
-        List<String> serviciosHome = new Home().getServices();
         List<Service> serviciosFinalHome = new ArrayList<>();
-        for (Service s: service.getServices(this)
+        for (Service s: service.getServicesOff(this)
         ) {
              serviciosFinalHome.add(s);
         }
