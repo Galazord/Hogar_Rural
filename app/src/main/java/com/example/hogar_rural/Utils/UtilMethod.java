@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import sun.bob.mcalendarview.vo.DateData;
+
 public class UtilMethod {
 
     // TOAST DESIGN
@@ -195,6 +197,13 @@ public class UtilMethod {
         return TypeOrder.NONE;
     }
 
+    public static boolean datePermited(int year, int month, int day){
+        Date dateSelected = getDateFromSting(year+"-"+month+"-"+day);
 
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+        Date dateNow = new Date(System.currentTimeMillis());
+
+        return dateSelected.before(dateNow);
+    }
 
 }

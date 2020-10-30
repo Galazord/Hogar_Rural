@@ -64,6 +64,7 @@ public class ExplorerActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Adapter adapter;
     private ArrayList<Home> list_home = new ArrayList<Home>();
+    private ArrayList<Home> list_home_filter = new ArrayList<Home>();
     private ImageView imgEmpty;
     MenuItem itemResultados;
     // firebase
@@ -303,7 +304,12 @@ public class ExplorerActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
 
     }
+    private void loadRecyclerViewFilter(){
 
+        Adapter adapter = new Adapter(getApplicationContext(), list_home_filter, destiny);
+        recyclerView.setAdapter(adapter);
+
+    }
    /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -426,19 +432,18 @@ public class ExplorerActivity extends AppCompatActivity {
                             isFilter = homeFilter.filterRangeOfDate(available);
 
                             if(isFilter){
-                                list_home.add(homeFilter.getHome());
+                                list_home_filter.add(homeFilter.getHome());
                             }
 
                             isFilter = false;
                             // Cargar/ mostrar la información en el recyclerView
-                            getSupportActionBar().setTitle(destiny+"\n --> "+list_home.size()+" resultados");
+                            getSupportActionBar().setTitle(destiny+"\n --> "+list_home_filter.size()+" resultados");
 
-                            if(list_home.size()!=0){
+                            if(list_home_filter.size()!=0){
                                 imgEmpty.setVisibility(View.INVISIBLE);
-                                loadRecyclerView();
+                                loadRecyclerViewFilter();
                             }else{
                                 imgEmpty.setVisibility(View.VISIBLE);
-                                //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
                             }
                         }
 

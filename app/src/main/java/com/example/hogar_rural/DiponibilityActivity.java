@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
+import android.widget.TextView;
 
 import com.example.hogar_rural.Model.Available;
 import com.example.hogar_rural.Model.Comment;
@@ -56,7 +57,10 @@ public class DiponibilityActivity extends AppCompatActivity {
     private List<DocumentReference> users_new_reserved;
     private List<Timestamp> dates_new_reserved;
     DocumentReference documentReferenceUser;
+    TextView tvPrecio;
     MCalendarView calendar;
+    private static long price;
+    private int numberOfDay=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +73,7 @@ public class DiponibilityActivity extends AppCompatActivity {
 
         if(b!=null){
             idHouse = b.getString("ID_HOUSE");
+            price = b.getLong("PRECIO");
             loadHomeFromDB();
         }
 
@@ -87,6 +92,7 @@ public class DiponibilityActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         // Relaccionar la parte gráfica con las variables
+        tvPrecio = (TextView) findViewById(R.id.tvPrecio);
         calendar = (MCalendarView)findViewById(R.id.calendarView);
 
 
@@ -97,23 +103,41 @@ public class DiponibilityActivity extends AppCompatActivity {
         calendar.setOnDateClickListener(new OnDateClickListener() {
             @Override
             public void onDateClick(View view, DateData date) {
-               Timestamp dateSelected =  UtilMethod.getTimestamp(date.getYear()+"-"+date.getMonth()+"-"+date.getDay());
 
-                    // Si está en verde deseleccionar
-                    if(dates_new_reserved.contains(dateSelected)){
-                        dates_new_reserved.remove(dateSelected);
-                        users_new_reserved.remove(documentReferenceUser);
-                        calendar.unMarkDate(new DateData(date.getYear(),date.getMonth(),date.getDay()));
-                        // Si está deselecionado marcar en verde
-                    }else{
-                        dates_new_reserved.add(dateSelected);
-                        calendar.markDate(new DateData(date.getYear(),date.getMonth(),date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GREEN)));
-                        users_new_reserved.add(documentReferenceUser);
-                    }
+             if(UtilMethod.datePermited(date.getYear(),date.getMonth(),date.getDay())){
+                 UtilMethod.showToast(TypeToast.INFO,DiponibilityActivity.this,"No puedes seleccionar una fecha inferior al dia actual");
+             }else{
+                 Timestamp dateSelected =  UtilMethod.getTimestamp(date.getYear()+"-"+date.getMonth()+"-"+date.getDay());
+
+                 // Si está en verde deseleccionar
+                 if(dates_new_reserved.contains(dateSelected)){
+                     dates_new_reserved.remove(dateSelected);
+                     users_new_reserved.remove(documentReferenceUser);
+                     calendar.unMarkDate(new DateData(date.getYear(),date.getMonth(),date.getDay()));
+                         numberOfDay--;
+                     // Si está deselecionado marcar en verde
+                 }else{
+                     dates_new_reserved.add(dateSelected);
+                     calendar.markDate(new DateData(date.getYear(),date.getMonth(),date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GREEN)));
+                     users_new_reserved.add(documentReferenceUser);
+                     numberOfDay++;
+                 }
+                 setPrecioInfo();
+             }
+
 
 
             }
         });
+    }
+
+    private void setPrecioInfo(){
+        if(numberOfDay == 0){
+
+            tvPrecio.setText("");
+        }else{
+            tvPrecio.setText(numberOfDay+" dia/s\nPrecio por : "+price+"€\nTotal: "+(price*numberOfDay)+"€");
+        }
     }
     private void loadHomeFromDB(){
 

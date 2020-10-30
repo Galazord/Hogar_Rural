@@ -79,14 +79,15 @@ public class HomeFilter {
     public boolean filterServices(){
         List<String> servicesHome = home.getServices();
         List<String> servicesFilter = filter.getServices();
-
+        /*
         for (String serviceName: servicesHome
         ) {
+            boolean containtAll =
             if(servicesFilter.contains(serviceName)){
                 return true;
             }
-        }
-        return false;
+        }*/
+        return servicesHome.containsAll(servicesFilter);
     }
 
     // GET & SET
