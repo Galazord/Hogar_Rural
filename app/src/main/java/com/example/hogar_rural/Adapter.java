@@ -108,7 +108,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         cargarImagen(imgGallery.get(0),holder.imageGalery);
         countComments(model.get(position).getId(),holder.txtNumOpinions);
         loadFavorite(holder.imageFavorite, model.get(position).getId());
-
+        cargarValoration(holder.arrayValoration,model.get(position).getValoration());
         String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
         String numPerson = String.valueOf(model.get(position).getAmount()).concat(this.context.getString(R.string.adapter_people));
         String numOpinion = "4".concat(this.context.getString(R.string.adapter_comments));
@@ -192,7 +192,22 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
     }
 
+private void cargarValoration(ImageView[] array, Long val){
 
+        if(val!=0){
+            for (int i = 0; i<val; i++){
+
+                array[i].setBackgroundResource(R.drawable.ic_leaf_on);
+            }
+
+            for (int i = val.intValue(); i<array.length; i++){
+
+                array[i].setBackgroundResource(R.drawable.ic_leaf_off);
+            }
+        }
+
+
+}
     private void cargarImagen(String nombre , final ImageView imageView){
 
 
@@ -247,6 +262,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         int index;
         TextView txtPlace, txtRental, txtPeople, txtPrice, txtNumOpinions;
         ImageView imageGalery, imageFavorite;
+        ImageView iconTemp1,iconTemp2,iconTemp3,iconTemp4,iconTemp5;
+        ImageView[] arrayValoration;
         Home home;
 
         // CONTRUCTOR DEL ViewHolder
@@ -286,6 +303,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
             txtPrice = itemView.findViewById(R.id.txtPrice);
             txtNumOpinions = itemView.findViewById(R.id.txtNumOpinions);
             imageGalery = itemView.findViewById(R.id.CardGaleryImage);
+            iconTemp1 = itemView.findViewById(R.id.iconTemp);
+            iconTemp2 = itemView.findViewById(R.id.iconTemp2);
+            iconTemp3 = itemView.findViewById(R.id.iconTemp3);
+            iconTemp4 = itemView.findViewById(R.id.iconTemp4);
+            iconTemp5 = itemView.findViewById(R.id.iconTemp5);
+             arrayValoration =new ImageView[] { iconTemp1,iconTemp2,iconTemp3,iconTemp4,iconTemp5};
             imageFavorite = itemView.findViewById(R.id.iconFavorite);
 
             imageFavorite.setBackgroundResource(R.drawable.ic_favo_off);

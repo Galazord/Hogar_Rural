@@ -52,6 +52,8 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
+        <!-- Fechas -->
+
 
     </RelativeLayout>
 

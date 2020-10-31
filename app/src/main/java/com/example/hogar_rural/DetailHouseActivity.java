@@ -52,6 +52,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -65,6 +66,8 @@ public class DetailHouseActivity extends AppCompatActivity {
     private TextView DetailPlace, DetailRental, DetailPeople, DetailPrice, DetailNumOpinions,tvEmptyComment, DetailValorations, DetailTextMultiLine1, DetailTextMultiLine2, DetailTextMultiLine3, DetailTextMultiLine4, tvPropertyName, tvPropertyUpdate, tvPropertyUpdateData;
     private ImageView CardDetailImage, ivDetail_avatarProperty, ivDetail_avatarUser,iconTempOff1,iconTempOff2,iconTempOff3,iconTempOff4,iconTempOff5;
     private ImageView[] arrValoration;
+    private  ImageView iconTemp1,iconTemp2,iconTemp3,iconTemp4,iconTemp5;
+    private ImageView[] arrayValorationAVG;
     private ToggleButton tbFilterDetail_adapted, tbFilterDetail_air, tbFilterDetail_barbecue, tbFilterDetail_bath, tbFilterDetail_pool, tbFilterDetail_climatized, tbFilterDetail_garden, tbFilterDetail_heating, tbFilterDetail_jacuzzi, tbFilterDetail_kitchen, tbFilterDetail_mountain, tbFilterDetail_parking, tbFilterDetail_beach, tbFilterDetail_breakfast, tbFilterDetail_children, tbFilterDetail_fireplace, tbFilterDetail_pets, tbFilterDetail_spa, tbFilterDetail_tv, tbFilterDetail_wifi;
     private List<ToggleButton> servicesIcon;
     private Button btnFavorite,btnShowMore1,btnShowMore2,btnShowMore3;
@@ -89,6 +92,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     private List<DocumentReference> favorites  = new ArrayList<>();;
     private List<String> listUrlImages;
     private int index = 0;
+    private int sum_valoration = 0;
     // Música & Sonidos
     private MediaPlayer soundSuccess;
 
@@ -126,49 +130,7 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine2 = (TextView) findViewById(R.id.DetailTextMultiLine2);
         DetailTextMultiLine3 = (TextView) findViewById(R.id.DetailTextMultiLine3);
 
-      /*  tbFilterDetail_adapted = (ToggleButton) findViewById(R.id.tbFilterDetail_adapted);
-        tbFilterDetail_air = (ToggleButton) findViewById(R.id.tbFilterDetail_air);
-        tbFilterDetail_barbecue = (ToggleButton) findViewById(R.id.tbFilterDetail_barbecue);
-        tbFilterDetail_bath = (ToggleButton) findViewById(R.id.tbFilterDetail_bath);
-        tbFilterDetail_pool = (ToggleButton) findViewById(R.id.tbFilterDetail_pool);
-        tbFilterDetail_climatized = (ToggleButton) findViewById(R.id.tbFilterDetail_climatized);
-        tbFilterDetail_garden = (ToggleButton) findViewById(R.id.tbFilterDetail_garden);
-        tbFilterDetail_heating = (ToggleButton) findViewById(R.id.tbFilterDetail_heating);
-        tbFilterDetail_jacuzzi = (ToggleButton) findViewById(R.id.tbFilterDetail_jacuzzi);
-        tbFilterDetail_kitchen = (ToggleButton) findViewById(R.id.tbFilterDetail_kitchen);
-        tbFilterDetail_mountain = (ToggleButton) findViewById(R.id.tbFilterDetail_mountain);
-        tbFilterDetail_parking = (ToggleButton) findViewById(R.id.tbFilterDetail_parking);
-        tbFilterDetail_beach = (ToggleButton) findViewById(R.id.tbFilterDetail_beach);
-        tbFilterDetail_breakfast = (ToggleButton) findViewById(R.id.tbFilterDetail_breakfast);
-        tbFilterDetail_children = (ToggleButton) findViewById(R.id.tbFilterDetail_children);
-        tbFilterDetail_fireplace = (ToggleButton) findViewById(R.id.tbFilterDetail_fireplace);
-        tbFilterDetail_pets = (ToggleButton) findViewById(R.id.tbFilterDetail_pets);
-        tbFilterDetail_spa = (ToggleButton) findViewById(R.id.tbFilterDetail_spa);
-        tbFilterDetail_tv = (ToggleButton) findViewById(R.id.tbFilterDetail_tv);
-        tbFilterDetail_wifi = (ToggleButton) findViewById(R.id.tbFilterDetail_wifi);
 
-        servicesIcon = new ArrayList<>();
-        Collections.addAll(servicesIcon, tbFilterDetail_adapted,
-                tbFilterDetail_air,
-                tbFilterDetail_barbecue,
-                tbFilterDetail_bath,
-                tbFilterDetail_pool,
-                tbFilterDetail_climatized,
-                tbFilterDetail_garden,
-                tbFilterDetail_heating,
-                tbFilterDetail_jacuzzi,
-                tbFilterDetail_kitchen,
-                tbFilterDetail_mountain,
-                tbFilterDetail_parking,
-                tbFilterDetail_beach,
-                tbFilterDetail_breakfast,
-                tbFilterDetail_children,
-                tbFilterDetail_fireplace,
-                tbFilterDetail_pets,
-                tbFilterDetail_spa,
-                tbFilterDetail_tv,
-                tbFilterDetail_wifi);
-*/
         tvPropertyName = (TextView) findViewById(R.id.tvPropertyName);
         tvEmptyComment = (TextView) findViewById(R.id.tvEmptyComment);
         tvPropertyUpdate = (TextView) findViewById(R.id.tvPropertyUpdate);
@@ -198,6 +160,16 @@ public class DetailHouseActivity extends AppCompatActivity {
             }
         });
 
+        //Iconos de valoracion media de la casa
+
+        iconTemp1 =  findViewById(R.id.iconTemp);
+        iconTemp2 = findViewById(R.id.iconTemp2);
+        iconTemp3 =  findViewById(R.id.iconTemp3);
+        iconTemp4 =  findViewById(R.id.iconTemp4);
+        iconTemp5 =  findViewById(R.id.iconTemp5);
+        arrayValorationAVG =new ImageView[] { iconTemp1,iconTemp2,iconTemp3,iconTemp4,iconTemp5};
+
+        //Iconos de valoracion de comentario
         iconTempOff1 = (ImageView) findViewById(R.id.iconTempOff1);
         iconTempOff2 = (ImageView) findViewById(R.id.iconTempOff2);
         iconTempOff3 = (ImageView) findViewById(R.id.iconTempOff3);
@@ -289,7 +261,22 @@ public class DetailHouseActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+private void updateValorationAVG(int media){
+    // Guarda la información del estado del favorito en la base de datos
+    db.collection("homes").document(home.getId())
+            .update("valoration",media).addOnSuccessListener(new OnSuccessListener<Void>() {
+        @Override
+        public void onSuccess(Void aVoid) {
+            Log.d(TAG, "DocumentSnapshot successfully updated!");
+        }
+    })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Error updating document", e);
+                }
+            });
+}
     // Cargar los comentarios existentes en firebase sobre la vivienda seleccionada
     private void loadCommentFirestore(){
 
@@ -308,10 +295,16 @@ public class DetailHouseActivity extends AppCompatActivity {
 
                             if(comment.getId_homes().equals(home.getId())){
                                 comments.add(comment);
+                                sum_valoration++;
 
                                    }
 
                         }
+
+                           if(sum_valoration!=0){
+                               int media = sum_valoration/comments.size();
+                               updateValorationAVG(media);
+                           }
                            // En el caso de que haya o no comentarios
                         if(comments.size()!=0){
                             tvEmptyComment.setVisibility(View.INVISIBLE);
@@ -423,6 +416,9 @@ public class DetailHouseActivity extends AppCompatActivity {
                         idProperty = home.getOwner();
                         loadPropertyFromDB(idProperty);
 
+                        //Cargar la valoracion de la casa
+                        cargarValoration(home.getValoration());
+
                         // cargar la imagen del usuario logado en ese momento
                         if(mAuth.getCurrentUser()!=null){
                             loadUserFromDB();
@@ -446,7 +442,22 @@ public class DetailHouseActivity extends AppCompatActivity {
         DetailTextMultiLine3.setText(UtilMethod.subStringText(DetailTextMultiLine3.getText().toString(),250,"..."));
 
     }
+    private void cargarValoration(Long val){
 
+        if(val!=0){
+            for (int i = 0; i<val; i++){
+
+                arrayValorationAVG[i].setBackgroundResource(R.drawable.ic_leaf_on);
+            }
+
+            for (int i = val.intValue(); i<arrayValorationAVG.length; i++){
+
+                arrayValorationAVG[i].setBackgroundResource(R.drawable.ic_leaf_off);
+            }
+        }
+
+
+    }
     // Cargar imagen de avatar del comentario
     private void initValorationImages(){
         for (int i = 0; i<arrValoration.length; i++){
@@ -697,11 +708,16 @@ public class DetailHouseActivity extends AppCompatActivity {
     // Botón de disponibilidad de fechas
     public void clickShowDisponibility(View view) {
 
-        // Ir a la ventana se seleccionar fechas
-        Intent intentDate = new Intent (getApplicationContext(), DiponibilityActivity.class);
-        intentDate.putExtra("ID_HOUSE",home.getId());
-        intentDate.putExtra("PRECIO",home.getPrice());
-        startActivity(intentDate);
+        if(mAuth.getCurrentUser()!=null){
+            // Ir a la ventana se seleccionar fechas
+            Intent intentDate = new Intent (getApplicationContext(), DiponibilityActivity.class);
+            intentDate.putExtra("ID_HOUSE",home.getId());
+            intentDate.putExtra("PRECIO",home.getPrice());
+            startActivity(intentDate);
+        }else{
+            UtilMethod.showToast(TypeToast.INFO,DetailHouseActivity.this, "Debes de registrarte para ver la disponibilidad de la vivienda");
+        }
+
 
     }
 

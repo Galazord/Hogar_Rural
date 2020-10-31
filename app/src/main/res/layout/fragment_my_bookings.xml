@@ -1,47 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    android:id="@+id/RLMain_myBookings"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Fragments.MyBookingsFragment"
-    android:background="@color/background_grey">
+
 
     <!-- RelativeLayout -->
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/RL_myBookings1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <!-- Seleccionar casa del propietario -->
-        <Spinner
-            android:id="@+id/spinOwnHouse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="20dp"/>
 
-        <!-- ScrollView de toda la vista -->
-        <ScrollView
-            android:id="@+id/myHouse_sv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/spinOwnHouse">
 
-            <!-- RelativeLayout -->
-            <RelativeLayout
-                android:id="@+id/RL_myBookings2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <!-- RecyclerView -->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/myBookings_recycler_view_my_Bookings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="Selecciona una de tús casas:"  />
+    <Spinner
+        android:id="@+id/spinOwnHouse"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
 
-            </RelativeLayout>
-        </ScrollView>
-    </RelativeLayout>
-</FrameLayout>
+        android:layout_below="@id/textView2"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMyBooking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:layout_below="@id/spinOwnHouse"
+      />
+
+
+
+</RelativeLayout>
