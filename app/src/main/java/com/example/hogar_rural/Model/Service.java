@@ -74,7 +74,7 @@ public class Service {
 
         List<Service> services = new ArrayList<>();
         Collections.addAll(services,
-                new Service("",context.getString(R.string.filters_adapted),R.drawable.ic_service_adapted_off),
+                new Service("",context.getString(R.string.filters_adapted),R.drawable.ic_service_adapted_off,R.drawable.ic_service_adapted_on),
                 new Service("",context.getString(R.string.filters_air),R.drawable.ic_service_air_off,R.drawable.ic_service_air_on),
                 new Service("",context.getString(R.string.filters_barbacue),R.drawable.ic_service_barbecue_off,R.drawable.ic_service_barbecue_on),
                 new Service("",context.getString(R.string.filters_bath),R.drawable.ic_service_bath_off,R.drawable.ic_service_bath_on),

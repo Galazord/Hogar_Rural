@@ -180,8 +180,10 @@ public class FiltersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        FiltersActivity.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth
+                        FiltersActivity.this, R.style.DialogTheme
                         , setListener, year, month, day);
+
+
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 datePickerDialog.show();
             }
@@ -192,15 +194,19 @@ public class FiltersActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(FiltersActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(FiltersActivity.this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
 
                         if(compare){
                             if(tvFilter_input_entrance.getText().toString().equals("")){
+
+
                                 UtilMethod.showToast(TypeToast.INFO,FiltersActivity.this, "Indica una fecha de entrada");
 
-                            }else{
+                            }
+                            else  {
+
                                 Date inputdate = UtilMethod.getDateFromStingUS(tvFilter_input_entrance.getText().toString());
                                 month = month + 1;
                                 Date newDate = UtilMethod.getDateFromStingUS( day + "/" + month + "/" + year);
@@ -216,9 +222,30 @@ public class FiltersActivity extends AppCompatActivity {
                             }
 
                         }else{
-                            month = month + 1;
-                            String date = day + "/" + month + "/" + year;
-                            textView.setText(date);
+                            if(!tvFilter_input_exit.getText().toString().equals("")){
+
+
+                                Date exitdate = UtilMethod.getDateFromStingUS(tvFilter_input_exit.getText().toString());
+                                month = month + 1;
+                                Date newDate = UtilMethod.getDateFromStingUS( day + "/" + month + "/" + year);
+
+                                if(exitdate.before(newDate)){
+                                    UtilMethod.showToast(TypeToast.INFO,FiltersActivity.this, "La fecha de entrada no puede ser superior\n a la de entrada");
+                                    textView.setText("");
+
+
+                                }else{
+                                    //month = month + 1;
+                                    String date = day + "/" + month + "/" + year;
+                                    textView.setText(date);
+                                }
+
+                            }else{
+                                month = month + 1;
+                                String date = day + "/" + month + "/" + year;
+                                textView.setText(date);
+                            }
+
                         }
 
                     }

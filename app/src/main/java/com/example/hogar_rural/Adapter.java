@@ -108,6 +108,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         cargarImagen(imgGallery.get(0),holder.imageGalery);
         countComments(model.get(position).getId(),holder.txtNumOpinions);
         loadFavorite(holder.imageFavorite, model.get(position).getId());
+
         cargarValoration(holder.arrayValoration,model.get(position).getValoration());
         String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
         String numPerson = String.valueOf(model.get(position).getAmount()).concat(this.context.getString(R.string.adapter_people));
@@ -142,11 +143,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
                     User user  = documentSnapshot.toObject(User.class);
                     if(user.getFavorites()!=null){
+                        favorites = user.getFavorites();
                         Log.i("ADAPTER_FAV",idHome+" 1FAV");
                         DocumentReference documentReference = db.collection("homes").document(idHome);
 
                         if(user.getFavorites().contains(documentReference)){
                             ivFavorite.setBackgroundResource(R.drawable.ic_favo_on);
+
+                        }else{
+                            ivFavorite.setBackgroundResource(R.drawable.ic_favo_off);
                         }
 
                     }else{

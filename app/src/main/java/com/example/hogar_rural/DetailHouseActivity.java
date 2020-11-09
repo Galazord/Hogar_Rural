@@ -93,6 +93,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     private List<String> listUrlImages;
     private int index = 0;
     private int sum_valoration = 0;
+    private int total_valorations = 0;
     // Música & Sonidos
     private MediaPlayer soundSuccess;
 
@@ -277,6 +278,53 @@ private void updateValorationAVG(int media){
                 }
             });
 }
+
+    private void calculateAVG(){
+
+
+        db.collection("comments")
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+
+                        sum_valoration=0;
+                        total_valorations = 0;
+                        for (QueryDocumentSnapshot document : value) {
+
+                            Comment comment = document.toObject(Comment.class);
+
+                            if(comment.getId_homes().equals(home.getId())){
+
+                                sum_valoration += comment.getValoration();
+                                total_valorations++;
+                            }
+
+                        }
+
+                        if(total_valorations!=0){
+                            int media = sum_valoration/total_valorations;
+                            updateValorationAVG(media);
+                            sum_valoration=0;
+                            total_valorations=0;
+                        }
+                        // En el caso de que haya o no comentarios
+                        if(comments.size()!=0){
+                            tvEmptyComment.setVisibility(View.INVISIBLE);
+                            tvEmptyComment.setText("");
+                            loadRecyclerView();
+                        }else{
+                            tvEmptyComment.setVisibility(View.VISIBLE);
+                            tvEmptyComment.setText("No hay comentarios");
+                            //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
+                        }
+                    }
+                });
+
+
+
+    }
     // Cargar los comentarios existentes en firebase sobre la vivienda seleccionada
     private void loadCommentFirestore(){
 
@@ -295,16 +343,11 @@ private void updateValorationAVG(int media){
 
                             if(comment.getId_homes().equals(home.getId())){
                                 comments.add(comment);
-                                sum_valoration++;
-
-                                   }
+                            }
 
                         }
 
-                           if(sum_valoration!=0){
-                               int media = sum_valoration/comments.size();
-                               updateValorationAVG(media);
-                           }
+
                            // En el caso de que haya o no comentarios
                         if(comments.size()!=0){
                             tvEmptyComment.setVisibility(View.INVISIBLE);
@@ -786,7 +829,6 @@ private void updateValorationAVG(int media){
             String id_homes = home.getId();
 
             Comment c = new Comment(id_comment,id_homes,comment,id_user,name_user,valoration_comment,Timestamp.now());
-
             registerCommentFirestore(c);
 
         }else{
@@ -809,7 +851,7 @@ private void updateValorationAVG(int media){
                     public void onSuccess(Void aVoid) {
                         etDetail_addComent.setText("");
                         pagination = 2;
-                        loadRecyclerView();
+                        calculateAVG();
                         initValorationImages();
 
                     }
