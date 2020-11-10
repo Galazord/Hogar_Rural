@@ -310,7 +310,7 @@ private void updateValorationAVG(int media){
                             total_valorations=0;
                         }
                         // En el caso de que haya o no comentarios
-                        if(comments.size()!=0){
+                     /*   if(comments.size()!=0){
                             tvEmptyComment.setVisibility(View.INVISIBLE);
                             tvEmptyComment.setText("");
                             loadRecyclerView();
@@ -318,7 +318,7 @@ private void updateValorationAVG(int media){
                             tvEmptyComment.setVisibility(View.VISIBLE);
                             tvEmptyComment.setText("No hay comentarios");
                             //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
-                        }
+                        }*/
                     }
                 });
 
@@ -329,7 +329,7 @@ private void updateValorationAVG(int media){
     private void loadCommentFirestore(){
 
 
-        db.collection("comments").orderBy("date", Query.Direction.DESCENDING).limit(pagination)
+        db.collection("comments").orderBy("date", Query.Direction.DESCENDING)
 
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -395,8 +395,11 @@ private void updateValorationAVG(int media){
     }
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
-
-        AdapterComment adapter = new AdapterComment(getApplicationContext(), comments);
+        if(pagination>comments.size()){
+            pagination = pagination - (pagination-comments.size());
+        }
+        List<Comment> comments_paginados = comments.subList(0,pagination);
+        AdapterComment adapter = new AdapterComment(getApplicationContext(), comments_paginados);
         recyclerViewComments.setAdapter(adapter);
 
 
@@ -827,7 +830,11 @@ private void updateValorationAVG(int media){
             String id_user = user.getId();
             String name_user = user.getName();
             String id_homes = home.getId();
-
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             Comment c = new Comment(id_comment,id_homes,comment,id_user,name_user,valoration_comment,Timestamp.now());
             registerCommentFirestore(c);
 

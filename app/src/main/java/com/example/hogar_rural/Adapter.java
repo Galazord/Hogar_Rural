@@ -209,6 +209,11 @@ private void cargarValoration(ImageView[] array, Long val){
 
                 array[i].setBackgroundResource(R.drawable.ic_leaf_off);
             }
+        }else{
+            for (int i = 0; i<array.length; i++){
+
+                array[i].setBackgroundResource(R.drawable.ic_leaf_off);
+            }
         }
 
 

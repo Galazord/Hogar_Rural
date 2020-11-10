@@ -84,7 +84,7 @@ public class HomeFilter {
             for (String serviceName: servicesHome
             ) {
 
-                if(servicesFilter.contains(serviceName)){
+                if(servicesFilter.get(0).equals(serviceName)){
                     return true;
                 }
             }

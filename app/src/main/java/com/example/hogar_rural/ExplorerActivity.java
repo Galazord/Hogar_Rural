@@ -272,11 +272,11 @@ public class ExplorerActivity extends AppCompatActivity {
                                         isFilter = homeFilter.filterServices();
                                 }
                                 // Si alguno de los filtros no se cumple, la búsqeuda se cancela y se vuelve a Explorer
-                                else{
+
                                     if(isFilter){
                                         list_home.add(homeFilter.getHome());
                                     }
-                                }
+
                             }
                             isFilter=false;
                         }
