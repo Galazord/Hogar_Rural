@@ -1,15 +1,21 @@
 package com.example.hogar_rural;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.hogar_rural.Fragments.PagerControllerAccount;
@@ -33,6 +39,8 @@ public class OutstandingActivity extends AppCompatActivity {
     private TabItem tabMyNews, tabMyLowPrices;
     private PagerControllerOutstanding pagerAdapter;
     private BottomNavigationView bottomNavigationView;
+    private String destiny;
+    private String destiny_old ="";
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -51,9 +59,18 @@ public class OutstandingActivity extends AppCompatActivity {
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
-
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            destiny = b.getString("destiny");
+            if(b.getString("destiny_old")!=null){
+                destiny_old=b.getString("destiny_old");
+            } else{
+                destiny_old = destiny;
+            }
+        }
         // Inicializar y asignar VARIABLES
         bottomNavigationView = findViewById(R.id.bottom_navegation);
+        bottomNavigationView.setItemIconSize(120);
         tabLayoutAccount = (TabLayout) findViewById(R.id.tabLayoututstanding);
         viewPagerAccount = (ViewPager) findViewById(R.id.viewPagerOutstanding);
         tabMyNews = (TabItem) findViewById(R.id.tabMyNews);
@@ -68,34 +85,7 @@ public class OutstandingActivity extends AppCompatActivity {
         firebaseStorage  = FirebaseStorage.getInstance();
 
         // Seleccionar y gestionar los diferentes tabs (Mi perfil y Mis casas)
-        pagerAdapter = new PagerControllerOutstanding(getSupportFragmentManager(), tabLayoutAccount.getTabCount());
-        viewPagerAccount.setAdapter(pagerAdapter);
-        tabLayoutAccount.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPagerAccount.setCurrentItem(tab.getPosition());
-
-                if(tab.getPosition() == 0){
-                    pagerAdapter.notifyDataSetChanged();
-                }
-                if(tab.getPosition() == 1){
-                    pagerAdapter.notifyDataSetChanged();;
-                }
-
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-        viewPagerAccount.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayoutAccount));
-
+        cargarPageView();
         // BARRA DE NAVEGACIÓN INFERIOR
         // Establecer este icono como marcado en el actual
         bottomNavigationView.setSelectedItemId(R.id.OutStanding);
@@ -106,25 +96,30 @@ public class OutstandingActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()){
                     case R.id.SearchList: // EXPLORAR
-                        startActivity(new Intent(getApplicationContext(), ExplorerActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent i =new Intent(getApplicationContext(), ExplorerActivity.class);
+                        i.putExtra("destiny",destiny_old);
+                        startActivity(i);
                         return true;
                     case R.id.MyProfile: // MI PERFIL
-
                         //Existe un usuario logueado
                         if(mAuth.getCurrentUser()!=null){
-                            startActivity(new Intent(getApplicationContext(), UserAccountActivity.class));
+                            Intent intent =new Intent(getApplicationContext(), UserAccountActivity.class);
+                            intent.putExtra("destine",destiny_old);
+                            startActivity(intent);
                         }else{
-                            startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+                            Intent intent =new Intent(getApplicationContext(), MyProfileActivity.class);
+                            intent.putExtra("destine",destiny_old);
+                            startActivity(intent);
                         }
 
                         overridePendingTransition(0,0);
                         return true;
-
                     case R.id.OutStanding: // DESTACADOS
                         return true;
                     case R.id.Favorites: // FAVORITOS
-                        startActivity(new Intent(getApplicationContext(), FavoriteActivity.class));
+                        Intent i2 =new Intent(getApplicationContext(), FavoriteActivity.class);
+                        i2.putExtra("destiny",destiny_old);
+                        startActivity(i2);
                         overridePendingTransition(0,0);
                         return true;
                 }
@@ -144,33 +139,116 @@ public class OutstandingActivity extends AppCompatActivity {
          */
 
     }
+    private void cargarPageView(){
+        // Seleccionar y gestionar los diferentes tabs (Mi perfil y Mis casas)
+        pagerAdapter = new PagerControllerOutstanding(getSupportFragmentManager(), tabLayoutAccount.getTabCount(),destiny);
+        viewPagerAccount.setAdapter(pagerAdapter);
+        tabLayoutAccount.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPagerAccount.setCurrentItem(tab.getPosition());
 
+                if(tab.getPosition() == 0){
+
+                    pagerAdapter.notifyDataSetChanged();
+                }
+                if(tab.getPosition() == 1){
+                    pagerAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPagerAccount.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayoutAccount));
+
+    }
+    // Menú superior: Resolver la búsqueda
     // Menú superior: Resolver la búsqueda
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_top, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_actionbar, menu);
 
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Introduce tu valor de búsqueda");
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapterList.getFilter().filter(newText);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.item_menu_search:
+                showInputAlertDialog();
                 return true;
-            }
-        });
 
-        return super.onCreateOptionsMenu(menu);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
+    // Sistema de alertas o errores
+    public void showInputAlertDialog(){
+        final String[] strReturn = {""};
+        // get prompts.xml view
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.alertdialog_custom, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+
+        // set prompts.xml to alertdialog builder
+        alertDialogBuilder.setView(promptsView);
+
+        final EditText userInput = (EditText) promptsView
+                .findViewById(R.id.custom_dialog_text);
+
+        // set dialog message
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("Buscar",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+
+                                strReturn[0] = userInput.getText().toString();
+                               /* Intent intentExplorer = new Intent (getApplicationContext(), ExplorerActivity.class);
+                                intentExplorer.putExtra("destiny", strReturn[0]);
+                                startActivity(intentExplorer);
+                                finish();*/
+                                destiny_old = destiny;
+
+                                destiny = strReturn[0];
+
+                                Intent intent = new Intent(getApplicationContext(), OutstandingActivity.class);
+                                intent.putExtra("destiny",destiny);
+                                intent.putExtra("destiny_old",destiny_old);
+                                startActivity(intent);
+                                finish();
+
+                            }
+                        })
+                .setNegativeButton("CANCELAR",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+
+    }
     //--> CLICK BOTONES
 
 }

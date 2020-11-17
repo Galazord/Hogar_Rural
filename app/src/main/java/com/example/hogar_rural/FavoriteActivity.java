@@ -15,8 +15,12 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 
 import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -26,6 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static java.security.AccessController.getContext;
 
@@ -34,7 +39,7 @@ public class FavoriteActivity extends AppCompatActivity {
     //--> VARIABLES
     private RelativeLayout RLMain_Favorite;
     private BottomNavigationView bottomNavigationView;
-
+    private String destiny;
     // RecyclerView
     private RecyclerView recyclerView;
     private Adapter adapter;
@@ -62,7 +67,7 @@ public class FavoriteActivity extends AppCompatActivity {
             RLMain_Favorite.setBackgroundColor(ContextCompat.getColor(this, R.color.background_grey));
 
             // Llamar a firebase para recoger los datos y mostrarlos
-            loadFromFirebase();
+            loadFavorite();
 
         }
 
@@ -71,10 +76,17 @@ public class FavoriteActivity extends AppCompatActivity {
     //--> MÉTODOS
     // Iniciar componentes
     private void initComponent() {
+// Recoger la palabra de destino
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            destiny = b.getString("destiny");
 
+
+        }
         // Relaccionar las variables con la parte gráfica
         RLMain_Favorite = (RelativeLayout) findViewById(R.id.RLMain_Favorite);
         bottomNavigationView = findViewById(R.id.bottom_navegation);
+        bottomNavigationView.setItemIconSize(120);
         recyclerView = findViewById(R.id.favoritesRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
@@ -97,24 +109,34 @@ public class FavoriteActivity extends AppCompatActivity {
 
                 switch (menuItem.getItemId()){
                     case R.id.SearchList: // EXPLORAR
-                        startActivity(new Intent(getApplicationContext(), ExplorerActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent i =new Intent(getApplicationContext(), ExplorerActivity.class);
+                        i.putExtra("destiny",destiny);
+                        startActivity(i);
                         return true;
                     case R.id.MyProfile: // MI PERFIL
                         //Existe un usuario logueado
                         if(mAuth.getCurrentUser()!=null){
-                            startActivity(new Intent(getApplicationContext(), UserAccountActivity.class));
+                            Intent intent =new Intent(getApplicationContext(), UserAccountActivity.class);
+                            intent.putExtra("destine",destiny);
+                            startActivity(intent);
                         }else{
-                            startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
+                            Intent intent =new Intent(getApplicationContext(), MyProfileActivity.class);
+                            intent.putExtra("destine",destiny);
+                            startActivity(intent);
                         }
 
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.OutStanding: // DESTACADOS
-                        startActivity(new Intent(getApplicationContext(), OutstandingActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent intent =new Intent(getApplicationContext(), OutstandingActivity.class);
+                        intent.putExtra("destiny",destiny);
+                        startActivity(intent);
                         return true;
                     case R.id.Favorites: // FAVORITOS
+                        Intent intent2 =new Intent(getApplicationContext(), FavoriteActivity.class);
+                        intent2.putExtra("destiny",destiny);
+                        startActivity(intent2);
+                        overridePendingTransition(0,0);
                         return true;
                 }
 
@@ -139,21 +161,63 @@ public class FavoriteActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : value) {
 
                             Home h = document.toObject(Home.class);
-                            list_home.add(h);
-                            Log.d("QUERY DB", document.getId() + " => " + document.getData());
+                            // list_home.add(h);
                         }
 
                         // Cargar/ mostrar la información en el recyclerView
                         loadRecyclerView();
+
                     }
                 });
 
 
     }
 
+    private void loadFavorite(){
+        if(mAuth.getCurrentUser()!=null){
+            String idUser = mAuth.getCurrentUser().getUid();
+
+            mFirestore.collection("users").document(idUser).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                            User user  = documentSnapshot.toObject(User.class);
+                            if(user.getFavorites()!=null){
+                                List<DocumentReference> favoritesUser = user.getFavorites();
+
+                                for (DocumentReference docRef: favoritesUser
+                                ) {
+                                    docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            Home h = documentSnapshot.toObject(Home.class);
+                                            list_home.add(h);
+
+                                            loadRecyclerView();
+                                        }
+                                    });
+
+                                }
+
+
+                            }else{
+
+                            }
+
+
+
+                        }
+
+
+                    });
+
+        }
+    }
+
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
-        Adapter adapter = new Adapter(getApplicationContext(), list_home);
+        Adapter adapter = new Adapter(getApplicationContext(), list_home, true);
         recyclerView.setAdapter(adapter);
     }
 

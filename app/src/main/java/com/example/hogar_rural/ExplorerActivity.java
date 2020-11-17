@@ -151,11 +151,14 @@ public class ExplorerActivity extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.OutStanding: // DESTACADOS
-                        startActivity(new Intent(getApplicationContext(), OutstandingActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent intent =new Intent(getApplicationContext(), OutstandingActivity.class);
+                        intent.putExtra("destiny",destiny);
+                        startActivity(intent);
                         return true;
                     case R.id.Favorites: // FAVORITOS
-                        startActivity(new Intent(getApplicationContext(), FavoriteActivity.class));
+                        Intent i =new Intent(getApplicationContext(), FavoriteActivity.class);
+                        i.putExtra("destiny",destiny);
+                        startActivity(i);
                         overridePendingTransition(0,0);
                         return true;
                 }

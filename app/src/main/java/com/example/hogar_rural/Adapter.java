@@ -59,6 +59,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     private List<String> imgGallery;
     private String idUser;
     private String destine;
+    private boolean isOnlyFavorite = false;
 
     public List<DocumentReference> favorites;
 
@@ -75,7 +76,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         this.context = context;
         this.destine = destine;
     }
-
+    public Adapter(Context context, ArrayList<Home> model,boolean favorite) {
+        this.inflater = LayoutInflater.from(context);
+        this.model = model;
+        this.context = context;
+        this.destine = destine;
+        this.isOnlyFavorite = favorite;
+    }
     // Los 3 métodos implementados del RecyclerView.Adapter
     @NonNull
     @Override
@@ -107,7 +114,10 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         imgGallery = holder.home.getImages();
         cargarImagen(imgGallery.get(0),holder.imageGalery);
         countComments(model.get(position).getId(),holder.txtNumOpinions);
-        loadFavorite(holder.imageFavorite, model.get(position).getId());
+
+            loadFavorite(holder.imageFavorite, model.get(position).getId());
+
+
 
         cargarValoration(holder.arrayValoration,model.get(position).getValoration());
         String price = String.valueOf(model.get(position).getPrice()).concat(this.context.getString(R.string.adapter_price));
@@ -147,12 +157,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
                         Log.i("ADAPTER_FAV",idHome+" 1FAV");
                         DocumentReference documentReference = db.collection("homes").document(idHome);
 
-                        if(user.getFavorites().contains(documentReference)){
-                            ivFavorite.setBackgroundResource(R.drawable.ic_favo_on);
 
-                        }else{
-                            ivFavorite.setBackgroundResource(R.drawable.ic_favo_off);
-                        }
+                            if(user.getFavorites().contains(documentReference)){
+                                ivFavorite.setBackgroundResource(R.drawable.ic_favo_on);
+
+                            }else{
+                                ivFavorite.setBackgroundResource(R.drawable.ic_favo_off);
+                            }
+
+
 
                     }else{
                         Log.i("ADAPTER_FAV",idHome+" 0FAV");

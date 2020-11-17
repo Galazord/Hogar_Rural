@@ -103,11 +103,15 @@ public class UserAccountActivity extends AppCompatActivity {
                     case R.id.MyProfile: // MI PERFIL
                         return true;
                     case R.id.OutStanding: // DESTACADOS
-                        startActivity(new Intent(getApplicationContext(), OutstandingActivity.class));
+                        Intent intent =new Intent(getApplicationContext(), OutstandingActivity.class);
+                        intent.putExtra("destiny",destine);
+                        startActivity(intent);
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.Favorites: // FAVORITOS
-                        startActivity(new Intent(getApplicationContext(), FavoriteActivity.class));
+                        Intent i2 =new Intent(getApplicationContext(), FavoriteActivity.class);
+                        i2.putExtra("destiny",destine);
+                        startActivity(i2);
                         overridePendingTransition(0,0);
                         return true;
                 }

@@ -9,11 +9,13 @@ public class PagerControllerOutstanding extends FragmentPagerAdapter {
 
     //--> VARIABLES
     int numsOfTabs;
+    String destine;
 
     //--> CONSTRUCTOR
-    public PagerControllerOutstanding(@NonNull FragmentManager fm, int behavior) {
+    public PagerControllerOutstanding(@NonNull FragmentManager fm, int behavior, String destine) {
         super(fm, behavior);
         this.numsOfTabs = behavior;
+        this.destine = destine;
     }
 
     //--> MÉTODOS
@@ -24,15 +26,19 @@ public class PagerControllerOutstanding extends FragmentPagerAdapter {
         switch(position){
 
             case 0:
-                return new MyNewsFragment();
+                return new MyNewsFragment(destine);
             case 1:
-                return new MyLowpricesFragment();
+                return new MyLowpricesFragment(destine);
             default:
                 return null;
         }
 
 
     }
+
+
+
+
 
     @Override
     public int getCount() {

@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -43,7 +44,10 @@ public class MyLowpricesFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage;
-
+    private String destine;
+    public MyLowpricesFragment(String destine) {
+        this.destine = destine;
+    }
 
     public MyLowpricesFragment() {
         // Required empty public constructor
@@ -107,7 +111,7 @@ public class MyLowpricesFragment extends Fragment {
 
     // Llamar a firebase para recoger los datos y mostrarlos
     private void loadFromFirebase(){
-        mFirestore.collection("homes")
+        mFirestore.collection("homes").orderBy("price", Query.Direction.ASCENDING)
 
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -121,7 +125,9 @@ public class MyLowpricesFragment extends Fragment {
                         for (QueryDocumentSnapshot document : value) {
 
                             Home h = document.toObject(Home.class);
-                            list_home.add(h);
+                            if(h.getProvince().toLowerCase().equals(destine.toLowerCase())){
+                                list_home.add(h);
+                            }
                             Log.d("QUERY DB", document.getId() + " => " + document.getData());
                         }
 

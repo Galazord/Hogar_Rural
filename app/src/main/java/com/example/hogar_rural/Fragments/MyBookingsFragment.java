@@ -167,7 +167,7 @@ public class MyBookingsFragment extends Fragment {
                 if(task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
                     if(doc.exists()){
-
+                        Timestamp today = Timestamp.now();
                         // Recoger los datos del usuario
                         Available available = doc.toObject(Available.class);
                         List<Timestamp> datesReserverd = available.getDates_reserved();

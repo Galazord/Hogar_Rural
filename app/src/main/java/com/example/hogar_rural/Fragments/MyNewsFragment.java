@@ -1,9 +1,11 @@
 package com.example.hogar_rural.Fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,9 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
@@ -25,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,14 +53,18 @@ public class MyNewsFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage;
+    String destine;
+    public MyNewsFragment(String destine) {
+        this.destine = destine;
 
+    }
     public MyNewsFragment() {
+
         // Required empty public constructor
     }
 
-
-    public static MyNewsFragment newInstance() {
-        MyNewsFragment fragment = new MyNewsFragment();
+    public static MyNewsFragment newInstance(String destine) {
+        MyNewsFragment fragment = new MyNewsFragment(destine);
 
         return fragment;
     }
@@ -63,6 +74,9 @@ public class MyNewsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,7 +123,7 @@ public class MyNewsFragment extends Fragment {
 
     // Llamar a firebase para recoger los datos y mostrarlos
     private void loadFromFirebase(){
-        mFirestore.collection("homes")
+        mFirestore.collection("homes").orderBy("creation_date", Query.Direction.DESCENDING)
 
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -123,8 +137,9 @@ public class MyNewsFragment extends Fragment {
                         for (QueryDocumentSnapshot document : value) {
 
                             Home h = document.toObject(Home.class);
-                            list_home.add(h);
-                            Log.d("QUERY DB", document.getId() + " => " + document.getData());
+                            if(h.getProvince().toLowerCase().equals(destine.toLowerCase())){
+                                list_home.add(h);
+                            }
                         }
 
                         // Cargar/ mostrar la información en el recyclerView
@@ -140,5 +155,8 @@ public class MyNewsFragment extends Fragment {
         Adapter adapter = new Adapter(getActivity().getApplicationContext(), list_home);
         recyclerView.setAdapter(adapter);
     }
+
+
+
 
 }
