@@ -44,6 +44,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MyBookingsFragment extends Fragment {
@@ -140,7 +141,7 @@ public class MyBookingsFragment extends Fragment {
                                 nameHomes.add(h.getName());
                                 idUsersHomes.add(h.getId());
                             }
-
+                            Log.i("aaa",nameHomes.size()+" "+idUsersHomes.size());
 
                             if(nameHomes.size()!=0){
                                 ArrayAdapter<String> adapter =   new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, nameHomes);
@@ -158,7 +159,7 @@ public class MyBookingsFragment extends Fragment {
 
     private void loadBookings(String homeId){
 
-
+        UtilMethod.showToast(TypeToast.WARNNING,getActivity(),homeId);
         DocumentReference docRef = mFirestore.collection("availables").document(homeId);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -167,18 +168,24 @@ public class MyBookingsFragment extends Fragment {
                 if(task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
                     if(doc.exists()){
-                        Timestamp today = Timestamp.now();
+
+                        Date today = Timestamp.now().toDate();
                         // Recoger los datos del usuario
                         Available available = doc.toObject(Available.class);
                         List<Timestamp> datesReserverd = available.getDates_reserved();
                         List<DocumentReference> usersId = available.getUsers_reserved();
                         List<Booking> bookings = new ArrayList<>();
-                        if(datesReserverd!=null && usersId!=null && datesReserverd.size() == usersId.size()){
+                        if(datesReserverd!=null && usersId!=null && datesReserverd.size() !=0 && datesReserverd.size() == usersId.size()){
                             for (int i=0; i<datesReserverd.size(); i++) {
-                                Booking booking = new Booking(datesReserverd.get(i),usersId.get(i));
-                                bookings.add(booking);
+                                if(datesReserverd.get(i).toDate().after(today)){
+                                    Booking booking = new Booking(datesReserverd.get(i),usersId.get(i));
+                                    bookings.add(booking);
+                                }
+
                             }
                             loadAdapterBooking(bookings);
+                        }else{
+                            UtilMethod.showToast(TypeToast.WARNNING,getActivity(),"no hay casas");
                         }
                     }
                     else{
