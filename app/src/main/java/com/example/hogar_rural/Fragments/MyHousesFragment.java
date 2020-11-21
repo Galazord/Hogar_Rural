@@ -110,7 +110,7 @@ public class MyHousesFragment extends Fragment {
 
     // Llamar a firebase para recoger los datos y mostrarlos
     private void loadFromFirebase(){
-        mFirestore.collection("homes")
+        mFirestore.collection("homes").whereEqualTo("owner",mAuth.getCurrentUser().getUid())
 
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -138,7 +138,7 @@ public class MyHousesFragment extends Fragment {
 
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
-        Adapter adapter = new Adapter(getActivity().getApplicationContext(), list_home);
+        Adapter adapter = new Adapter(getActivity().getApplicationContext(), list_home, true);
         recyclerView.setAdapter(adapter);
     }
 

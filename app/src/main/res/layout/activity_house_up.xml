@@ -474,9 +474,13 @@
             <EditText
                 android:id="@+id/etHouse_input_features"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
                 android:layout_below="@id/tvHouse_features"
                 android:inputType="textMultiLine"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
                 android:textAlignment="textStart"
@@ -507,7 +511,8 @@
             <EditText
                 android:id="@+id/etHouse_input_activities"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
                 android:layout_below="@id/tvHouse_activities"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
@@ -516,6 +521,8 @@
                 android:textColor="@color/green_dark"
                 android:textSize="18sp"
                 android:textStyle="bold"
+                android:inputType="textMultiLine"
+                android:scrollbars="vertical"
                 tools:ignore="RtlSymmetry"
                 android:alpha="0.6"
                 android:background="@drawable/background_corners_2"
@@ -540,7 +547,8 @@
             <EditText
                 android:id="@+id/etHouse_input_interest"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
                 android:layout_below="@id/tvHouse_interest"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
@@ -550,6 +558,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:ignore="RtlSymmetry"
+                android:scrollbars="vertical"
+                android:inputType="textMultiLine"
                 android:alpha="0.6"
                 android:background="@drawable/background_corners_2"
                 android:ems="10"
@@ -572,525 +582,21 @@
 
 
             <!-- Iconos seleccionables de servicios-->
-            <GridLayout
-                android:id="@+id/GLHouse_services"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvServicesUp"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvHouse_services"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="30dp"
-                android:columnCount="4"
-                android:rowCount="6">
-
-                <!-- Botón Toggle Discapacitados -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_adapted"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_adapted"
-                    android:tag="@string/filters_adapted"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle Aire acondicionado -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_air"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginHorizontal="30dp"
-                    android:background="@drawable/toggle_selector_air"
-                    android:tag="@string/filters_air"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle barbacoa -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_barbecue"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_barcacue"
-                    android:tag="@string/filters_barbacue"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle baño en habitación -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_bath"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_bath"
-                    android:tag="@string/filters_bath"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Texto: Minusválidos -->
-                <TextView
-                    android:id="@+id/tvFilter_txtAdapted"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_adapted"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Aire acondicionado -->
-                <TextView
-                    android:id="@+id/tvFilter_txtAir"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_air"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Barbacoa -->
-                <TextView
-                    android:id="@+id/tvFilter_txtBarbacue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_barbacue"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Baño en habitación -->
-                <TextView
-                    android:id="@+id/tvFilter_txtBath"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_bath"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Botón Toggle piscina -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_pool"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:textOn=""
-                    android:textOff=""
-                    android:tag="@string/filters_pool"
-                    android:background="@drawable/toggle_selector_pool"
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle piscina climatizada -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_climatized"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_climatized_pool"
-                    android:tag="@string/filters_climatized"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle jardín -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_garden"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_garden"
-                    android:tag="@string/filters_garden"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle calefacción -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_heating"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_heating"
-                    android:tag="@string/filters_heating"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Texto: piscina -->
-                <TextView
-                    android:id="@+id/tvFilter_txtPool"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_pool"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: piscina climatizada -->
-                <TextView
-                    android:id="@+id/tvFilter_txtClimatized"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_climatized"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Jardín -->
-                <TextView
-                    android:id="@+id/tvFilter_txtGarden"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_garden"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Calefacción -->
-                <TextView
-                    android:id="@+id/tvFilter_txtHeating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_heating"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Botón Toggle jacuzzi -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_jacuzzi"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_jacuzzi"
-                    android:tag="@string/filters_jacuzzi"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle cocina incluida -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_kitchen"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_kitchen"
-                    android:tag="@string/filters_kitchen"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle Montañas-->
-                <ToggleButton
-                    android:id="@+id/tbFilter_mountain"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_mountain"
-                    android:tag="@string/filters_mountain"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle parking -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_parking"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_parking"
-                    android:tag="@string/filters_parking"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Texto: Jacuzzi -->
-                <TextView
-                    android:id="@+id/tvFilter_txtJacuzzi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_jacuzzi"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Cocina integrada -->
-                <TextView
-                    android:id="@+id/tvFilter_txtKitchen"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_kitchen"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Montaña -->
-                <TextView
-                    android:id="@+id/tvFilter_txtMountain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_mountain"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Parking -->
-                <TextView
-                    android:id="@+id/tvFilter_txtParking"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_parking"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Botón Toggle playa -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_beach"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_beach"
-                    android:tag="@string/filters_beach"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle desayuno incluido -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_breakfast"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_breakfast"
-                    android:tag="@string/filters_breakfast"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle zona para niños -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_children"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_children"
-                    android:tag="@string/filters_children"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle chimenea -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_fireplace"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_fireplace"
-                    android:tag="@string/filters_fireplace"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Texto: playa -->
-                <TextView
-                    android:id="@+id/tvFilter_txtBeach"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_beach"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: desayuno incluido -->
-                <TextView
-                    android:id="@+id/tvFilter_txtBreakfast"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_breakfast"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: zona infantil -->
-                <TextView
-                    android:id="@+id/tvFilter_txtChildren"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_children"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: chimenea -->
-                <TextView
-                    android:id="@+id/tvFilter_txtFireplace"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_fireplace"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Botón Toggle mascotas -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_pets"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_pets"
-                    android:tag="@string/filters_pets"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle spa -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_spa"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_spa"
-                    android:tag="@string/filters_spa"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle television -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_tv"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_tv"
-                    android:tag="@string/filters_tv"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Botón Toggle wifi -->
-                <ToggleButton
-                    android:id="@+id/tbFilter_wifi"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@drawable/toggle_selector_wifi"
-                    android:tag="@string/filters_wifi"
-                    android:textOn=""
-                    android:textOff=""
-                    android:onClick="OnDefaultToggleClickServices"/>
-
-                <!-- Texto: Permite mascotas -->
-                <TextView
-                    android:id="@+id/tvFilter_txtPets"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_pets"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Spa -->
-                <TextView
-                    android:id="@+id/tvFilter_txtSpa"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_spa"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Televisión -->
-                <TextView
-                    android:id="@+id/tvFilter_txtTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_tv"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-                <!-- Texto: Wifi -->
-                <TextView
-                    android:id="@+id/tvFilter_txtWifi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="center"
-                    android:text="@string/filters_wifi"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textSize="10sp"
-                    android:gravity="center"
-                    android:textColor="@color/green_light_icon" />
-
-            </GridLayout>
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tvHouse_services"
+                />
 
             <!-- Botón de publicar la oferta de la vivienda-->
             <Button
                 android:id="@+id/btnPublishHouse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/GLHouse_services"
+                android:layout_below="@+id/rvServicesUp"
                 android:layout_marginVertical="10dp"
                 android:layout_marginHorizontal="30dp"
                 android:background="@drawable/gradient_green"

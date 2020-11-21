@@ -36,7 +36,14 @@
         android:layout_margin="8dp"
         android:layout_below="@id/spinOwnHouse"
       />
-
+    <ImageView
+        android:id="@+id/imgEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/rvMyBooking"
+        android:scaleType="centerCrop"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/hr_destiny_missing_background" />
 
 
 </RelativeLayout>

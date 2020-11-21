@@ -59,7 +59,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     private List<String> imgGallery;
     private String idUser;
     private String destine;
-    private boolean isOnlyFavorite = false;
+    private boolean notShowFavorite = false;
 
     public List<DocumentReference> favorites;
 
@@ -81,7 +81,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         this.model = model;
         this.context = context;
         this.destine = destine;
-        this.isOnlyFavorite = favorite;
+        this.notShowFavorite = favorite;
     }
     // Los 3 métodos implementados del RecyclerView.Adapter
     @NonNull
@@ -114,9 +114,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         imgGallery = holder.home.getImages();
         cargarImagen(imgGallery.get(0),holder.imageGalery);
         countComments(model.get(position).getId(),holder.txtNumOpinions);
-
+        if(!notShowFavorite){
             loadFavorite(holder.imageFavorite, model.get(position).getId());
-
+        } else{
+            holder.imageFavorite.setVisibility(View.INVISIBLE);
+        }
 
 
         cargarValoration(holder.arrayValoration,model.get(position).getValoration());
@@ -277,7 +279,6 @@ private void cargarValoration(ImageView[] array, Long val){
 
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-
 
         public int getIndex() {
             return index;

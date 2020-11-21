@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.hogar_rural.Model.Home;
+import com.example.hogar_rural.Model.Service;
 import com.example.hogar_rural.Utils.Constant;
 import com.example.hogar_rural.Utils.TypeToast;
 import com.example.hogar_rural.Utils.UtilMethod;
@@ -59,14 +62,14 @@ public class HouseUpActivity extends AppCompatActivity {
     private RadioButton rbHouseUp_complete, rbHouseUp_rooms;
     private TextView tvCounter_capMax, tvHouseUp_priceIndicator;
     private SeekBar sbHouseUp_priceSelector;
-    private ToggleButton tbFilter_adapted, tbFilter_air, tbFilter_barbecue, tbFilter_bath, tbFilter_pool, tbFilter_climatized, tbFilter_garden, tbFilter_heating, tbFilter_jacuzzi, tbFilter_kitchen, tbFilter_mountain, tbFilter_parking, tbFilter_beach, tbFilter_breakfast, tbFilter_children, tbFilter_fireplace, tbFilter_pets, tbFilter_spa, tbFilter_tv, tbFilter_wifi;
+    private AdapterService adapter;
     private Button btnSelectGaleryImage, btnCapMax_less, btnCapMax_plus, btnGallery_next_left, btnGallery_next_right, btnPrice_less, btnPrice_plus, btnGallery_remove;
     private int numPeople = 1;
     private int price = PRICE_MIN;
     private MediaPlayer soundError, soundCorrect;
     private List<String> services;
     private List<String> images;
-
+    private RecyclerView rvService;
     private boolean ImageExist = false;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmap;
@@ -99,6 +102,9 @@ public class HouseUpActivity extends AppCompatActivity {
         ivUser_avatar = (ImageView) findViewById(R.id.ivUser_avatar);
         filePath = new ArrayList<>();
         images = new ArrayList<>();
+        rvService = (RecyclerView) findViewById(R.id.rvServicesUp);
+        rvService.setLayoutManager(new GridLayoutManager(getApplicationContext(),4));
+        rvService.setNestedScrollingEnabled(false);
         etHouse_input_name = (EditText) findViewById(R.id.etHouse_input_name);
         etHouse_input_address = (EditText) findViewById(R.id.etHouse_input_address);
         etHouse_input_code = (EditText) findViewById(R.id.etHouse_input_code);
@@ -116,26 +122,6 @@ public class HouseUpActivity extends AppCompatActivity {
         sbHouseUp_priceSelector.setMin(PRICE_MIN);
         sbHouseUp_priceSelector.setMax(PRICE_MAX);
         services = new ArrayList<>();
-        tbFilter_adapted = (ToggleButton) findViewById(R.id.tbFilter_adapted);
-        tbFilter_air = (ToggleButton) findViewById(R.id.tbFilter_air);
-        tbFilter_barbecue = (ToggleButton) findViewById(R.id.tbFilter_barbecue);
-        tbFilter_bath = (ToggleButton) findViewById(R.id.tbFilter_bath);
-        tbFilter_pool = (ToggleButton) findViewById(R.id.tbFilter_pool);
-        tbFilter_climatized = (ToggleButton) findViewById(R.id.tbFilter_climatized);
-        tbFilter_garden = (ToggleButton) findViewById(R.id.tbFilter_garden);
-        tbFilter_heating = (ToggleButton) findViewById(R.id.tbFilter_heating);
-        tbFilter_jacuzzi = (ToggleButton) findViewById(R.id.tbFilter_jacuzzi);
-        tbFilter_kitchen = (ToggleButton) findViewById(R.id.tbFilter_kitchen);
-        tbFilter_mountain = (ToggleButton) findViewById(R.id.tbFilter_mountain);
-        tbFilter_parking = (ToggleButton) findViewById(R.id.tbFilter_parking);
-        tbFilter_beach = (ToggleButton) findViewById(R.id.tbFilter_beach);
-        tbFilter_breakfast = (ToggleButton) findViewById(R.id.tbFilter_breakfast);
-        tbFilter_children = (ToggleButton) findViewById(R.id.tbFilter_children);
-        tbFilter_fireplace = (ToggleButton) findViewById(R.id.tbFilter_fireplace);
-        tbFilter_pets = (ToggleButton) findViewById(R.id.tbFilter_pets);
-        tbFilter_spa = (ToggleButton) findViewById(R.id.tbFilter_spa);
-        tbFilter_tv = (ToggleButton) findViewById(R.id.tbFilter_tv);
-        tbFilter_wifi = (ToggleButton) findViewById(R.id.tbFilter_wifi);
         btnSelectGaleryImage = (Button) findViewById(R.id.btnSelectGaleryImage);
         btnCapMax_less = (Button) findViewById(R.id.btnCapMax_less);
         btnCapMax_plus = (Button) findViewById(R.id.btnCapMax_plus);
@@ -162,9 +148,28 @@ public class HouseUpActivity extends AppCompatActivity {
 
         // Gestión del SeekBar para seleccionar el precio
         generateSeekBar();
+        loadServices();
 
     }
+    // Cargar los iconos activos de los servicios
+    private void loadServices(){
+        Service service = new Service();
+        List<Service> serviciosFinalHome = new ArrayList<>();
+        for (Service s: service.getServicesOff(this)
+        ) {
+            serviciosFinalHome.add(s);
+        }
 
+        loadRecyclerViewServices(serviciosFinalHome);
+
+    }
+    private void loadRecyclerViewServices(List<Service> services){
+
+        adapter = new AdapterService(getApplicationContext(), services);
+        rvService.setAdapter(adapter);
+
+
+    }
     //--> MÉTODOS
     // Gestión del SeekBar para seleccionar el precio
     private void generateSeekBar() {
@@ -444,7 +449,7 @@ public class HouseUpActivity extends AppCompatActivity {
             typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, getWindow().getDecorView().getRootView(), getApplicationContext());
 
             // Agrupar todos los datos en un tipo Home y subirlo a firebase
-            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now, services);
+            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now, adapter.getSelectedServices());
             registerHomesFirestore(home);
 
             // Volver a mi perfil logueado (UserAccountActivity)
@@ -513,14 +518,14 @@ public class HouseUpActivity extends AppCompatActivity {
     public void clickGalleryNextRight(View view) {
 
 
-        if(filePath.size()-1 == indexImage ){
+        if(filePath.size()-1 <= indexImage ){
             // Cambiar color para indicar que se puede llegar al mínimo posible
             btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
         }
         else{
             indexImage++;
             drawImage(bitmap, filePath.get(indexImage));
-            if(indexImage == filePath.size()-1){
+            if(indexImage <= filePath.size()-1){
                 btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
             }
             btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);

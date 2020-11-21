@@ -51,6 +51,7 @@ public class MyBookingsFragment extends Fragment {
 
     //--> VARIBALES
     private ImageView cvBooking_avatar;
+    private ImageView imgEmpty;
     private TextView tvBooking_name, tvBooking_dates;
     private Spinner spinOwnHouse;
     // RecyclerView
@@ -95,6 +96,7 @@ public class MyBookingsFragment extends Fragment {
 
         // Relaccionar las variables con la parte gráfica
         cvBooking_avatar = (ImageView) view.findViewById(R.id.cvBooking_avatar);
+        imgEmpty = (ImageView) view.findViewById(R.id.imgEmpty);
         tvBooking_name = (TextView) view.findViewById(R.id.tvBooking_name);
         tvBooking_dates = (TextView) view.findViewById(R.id.tvBooking_dates);
         spinOwnHouse = (Spinner) view.findViewById(R.id.spinOwnHouse);
@@ -106,6 +108,7 @@ public class MyBookingsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selecteHouseName =  (String)parent.getItemAtPosition(position);
+
                 loadBookings(idUsersHomes.get(position));
             }
 
@@ -140,8 +143,9 @@ public class MyBookingsFragment extends Fragment {
                                 Home h = document.toObject(Home.class);
                                 nameHomes.add(h.getName());
                                 idUsersHomes.add(h.getId());
+
+                                Log.i("aaa",h.getName()+" id: "+h.getId());
                             }
-                            Log.i("aaa",nameHomes.size()+" "+idUsersHomes.size());
 
                             if(nameHomes.size()!=0){
                                 ArrayAdapter<String> adapter =   new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, nameHomes);
@@ -159,10 +163,11 @@ public class MyBookingsFragment extends Fragment {
 
     private void loadBookings(String homeId){
 
-        UtilMethod.showToast(TypeToast.WARNNING,getActivity(),homeId);
+
         DocumentReference docRef = mFirestore.collection("availables").document(homeId);
 
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
@@ -190,6 +195,8 @@ public class MyBookingsFragment extends Fragment {
                     }
                     else{
                         Log.i("ERROR Available", task.getResult().toString());
+                        UtilMethod.showToast(TypeToast.INFO,getActivity(), "No Tienes reservas");
+                        recyclerView.setVisibility(View.INVISIBLE);
                     }
                 }else{
                     Log.i("ERROR GET Available", task.getResult().toString());
@@ -199,7 +206,12 @@ public class MyBookingsFragment extends Fragment {
     }
 
     private void loadAdapterBooking(List<Booking> bookings){
+
         AdapterBooking adapterBooking = new AdapterBooking(getActivity(), bookings);
-        recyclerView.setAdapter(adapterBooking);
+            recyclerView.setAdapter(adapterBooking);
+            recyclerView.setVisibility(View.VISIBLE);
+
+
+
     }
 }
