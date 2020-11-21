@@ -53,11 +53,9 @@
             android:name=".HouseUpActivity"
             android:parentActivityName=".UserAccountActivity" /> <!-- SUBIR UNA OFERTA DE CASA -->
         <activity
-            android:name=".OutstandingActivity"
-            android:parentActivityName=".ExplorerActivity" /> <!-- DESTACADOS -->
+            android:name=".OutstandingActivity"  /> <!-- DESTACADOS -->
         <activity
-            android:name=".FavoriteActivity"
-            android:parentActivityName=".ExplorerActivity" /> <!-- FAVORITOS -->
+            android:name=".FavoriteActivity"  /> <!-- FAVORITOS -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
