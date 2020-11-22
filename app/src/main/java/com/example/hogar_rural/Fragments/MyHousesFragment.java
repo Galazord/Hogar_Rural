@@ -138,7 +138,7 @@ public class MyHousesFragment extends Fragment {
 
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
-        Adapter adapter = new Adapter(getActivity().getApplicationContext(), list_home, true);
+        Adapter adapter = new Adapter(getActivity(), list_home, true);
         recyclerView.setAdapter(adapter);
     }
 

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hogar_rural.Model.Available;
 import com.example.hogar_rural.Model.Comment;
@@ -44,6 +45,7 @@ import sun.bob.mcalendarview.MCalendarView;
 import sun.bob.mcalendarview.MarkStyle;
 import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.vo.DateData;
+import sun.bob.mcalendarview.vo.MarkedDates;
 
 public class DiponibilityActivity extends AppCompatActivity {
 
@@ -79,6 +81,11 @@ public class DiponibilityActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
     //--> MÉTODOS
     // Inicializar componentes
 
@@ -95,7 +102,7 @@ public class DiponibilityActivity extends AppCompatActivity {
         tvPrecio = (TextView) findViewById(R.id.tvPrecio);
         calendar = (MCalendarView)findViewById(R.id.calendarView);
 
-
+        limpiarCalendario();
 
 
         documentReferenceUser = db.collection("users").document(mAuth.getCurrentUser().getUid());
@@ -117,10 +124,17 @@ public class DiponibilityActivity extends AppCompatActivity {
                          numberOfDay--;
                      // Si está deselecionado marcar en verde
                  }else{
-                     dates_new_reserved.add(dateSelected);
-                     calendar.markDate(new DateData(date.getYear(),date.getMonth(),date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GREEN)));
-                     users_new_reserved.add(documentReferenceUser);
-                     numberOfDay++;
+                     if (dates_reserved.contains(dateSelected)) {
+                         UtilMethod.showToast(TypeToast.INFO,DiponibilityActivity.this,"No puedes seleccionar una fecha ocupada");
+
+
+                     }else{
+                         dates_new_reserved.add(dateSelected);
+                         calendar.markDate(new DateData(date.getYear(),date.getMonth(),date.getDay()).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.GREEN)));
+                         users_new_reserved.add(documentReferenceUser);
+                         numberOfDay++;
+                     }
+
                  }
                  setPrecioInfo();
              }
@@ -130,7 +144,14 @@ public class DiponibilityActivity extends AppCompatActivity {
             }
         });
     }
+    private void limpiarCalendario(){
+        MarkedDates mkd=  calendar.getMarkedDates();
+        if(mkd.getAll()!=null && mkd.getAll().size()!=0){
 
+            mkd.removeAdd();
+        }
+
+    }
     private void setPrecioInfo(){
         if(numberOfDay == 0){
 
@@ -175,13 +196,16 @@ public class DiponibilityActivity extends AppCompatActivity {
             int day = Integer.parseInt(parts[0]); // DÍA
             int month = Integer.parseInt(parts[1]); // MES
             int year = Integer.parseInt(parts[2]); // AÑO
-
+        if(!UtilMethod.datePermited(year,month,day)){
             // Marcar en rojo las que ya están reservadas
             calendar.markDate(
                     new DateData(year, month, day).setMarkStyle(new MarkStyle(MarkStyle.BACKGROUND, Color.RED)
                     ));
 
-            }
+        }
+        }
+
+
 
     }
 

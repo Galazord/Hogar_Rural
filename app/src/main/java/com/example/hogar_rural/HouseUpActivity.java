@@ -422,7 +422,7 @@ public class HouseUpActivity extends AppCompatActivity {
 
 
         // Comprobar el contenido de los campos obligatorios.
-        if(services.isEmpty() || TextUtils.isEmpty(etHouse_input_name.getText()) || TextUtils.isEmpty(etHouse_input_address.getText()) || TextUtils.isEmpty(etHouse_input_municipaly.getText()) || TextUtils.isEmpty(etHouse_input_province.getText()) || TextUtils.isEmpty(etHouse_input_code.getText()) || TextUtils.isEmpty(etHouse_input_features.getText()) || TextUtils.isEmpty(etHouse_input_activities.getText()) || TextUtils.isEmpty(etHouse_input_interest.getText())){
+        if(adapter.getSelectedServices().isEmpty() || TextUtils.isEmpty(etHouse_input_name.getText()) || TextUtils.isEmpty(etHouse_input_address.getText()) || TextUtils.isEmpty(etHouse_input_municipaly.getText()) || TextUtils.isEmpty(etHouse_input_province.getText()) || TextUtils.isEmpty(etHouse_input_code.getText()) || TextUtils.isEmpty(etHouse_input_features.getText()) || TextUtils.isEmpty(etHouse_input_activities.getText()) || TextUtils.isEmpty(etHouse_input_interest.getText())){
 
             UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this, "ERROR: Debes rellenar todos los campos.");
 

@@ -94,10 +94,10 @@
     <TextView
         android:id="@+id/tvPrecio"
         android:layout_width="match_parent"
-        android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btnConfirmDisponibility"
-        android:text="" />
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 
 </RelativeLayout>
