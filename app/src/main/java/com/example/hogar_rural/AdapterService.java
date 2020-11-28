@@ -3,6 +3,7 @@ package com.example.hogar_rural;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,10 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
     //--> VARIABLES
     private LayoutInflater inflater;
     private  List<Service> services;
+    private  List<Service> servicesSel;
     private Context context;
     private List<String> selectedServices;
+    private boolean all =false;
 
     //--> CONSTRCUTOR
     public AdapterService(Context context, List<Service> services) {
@@ -42,6 +45,15 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
         this.context = context;
         this.selectedServices = new ArrayList<>();
     }
+    public AdapterService(Context context, List<Service> services, boolean all, List<Service> servicesSel) {
+        this.inflater = LayoutInflater.from(context);
+        this.services = services;
+        this.context = context;
+        this.all = all;
+        this.servicesSel = servicesSel;
+        loadSelectedService();
+    }
+
 
 
     @NonNull
@@ -55,11 +67,25 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
     @Override
     public void onBindViewHolder(@NonNull AdapterService.ViewHolder holder, int position) {
 
+         if(all){
+             String name = services.get(position).getName();
+             holder.txtName.setText(name);
 
-        String name = services.get(position).getName();
-        int resoruceIcon = services.get(position).getIcon();
-        holder.txtName.setText(name);
-        holder.imageAvatar.setBackgroundResource(resoruceIcon);
+             if(searchService(services.get(position))){
+                 int resoruceIcon = services.get(position).getIcon_on();
+                 holder.imageAvatar.setBackgroundResource(resoruceIcon);
+             }else{
+                 int resoruceIcon = services.get(position).getIcon();
+                 holder.imageAvatar.setBackgroundResource(resoruceIcon);
+             }
+         }else{
+             String name = services.get(position).getName();
+             int resoruceIcon = services.get(position).getIcon();
+             holder.txtName.setText(name);
+             holder.imageAvatar.setBackgroundResource(resoruceIcon);
+         }
+
+
 
 
     }
@@ -76,6 +102,23 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
         return this.selectedServices;
     }
 
+    private void loadSelectedService(){
+        this.selectedServices = new ArrayList<>();
+
+        for (Service s:servicesSel
+        ) {
+            this.selectedServices.add(s.getName());
+        }
+    }
+    private boolean searchService(Service nameServ ){
+        for (Service s:servicesSel
+             ) {
+            if(s.getName().equals(nameServ.getName())){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -111,14 +154,16 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
 
         private void setCheckedService(String serviceName, int iconOn, int iconOff){
 
-                if(selectedServices.contains(serviceName)){
-                    selectedServices.remove(serviceName);
-                    imageAvatar.setBackgroundResource(iconOff);
-                }else{
-                    selectedServices.add(serviceName);
+                    if(selectedServices.contains(serviceName)){
+                        selectedServices.remove(serviceName);
+                        imageAvatar.setBackgroundResource(iconOff);
+                    }else{
+                        selectedServices.add(serviceName);
 
-                    imageAvatar.setBackgroundResource(iconOn);
-                }
+                        imageAvatar.setBackgroundResource(iconOn);
+                    }
+            Log.i("service",  selectedServices.size()+"");
+
 
         }
 

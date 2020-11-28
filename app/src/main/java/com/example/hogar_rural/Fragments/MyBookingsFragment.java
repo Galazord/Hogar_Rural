@@ -160,7 +160,64 @@ public class MyBookingsFragment extends Fragment {
 
 
     }
+    private List<Booking> getBookingAgrupate(List<DocumentReference> users, List<Timestamp> dates){
+        List<Booking> bookings = new ArrayList<>();
+        List<String> dates_str = new ArrayList<>();
+        List<DocumentReference> userFilter = new ArrayList<>();
+        List<Timestamp> datesFilter = new ArrayList<>();
+        String firstUserStr = "";
+        DocumentReference firstUser = null;
+        Date today = Timestamp.now().toDate();
 
+        for (int i=0; i<dates.size(); i++) {
+            if(dates.get(i).toDate().after(today)){
+                userFilter.add(users.get(i));
+                datesFilter.add(dates.get(i));
+
+            }
+
+        }
+
+
+        if(userFilter.size()>=0){
+            firstUserStr = userFilter.get(0).toString();
+            firstUser = userFilter.get(0);
+        }
+
+        int index = 0;
+        for (DocumentReference docRef: userFilter
+             ) {
+            String ref = docRef.toString();
+
+            if (ref.equals(firstUserStr)) {
+                Date date = new Date(datesFilter.get(index).toDate().getTime() + (1000 * 60 * 60 * 24));
+                dates_str.add(UtilMethod.getDate(date));
+
+
+            }else{
+                Booking booking = new Booking(firstUser, dates_str);
+                bookings.add(booking);
+
+                dates_str = new ArrayList<>();
+                firstUserStr = ref;
+                firstUser = docRef;
+
+                Date date = new Date(datesFilter.get(index).toDate().getTime() + (1000 * 60 * 60 * 24));
+                dates_str.add(UtilMethod.getDate(date));
+            }
+
+            index++;
+
+            if(index == userFilter.size()-1){
+                Booking booking = new Booking(firstUser, dates_str);
+                bookings.add(booking);
+            }
+
+
+        }
+
+        return bookings;
+    }
     private void loadBookings(String homeId){
 
 
@@ -181,14 +238,17 @@ public class MyBookingsFragment extends Fragment {
                         List<DocumentReference> usersId = available.getUsers_reserved();
                         List<Booking> bookings = new ArrayList<>();
                         if(datesReserverd!=null && usersId!=null && datesReserverd.size() !=0 && datesReserverd.size() == usersId.size()){
-                            for (int i=0; i<datesReserverd.size(); i++) {
+
+                            List<Booking> bookingsAgrupate = getBookingAgrupate(usersId,datesReserverd);
+                           /* for (int i=0; i<datesReserverd.size(); i++) {
                                 if(datesReserverd.get(i).toDate().after(today)){
+
                                     Booking booking = new Booking(datesReserverd.get(i),usersId.get(i));
                                     bookings.add(booking);
                                 }
 
-                            }
-                            loadAdapterBooking(bookings);
+                            }*/
+                            loadAdapterBooking(bookingsAgrupate);
                         }else{
                             UtilMethod.showToast(TypeToast.WARNNING,getActivity(),"no hay casas");
                         }

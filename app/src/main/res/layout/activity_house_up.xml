@@ -168,51 +168,14 @@
                 android:fontFamily="@font/roboto_medium"
                 android:hint="@string/houseUp_namePlace"/>
 
-            <!-- Preguntar tipo de casa -->
-            <TextView
-                android:id="@+id/tvHouse_description_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="30dp"
-                android:layout_below="@+id/etHouse_input_name"
-                android:text="@string/houseUp_type"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/green_dark"
-                android:textSize="16sp"/>
 
-            <RadioGroup
-                android:id="@+id/RGHouse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="30dp"
-                android:orientation="horizontal"
-                android:paddingHorizontal="20dp"
-                android:layout_below="@+id/tvHouse_description_3">
-
-                <RadioButton
-                    android:id="@+id/rbHouseUp_complete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/houseUp_complete" />
-
-                <RadioButton
-                    android:id="@+id/rbHouseUp_rooms"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:text="@string/houseUp_rooms" />
-
-            </RadioGroup>
 
             <!-- Contador del número de inquilinos -->
             <TextView
                 android:id="@+id/tvCounter_textCapMax"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/RGHouse"
+                android:layout_below="@id/etHouse_input_name"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginVertical="10dp"
                 android:fontFamily="@font/roboto_medium"
@@ -455,6 +418,7 @@
                 android:textColor="@color/white_text"
                 android:drawableStart="@drawable/ic_calendar"
                 android:paddingStart="30dp"
+                android:visibility="invisible"
                 android:onClick="clickSelectDateAvailable"/>
 
             <!-- Texto: Descripción características principales -->

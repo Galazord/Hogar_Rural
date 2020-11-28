@@ -215,7 +215,6 @@ public class DetailHouseActivity extends AppCompatActivity {
 
             destine = i.getStringExtra("destine");
         }else{
-
             destine = "";
         }
 
@@ -667,7 +666,7 @@ private void updateValorationAVG(int media){
 
     }
 
-    // Cargar la imagen del usuario actual
+    // Cargar la btnDateAvailablen del usuario actual
     private void loadUserImage(User user){
 
         StorageReference gsReference = firebaseStorage.getReferenceFromUrl(user.getImage());
@@ -924,6 +923,8 @@ private void updateValorationAVG(int media){
     // Ir al mapa de "cómo llegar"
     public void clickGoToMap(View view) {
         Intent i =new Intent(this, MapActivity.class);
+        i.putExtra("idHome",idHouse);
+        i.putExtra("destiny",destine);
         startActivity(i);
     }
 }

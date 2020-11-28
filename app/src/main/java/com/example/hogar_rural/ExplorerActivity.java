@@ -367,6 +367,7 @@ public class ExplorerActivity extends AppCompatActivity {
 
         // Ir a la sección Mapa
         Intent intentMap = new Intent (getApplicationContext(), MapActivity.class);
+        intentMap.putExtra("destiny",destiny);
         startActivity(intentMap);
 
     }

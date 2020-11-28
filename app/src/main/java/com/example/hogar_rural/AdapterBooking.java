@@ -29,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.ViewHolder>  {
@@ -65,12 +66,25 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.ViewHold
         // Obtener los datos del modelo y pasarlos a la vista
         // Aqui se ponen los componentes(titulo, fecha e imagen)
         DocumentReference user = bookings.get(position).getUser();
-        Timestamp dateReserd = bookings.get(position).getDate_reserved();
-        holder.txtBooking.setText(UtilMethod.getDate(dateReserd.toDate()));
+        List<String> dateReserd = bookings.get(position).getDate_reserved_str();
+       /* Date date = new Date(dateReserd.toDate().getTime() + (1000 * 60 * 60 * 24));
+        //holder.txtBooking.setText(UtilMethod.getDate(dateReserd.toDate()));
+        holder.txtBooking.setText(UtilMethod.getDate(date));*/
+
+       //OPcion lista de fehcas
+        /*
+       String fechas = "";
+        for (String str: dateReserd
+             ) {
+            fechas = fechas.concat(str+"\n");
+        }
+        holder.txtBooking.setText(fechas);*/
+        if(dateReserd.size()==0){
+            holder.txtBooking.setText(dateReserd.get(0));
+        }else{
+            holder.txtBooking.setText("Desde\n  - "+dateReserd.get(0)+"\nHasta\n  - "+dateReserd.get(dateReserd.size()-1));
+        }
         cargarUserInfo(user,holder.imageAvatar,holder.textNameUser);
-
-
-
 
 
     }

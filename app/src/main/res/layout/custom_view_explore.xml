@@ -60,32 +60,20 @@
                 android:src="@drawable/hr_line_divider"
                 android:layout_below="@id/txtPlace"/>
 
-            <!-- tipo de renta -->
-            <TextView
-                android:id="@+id/txtRental"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/iv_line_divider"
-                android:layout_marginStart="10dp"
-                android:layout_marginVertical="3dp"
-                android:paddingTop="5dp"
-                android:text="@string/house_rental"
-                android:fontFamily="@font/roboto_medium"
-                android:textColor="@color/green_sub"
-                android:textSize="14sp" />
+
 
             <!-- Número de personas -->
             <TextView
                 android:id="@+id/txtPeople"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/iv_line_divider"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/txtRental"
-                android:layout_marginStart="10dp"
                 android:layout_marginVertical="3dp"
-                android:text="@string/house_nPerson"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/roboto_medium"
+                android:text="@string/house_nPerson"
                 android:textColor="@color/green_sub"
                 android:textSize="14sp" />
 
@@ -109,13 +97,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/iv_line_divider"
-                android:layout_toEndOf="@+id/txtPeople"
-                android:layout_marginStart="45dp"
-                android:layout_marginEnd="-105dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="18dp"
+                android:layout_marginEnd="-105dp"
+                android:layout_toEndOf="@+id/txtPeople"
+                android:fontFamily="@font/roboto_medium"
                 android:paddingTop="10dp"
                 android:text="@string/house_price"
-                android:fontFamily="@font/roboto_medium"
                 android:textColor="@color/green_dark"
                 android:textSize="24sp"
                 android:textStyle="bold" />

@@ -101,12 +101,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         // Obtener los datos del modelo y pasarlos a la vista
         // Aqui se ponen los componentes(titulo, fecha e imagen)
         String namePlace = model.get(position).getName();
-        String typeRental ="";
-        if(model.get(position).getType() == 1){
-            typeRental = "Íntegro";
-        }else if(model.get(position).getType() == 2) {
-            typeRental = "Habitaciones";
-        }
+
 
         holder.home = model.get(position);
 
@@ -128,7 +123,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
         // Colocar datos en los campos de texto
         holder.txtPlace.setText(namePlace);
-        holder.txtRental.setText(typeRental);
         holder.txtPrice.setText(price);
         holder.txtPeople.setText(numPerson);
         holder.txtNumOpinions.setText(numOpinion);
@@ -301,15 +295,24 @@ private void cargarValoration(ImageView[] array, Long val){
 
                     //Toast.makeText(context, "ID: " + model.get(getAdapterPosition()).getId(), Toast.LENGTH_SHORT).show();
 
-                    Intent in = new Intent(view.getContext(), DetailHouseActivity.class);
-                    in.putExtra("idHouse", model.get(getAdapterPosition()).getId());
-                   if(destine!=null){
-                       in.putExtra("destine", destine);
-                   }
-                    in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //Abrimos para editar
+                    if(notShowFavorite){
+                        Intent in = new Intent(view.getContext(), HouseUpActivity.class);
+                        in.putExtra("ID_HOME", model.get(getAdapterPosition()).getId());
+                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        view.getContext().startActivity(in);
+                    }else{
+                        Intent in = new Intent(view.getContext(), DetailHouseActivity.class);
+                        in.putExtra("idHouse", model.get(getAdapterPosition()).getId());
+                        if(destine!=null){
+                            in.putExtra("destine", destine);
+                        }
+                        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    // Abrir actividad: DetailHouseActivity
-                    view.getContext().startActivity(in);
+                        // Abrir actividad: DetailHouseActivity
+                        view.getContext().startActivity(in);
+                    }
+
 
 
                 }
@@ -322,7 +325,6 @@ private void cargarValoration(ImageView[] array, Long val){
             favorites   = new ArrayList<>();
             // Relacionar las variables con la parte gráfica
             txtPlace = itemView.findViewById(R.id.txtPlace);
-            txtRental = itemView.findViewById(R.id.txtRental);
             txtPeople = itemView.findViewById(R.id.txtPeople);
             txtPrice = itemView.findViewById(R.id.txtPrice);
             txtNumOpinions = itemView.findViewById(R.id.txtNumOpinions);

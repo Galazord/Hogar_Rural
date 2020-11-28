@@ -27,6 +27,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
 import com.example.hogar_rural.Model.Home;
 import com.example.hogar_rural.Model.Service;
 import com.example.hogar_rural.Utils.Constant;
@@ -39,6 +40,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -47,6 +49,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.hogar_rural.Utils.Constant.PRICE_MAX;
@@ -63,7 +66,7 @@ public class HouseUpActivity extends AppCompatActivity {
     private TextView tvCounter_capMax, tvHouseUp_priceIndicator;
     private SeekBar sbHouseUp_priceSelector;
     private AdapterService adapter;
-    private Button btnSelectGaleryImage, btnCapMax_less, btnCapMax_plus, btnGallery_next_left, btnGallery_next_right, btnPrice_less, btnPrice_plus, btnGallery_remove;
+    private Button btnPublishHouse, btnSelectGaleryImage, btnDateAvailable, btnCapMax_less, btnCapMax_plus, btnGallery_next_left, btnGallery_next_right, btnPrice_less, btnPrice_plus, btnGallery_remove;
     private int numPeople = 1;
     private int price = PRICE_MIN;
     private MediaPlayer soundError, soundCorrect;
@@ -81,6 +84,14 @@ public class HouseUpActivity extends AppCompatActivity {
     private FirebaseFirestore mFirestore;
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage;
+    //Modificar
+    private boolean esModificar = false;
+    private List<Service> serviciosFinalHome;
+    private String idHomeUpdate;
+    private int valoration = 0;
+    private Home homeUpdate;
+    private List<String> imagesUpdate;
+    private int indexImageUpdate = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -90,6 +101,14 @@ public class HouseUpActivity extends AppCompatActivity {
 
         // Inciar componentes
         initComponent();
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            idHomeUpdate = bundle.getString("ID_HOME");
+            btnPublishHouse.setText("Modificar Casa");
+            esModificar = true;
+            loadHomeFromDB();
+        }
 
     }
 
@@ -113,15 +132,17 @@ public class HouseUpActivity extends AppCompatActivity {
         etHouse_input_features = (EditText) findViewById(R.id.etHouse_input_features);
         etHouse_input_activities = (EditText) findViewById(R.id.etHouse_input_activities);
         etHouse_input_interest = (EditText) findViewById(R.id.etHouse_input_interest);
-        RGHouse = (RadioGroup) findViewById(R.id.RGHouse);
+       /* RGHouse = (RadioGroup) findViewById(R.id.RGHouse);
         rbHouseUp_complete = (RadioButton) findViewById(R.id.rbHouseUp_complete);
-        rbHouseUp_rooms = (RadioButton) findViewById(R.id.rbHouseUp_rooms);
+        rbHouseUp_rooms = (RadioButton) findViewById(R.id.rbHouseUp_rooms);*/
         tvCounter_capMax = (TextView) findViewById(R.id.tvCounter_capMax);
         tvHouseUp_priceIndicator = (TextView) findViewById(R.id.tvHouseUp_priceIndicator);
         sbHouseUp_priceSelector = (SeekBar) findViewById(R.id.sbHouseUp_priceSelector);
         sbHouseUp_priceSelector.setMin(PRICE_MIN);
         sbHouseUp_priceSelector.setMax(PRICE_MAX);
         services = new ArrayList<>();
+        btnPublishHouse = (Button) findViewById(R.id.btnPublishHouse);
+        btnDateAvailable = (Button) findViewById(R.id.btnDateAvailable);
         btnSelectGaleryImage = (Button) findViewById(R.id.btnSelectGaleryImage);
         btnCapMax_less = (Button) findViewById(R.id.btnCapMax_less);
         btnCapMax_plus = (Button) findViewById(R.id.btnCapMax_plus);
@@ -151,6 +172,113 @@ public class HouseUpActivity extends AppCompatActivity {
         loadServices();
 
     }
+    /* =================
+
+    DATOS DE MODIFICACION DE CASA
+
+    ====================
+     */
+
+    private void loadServicesAtHome(Home home){
+        Service service = new Service();
+        List<String> serviciosHome = home.getServices();
+
+        serviciosFinalHome = new ArrayList<>();
+        for (Service s: service.getServices(this)
+        ) {
+            // Comprueba si el servicio está en el array de Firebase. Y si está guarda el servicio entero.
+            if(serviciosHome.contains(s.getName())){
+                serviciosFinalHome.add(s);
+            }
+        }
+
+        adapter = new AdapterService(getApplicationContext(), service.getServicesOff(this),true,serviciosFinalHome);
+        rvService.setAdapter(adapter);
+
+
+    }
+    private void loadHomeFromDB(){
+
+        DocumentReference docRef = mFirestore.collection("homes").document(idHomeUpdate);
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if(doc.exists()){
+
+                        // Recoger los datos de la casa
+                        homeUpdate = doc.toObject(Home.class);
+                        //Mostramos los servicios de la casa*/
+                        loadServicesAtHome(homeUpdate);
+                        imagesUpdate = homeUpdate.getImages();
+                        if(imagesUpdate!=null && imagesUpdate.size()>0){
+                            loadHomeGallery(imagesUpdate.get(indexImageUpdate));
+                        }
+                        // Nombre casa
+                        etHouse_input_name.setText(homeUpdate.getName());
+                        //Precio casa
+                        price =  homeUpdate.getPrice().intValue();
+                        generateSeekBar();
+                        tvHouseUp_priceIndicator.setText(String.valueOf(homeUpdate.getPrice()).concat(getApplicationContext().getString(R.string.adapter_price)));
+
+                        //Numero de personas
+                        tvCounter_capMax.setText(String.valueOf(homeUpdate.getAmount()).concat(" "+getApplicationContext().getString(R.string.adapter_people)));
+                        numPeople = homeUpdate.getAmount().intValue();
+
+                        //Cajas de textos
+                        etHouse_input_features.setText(homeUpdate.getDescription().replace("\\n", "\n"));
+                        etHouse_input_activities.setText(homeUpdate.getActivities().replace("\\n", "\n"));
+                        etHouse_input_interest.setText(homeUpdate.getInteresting_places().replace("\\n", "\n"));
+
+                        //Cajas de direccion
+                        etHouse_input_address.setText(homeUpdate.getAddress());
+                        etHouse_input_code.setText(homeUpdate.getPostal());
+                        etHouse_input_municipaly.setText(homeUpdate.getMunicipality());
+                        etHouse_input_province.setText(homeUpdate.getProvince());
+
+                        //Mostrarmos el boton para poder hacer reservas
+                        btnDateAvailable.setVisibility(View.VISIBLE);
+
+
+                       /* listUrlImages = home.getImages();
+                        // Cargar la galería de imágenes de la casa actual
+                        loadHomeGallery(listUrlImages.get(index));*/
+
+                        //Cargar la valoracion de la casa
+                        valoration = homeUpdate.getValoration().intValue();
+
+
+
+                    }
+                    else{
+                        Log.i("ERROR USER NOT EXIST", task.getResult().toString());
+                    }
+                }else{
+                    Log.i("ERROR GET USER", task.getResult().toString());
+                }
+            }
+        });
+    }
+    // Cargar la galería de imágenes de la vivienda actual
+    private void loadHomeGallery(String img){
+
+        StorageReference gsReference = firebaseStorage.getReferenceFromUrl(img);
+        gsReference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    Glide.with(getApplicationContext()).load(task.getResult()).into(ivUser_avatar);
+                }
+            }
+
+        });
+    }
+    //*
+    // ======================
+    // */
+
     // Cargar los iconos activos de los servicios
     private void loadServices(){
         Service service = new Service();
@@ -163,6 +291,8 @@ public class HouseUpActivity extends AppCompatActivity {
         loadRecyclerViewServices(serviciosFinalHome);
 
     }
+
+
     private void loadRecyclerViewServices(List<Service> services){
 
         adapter = new AdapterService(getApplicationContext(), services);
@@ -214,9 +344,6 @@ public class HouseUpActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
 
                         Log.e("TAG", "her");
-
-
-
 
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -278,6 +405,9 @@ public class HouseUpActivity extends AppCompatActivity {
                 StorageReference ref = storageReference.child("homes/" + idHomes + "/" + nameImage);
                 images.add(Constant.URL_GS_IMAGE_HOME.concat(idHomes + "/" + nameImage));
 
+                if(esModificar){
+                    images.addAll(imagesUpdate);
+                }
 
 
 
@@ -428,12 +558,19 @@ public class HouseUpActivity extends AppCompatActivity {
 
         }else{
 
+
             // Generar un ID para la casa
             String idHome = UtilMethod.getUIID();
+            Timestamp date_now = Timestamp.now();
+            Timestamp date_update = Timestamp.now();
+            if(esModificar){
+                idHome = homeUpdate.getId();
+                date_now = homeUpdate.getCreation_date();
+            }
 
             // Recoger valores de los campos
             String nameHome = etHouse_input_name.getText().toString();
-            Long typeRoom = -1L;
+            Long typeRoom = 1L;
             String address = etHouse_input_address.getText().toString();
             String municipality = etHouse_input_municipaly.getText().toString();
             String province = etHouse_input_province.getText().toString();
@@ -443,18 +580,18 @@ public class HouseUpActivity extends AppCompatActivity {
             String interest_places = etHouse_input_interest.getText().toString();
 
 
-            // Fecha de hoy para la creación/actualización
-            Timestamp date_now = Timestamp.now();
             // Tipo de vivienda (Ïntegra/ habitaciones)
-            typeRoom = UtilMethod.getNameSelectedRadioButton(RGHouse, getWindow().getDecorView().getRootView(), getApplicationContext());
 
             // Agrupar todos los datos en un tipo Home y subirlo a firebase
-            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) 0,date_now,date_now, adapter.getSelectedServices());
+            Home home = new Home(idHome, mAuth.getCurrentUser().getUid(),nameHome,address, cp, municipality,province, features, activities,interest_places,typeRoom, (long) numPeople, (long)  price, (long) valoration,date_now,date_update, adapter.getSelectedServices());
+
+
             registerHomesFirestore(home);
 
             // Volver a mi perfil logueado (UserAccountActivity)
             Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
             startActivity(intent);
+
 
         }
 
@@ -462,54 +599,103 @@ public class HouseUpActivity extends AppCompatActivity {
 
     // Eliminar la foto actual de la galería de imagenes
     public void clickGalleryRemove(View view) {
-        if(filePath.size()==1){
+        if(esModificar){
+            if(imagesUpdate.size()==1){
 
-            filePath.remove(indexImage);
-            indexImage = 0;
-            ivUser_avatar.setImageResource(R.drawable.icon_missing_house);
+                imagesUpdate.remove(indexImageUpdate);
+                indexImageUpdate = 0;
+                ivUser_avatar.setImageResource(R.drawable.icon_missing_house);
 
-            // Si solo hay una imagen poner ambos botones en gris
-            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
-            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
-            btnGallery_remove.setBackgroundResource(R.drawable.gradient_grey);
-
-        }else if(filePath.size()>1){
-
-            filePath.remove(indexImage);
-            indexImage = 0;
-            drawImage(bitmap, filePath.get(indexImage));
-
-            // Poner el color de los botones a verde
-            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
-            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
-            btnGallery_remove.setBackgroundResource(R.drawable.gradient_green);
-        }
-
-    }
-
-    // Pasar en la galería a la foto de la izquierda
-    public void clickGalleryNextLeft(View view) {
-
-        if(indexImage == 0){
-            // nada
-        }
-        else{
-            indexImage--;
-            drawImage(bitmap, filePath.get(indexImage));
-            // Poner el color del botón verde
-            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
-
-            // Si llega a ser la imagen 0 se cambia el color del botón a gris
-            if(indexImage == 0){
+                // Si solo hay una imagen poner ambos botones en gris
                 btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+                btnGallery_remove.setBackgroundResource(R.drawable.gradient_grey);
+
+            }else if(imagesUpdate.size()>1){
+
+                imagesUpdate.remove(indexImageUpdate);
+                indexImageUpdate = 0;
+                loadHomeGallery(imagesUpdate.get(indexImageUpdate));
+
+                // Poner el color de los botones a verde
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_remove.setBackgroundResource(R.drawable.gradient_green);
+            }
+        }else{
+            if(filePath.size()==1){
+
+                filePath.remove(indexImage);
+                indexImage = 0;
+                ivUser_avatar.setImageResource(R.drawable.icon_missing_house);
+
+                // Si solo hay una imagen poner ambos botones en gris
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+                btnGallery_remove.setBackgroundResource(R.drawable.gradient_grey);
+
+            }else if(filePath.size()>1){
+
+                filePath.remove(indexImage);
+                indexImage = 0;
+                drawImage(bitmap, filePath.get(indexImage));
+
+                // Poner el color de los botones a verde
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_remove.setBackgroundResource(R.drawable.gradient_green);
             }
         }
 
-        if(filePath.size()==1){
-            // Cambiar color para indicar que se puede llegar al mínimo posible
-            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
-            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+
+    }
+
+    // Pasar en la galería  la foto de la izquierda
+    public void clickGalleryNextLeft(View view) {
+        if(esModificar){
+            if(indexImageUpdate == 0){
+
+            }
+            else{
+                indexImageUpdate--;
+                loadHomeGallery(imagesUpdate.get(indexImageUpdate));
+                // Poner el color del botón verde
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+
+                // Si llega a ser la imagen 0 se cambia el color del botón a gris
+                if(indexImageUpdate == 0){
+                    btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
+                }
+            }
+
+            if(imagesUpdate.size()==1){
+                // Cambiar color para indicar que se puede llegar al mínimo posible
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+            }
+        }else{
+            if(indexImage == 0){
+                // nada
+            }
+            else{
+                indexImage--;
+                drawImage(bitmap, filePath.get(indexImage));
+                // Poner el color del botón verde
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+
+                // Si llega a ser la imagen 0 se cambia el color del botón a gris
+                if(indexImage == 0){
+                    btnGallery_next_left.setBackgroundResource(R.drawable.gradient_grey);
+                }
+            }
+
+            if(filePath.size()==1){
+                // Cambiar color para indicar que se puede llegar al mínimo posible
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+            }
         }
+
 
 
     }
@@ -517,26 +703,49 @@ public class HouseUpActivity extends AppCompatActivity {
     // Pasar en la galería a la foto de la izquierda
     public void clickGalleryNextRight(View view) {
 
-
-        if(filePath.size()-1 <= indexImage ){
-            // Cambiar color para indicar que se puede llegar al mínimo posible
-            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
-        }
-        else{
-            indexImage++;
-            drawImage(bitmap, filePath.get(indexImage));
-            if(indexImage <= filePath.size()-1){
-                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+        if(esModificar){
+            if(imagesUpdate.size()-1 <= indexImageUpdate ){
+                // Cambiar color para indicar que se puede llegar al mínimo posible
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
             }
-            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+            else{
+                indexImageUpdate++;
+              loadHomeGallery(imagesUpdate.get(indexImageUpdate));
+                if(indexImageUpdate <= imagesUpdate.size()-1){
+                    btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+                }
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+            }
+
+
+            if(imagesUpdate.size()==1){
+                // Cambiar color para indicar que se puede llegar al mínimo posible
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+            }
+        }else{
+            if(filePath.size()-1 <= indexImage ){
+                // Cambiar color para indicar que se puede llegar al mínimo posible
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+            }
+            else{
+                indexImage++;
+                drawImage(bitmap, filePath.get(indexImage));
+                if(indexImage <= filePath.size()-1){
+                    btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
+                }
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+            }
+
+
+            if(filePath.size()==1){
+                // Cambiar color para indicar que se puede llegar al mínimo posible
+                btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
+                btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
+            }
         }
 
 
-        if(filePath.size()==1){
-            // Cambiar color para indicar que se puede llegar al mínimo posible
-            btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
-            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
-        }
 
     }
 
