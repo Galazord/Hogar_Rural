@@ -217,7 +217,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
-        Adapter adapter = new Adapter(getApplicationContext(), list_home, true);
+        Adapter adapter = new Adapter(getApplicationContext(), list_home, destiny,true,true);
         recyclerView.setAdapter(adapter);
     }
 

@@ -44,9 +44,16 @@ public class MyHousesFragment extends Fragment {
     private FirebaseFirestore mFirestore;
     private StorageReference storageReference;
     private FirebaseStorage firebaseStorage;
+    private String destine;
 
+    public MyHousesFragment() {
+
+    }
     //--> CONTRUCTOR
-    public MyHousesFragment() {}
+    public MyHousesFragment(String destine) {
+        this.destine = destine;
+        Log.i("destiny house frag", destine);
+    }
 
     public static MyHousesFragment newInstance() {
         MyHousesFragment fragment = new MyHousesFragment();
@@ -99,9 +106,10 @@ public class MyHousesFragment extends Fragment {
         btnCreateNewHouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.i("destiny   clcik", destine);
                 // Ir a la vista del formulario para registrar una nueva casa
                 Intent i = new Intent(getContext(), HouseUpActivity.class);
+                i.putExtra("destiny", destine);
                 startActivity(i);
 
             }
@@ -138,7 +146,7 @@ public class MyHousesFragment extends Fragment {
 
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
-        Adapter adapter = new Adapter(getActivity(), list_home, true);
+        Adapter adapter = new Adapter(getActivity(), list_home,destine, true);
         recyclerView.setAdapter(adapter);
     }
 

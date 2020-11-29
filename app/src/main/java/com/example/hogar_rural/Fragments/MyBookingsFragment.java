@@ -179,7 +179,7 @@ public class MyBookingsFragment extends Fragment {
         }
 
 
-        if(userFilter.size()>=0){
+        if(userFilter.size()>0){
             firstUserStr = userFilter.get(0).toString();
             firstUser = userFilter.get(0);
         }
@@ -190,7 +190,8 @@ public class MyBookingsFragment extends Fragment {
             String ref = docRef.toString();
 
             if (ref.equals(firstUserStr)) {
-                Date date = new Date(datesFilter.get(index).toDate().getTime() + (1000 * 60 * 60 * 24));
+                //   Date date = new Date(datesFilter.get(index).toDate().getTime() + (1000 * 60 * 60 * 24));
+                Date date = new Date(datesFilter.get(index).toDate().getTime());
                 dates_str.add(UtilMethod.getDate(date));
 
 
@@ -202,7 +203,8 @@ public class MyBookingsFragment extends Fragment {
                 firstUserStr = ref;
                 firstUser = docRef;
 
-                Date date = new Date(datesFilter.get(index).toDate().getTime() + (1000 * 60 * 60 * 24));
+             //   Date date = new Date(datesFilter.get(index).toDate().getTime() + (1000 * 60 * 60 * 24));
+                Date date = new Date(datesFilter.get(index).toDate().getTime());
                 dates_str.add(UtilMethod.getDate(date));
             }
 
@@ -237,7 +239,7 @@ public class MyBookingsFragment extends Fragment {
                         List<Timestamp> datesReserverd = available.getDates_reserved();
                         List<DocumentReference> usersId = available.getUsers_reserved();
                         List<Booking> bookings = new ArrayList<>();
-                        if(datesReserverd!=null && usersId!=null && datesReserverd.size() !=0 && datesReserverd.size() == usersId.size()){
+                        if(datesReserverd!=null && usersId!=null && usersId.size() !=0 && datesReserverd.size() !=0 && datesReserverd.size() == usersId.size()){
 
                             List<Booking> bookingsAgrupate = getBookingAgrupate(usersId,datesReserverd);
                            /* for (int i=0; i<datesReserverd.size(); i++) {

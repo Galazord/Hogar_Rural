@@ -60,6 +60,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
     private String idUser;
     private String destine;
     private boolean notShowFavorite = false;
+    private boolean showFav = false;
 
     public List<DocumentReference> favorites;
 
@@ -76,12 +77,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
         this.context = context;
         this.destine = destine;
     }
-    public Adapter(Context context, ArrayList<Home> model,boolean favorite) {
+    public Adapter(Context context, ArrayList<Home> model,String destine,boolean favorite) {
         this.inflater = LayoutInflater.from(context);
         this.model = model;
         this.context = context;
         this.destine = destine;
         this.notShowFavorite = favorite;
+    }
+    public Adapter(Context context, ArrayList<Home> model,String destine,boolean favorite, boolean showFav) {
+        this.inflater = LayoutInflater.from(context);
+        this.model = model;
+        this.context = context;
+        this.destine = destine;
+        this.notShowFavorite = favorite;
+        this.showFav = showFav;
     }
     // Los 3 métodos implementados del RecyclerView.Adapter
     @NonNull
@@ -107,7 +116,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>  {
 
         imgGallery = new ArrayList<>();
         imgGallery = holder.home.getImages();
-        cargarImagen(imgGallery.get(0),holder.imageGalery);
+
+            cargarImagen(imgGallery.get(0),holder.imageGalery);
+
         countComments(model.get(position).getId(),holder.txtNumOpinions);
         if(!notShowFavorite){
             loadFavorite(holder.imageFavorite, model.get(position).getId());
@@ -296,9 +307,10 @@ private void cargarValoration(ImageView[] array, Long val){
                     //Toast.makeText(context, "ID: " + model.get(getAdapterPosition()).getId(), Toast.LENGTH_SHORT).show();
 
                     //Abrimos para editar
-                    if(notShowFavorite){
+                    if(notShowFavorite && !showFav){
                         Intent in = new Intent(view.getContext(), HouseUpActivity.class);
                         in.putExtra("ID_HOME", model.get(getAdapterPosition()).getId());
+                        in.putExtra("destiny", destine);
                         in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         view.getContext().startActivity(in);
                     }else{

@@ -189,8 +189,8 @@ public class DiponibilityActivity extends AppCompatActivity {
         for (Timestamp tmp :
                 dates_reserved) {
 
-            Date date = new Date(tmp.toDate().getTime() + (1000 * 60 * 60 * 24));
-           // Date date = tmp.toDate(); // Convertir en formato fecha (timeStamp --> date)
+           // Date date = new Date(tmp.toDate().getTime() + (1000 * 60 * 60 * 24));
+           Date date = tmp.toDate(); // Convertir en formato fecha (timeStamp --> date)
             String dateStr =  UtilMethod.getDate(date); // Convertirlo en String y separar por partes
             String parts[] = dateStr.split("-"); // Separar por partes
             int day = Integer.parseInt(parts[0]); // DÍA

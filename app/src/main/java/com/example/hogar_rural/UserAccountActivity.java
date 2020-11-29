@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.hogar_rural.Fragments.PagerControllerAccount;
@@ -38,6 +39,8 @@ public class UserAccountActivity extends AppCompatActivity {
     private void initComponent() {
         if(getIntent().getExtras()!=null && getIntent().getStringExtra("destine")!=null){
             destine = getIntent().getStringExtra("destine");
+
+            Log.i("destiny -- ",destine);
         }else{
 
             destine = "";

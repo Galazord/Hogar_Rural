@@ -78,6 +78,7 @@ public class HouseUpActivity extends AppCompatActivity {
     private Bitmap bitmap;
     private List<Uri> filePath;
     private String  urlImage;
+    private String  destiny;
     private int indexImage = 0;
 
     private FirebaseAuth mAuth;
@@ -91,6 +92,7 @@ public class HouseUpActivity extends AppCompatActivity {
     private int valoration = 0;
     private Home homeUpdate;
     private List<String> imagesUpdate;
+    private int tamImagesUpdate = 0;
     private int indexImageUpdate = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -104,10 +106,18 @@ public class HouseUpActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if(bundle!=null){
+
+            destiny = bundle.getString("destiny");
+            Log.i("destiny im bundle",destiny);
             idHomeUpdate = bundle.getString("ID_HOME");
-            btnPublishHouse.setText("Modificar Casa");
-            esModificar = true;
-            loadHomeFromDB();
+            if(idHomeUpdate!=null){
+                btnPublishHouse.setText("Modificar Casa");
+                esModificar = true;
+                loadHomeFromDB();
+            }
+
+
+
         }
 
     }
@@ -213,7 +223,10 @@ public class HouseUpActivity extends AppCompatActivity {
                         //Mostramos los servicios de la casa*/
                         loadServicesAtHome(homeUpdate);
                         imagesUpdate = homeUpdate.getImages();
+                        tamImagesUpdate = homeUpdate.getImages().size();
+
                         if(imagesUpdate!=null && imagesUpdate.size()>0){
+                            btnGallery_next_right.setBackgroundResource(R.drawable.gradient_green);
                             loadHomeGallery(imagesUpdate.get(indexImageUpdate));
                         }
                         // Nombre casa
@@ -349,7 +362,7 @@ public class HouseUpActivity extends AppCompatActivity {
                 }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-
+                UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Guardando...");
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -363,13 +376,22 @@ public class HouseUpActivity extends AppCompatActivity {
 
         UtilMethod.showToast(TypeToast.SUCCESS, HouseUpActivity.this,"Guardando...");
 
-        try{
-            sleep(3000);
-            uploadImage(mAuth.getCurrentUser().getUid(), homeId);
 
-        }catch (Exception exe){
+        /*
+        Solo tratamos la imagen si es insertar o si es modificar y has cargado alguna imagen de la galería o has borrando alguna de tu lista*/
+        if(!esModificar || (esModificar &&  ImageExist && filePath.size()!=0) ){
+            try{
+                sleep(3000);
+                uploadImage(mAuth.getCurrentUser().getUid(), homeId);
 
+            }catch (Exception exe){
+
+            }
+        }else{
+            images = imagesUpdate;
+            updateUrlImage(idHomeUpdate);
         }
+
     }
 
     // Para seleccionar una o varias imagenes
@@ -590,6 +612,9 @@ public class HouseUpActivity extends AppCompatActivity {
 
             // Volver a mi perfil logueado (UserAccountActivity)
             Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);
+            intent.putExtra("destine",destiny);
+
+            Log.i("destiny",destiny);
             startActivity(intent);
 
 
@@ -711,7 +736,7 @@ public class HouseUpActivity extends AppCompatActivity {
             else{
                 indexImageUpdate++;
               loadHomeGallery(imagesUpdate.get(indexImageUpdate));
-                if(indexImageUpdate <= imagesUpdate.size()-1){
+                if(indexImageUpdate == imagesUpdate.size()-1){
                     btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
                 }
                 btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
@@ -731,7 +756,7 @@ public class HouseUpActivity extends AppCompatActivity {
             else{
                 indexImage++;
                 drawImage(bitmap, filePath.get(indexImage));
-                if(indexImage <= filePath.size()-1){
+                if(indexImage == filePath.size()-1){
                     btnGallery_next_right.setBackgroundResource(R.drawable.gradient_grey);
                 }
                 btnGallery_next_left.setBackgroundResource(R.drawable.gradient_green);
