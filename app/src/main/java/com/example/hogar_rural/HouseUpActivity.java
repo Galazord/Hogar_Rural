@@ -556,6 +556,7 @@ public class HouseUpActivity extends AppCompatActivity {
 
         // Ir a la ventana se seleccionar fechas
         Intent intentDate = new Intent (getApplicationContext(), DiponibilityActivity.class);
+        intentDate.putExtra("ID_HOUSE", homeUpdate.getId());
         startActivity(intentDate);
 
     }

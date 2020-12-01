@@ -380,7 +380,7 @@ public class ExplorerActivity extends AppCompatActivity {
         View promptsView = li.inflate(R.layout.alertdialog_custom, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                this);
+                this,R.style.DialogTheme);
 
         // set prompts.xml to alertdialog builder
         alertDialogBuilder.setView(promptsView);
