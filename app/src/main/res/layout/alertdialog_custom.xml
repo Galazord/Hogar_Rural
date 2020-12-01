@@ -25,10 +25,10 @@
         android:layout_toEndOf="@id/ivSearch_icon_search"
         android:ems="10"
         android:hint="@string/search_insert"
-        android:textColorHint="@color/green_bg1"
+        android:textColorHint="@color/green_icon"
         android:inputType="textPersonName"
         android:fontFamily="@font/roboto_medium"
         android:textSize="16sp"
-        android:textColor="@color/green_very_light"/>
+        android:textColor="@color/green_very_light" />
 
 </RelativeLayout>

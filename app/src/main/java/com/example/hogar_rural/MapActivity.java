@@ -85,12 +85,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void loadMarketFromDir(String dir, String name,String idHome){
         Geocoder coder = new Geocoder(getApplicationContext());
-
         try {
             ArrayList<Address> adresses = (ArrayList<Address>)  coder.getFromLocationName(dir, 1);
-
             if(adresses.size()!=0) {
-
                 LatLng dirLatLng = new LatLng(adresses.get(0).getLatitude(), adresses.get(0).getLongitude());
                 mMap.addMarker(new MarkerOptions()
                         .position(dirLatLng)
@@ -106,38 +103,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
     private void loadFromFirebase(){
         db.collection("homes")
-
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
-
                         // Empezar con la lista vacía antes de mostrar
                         list_home.removeAll(list_home);
-
                         // Recorrer firebase y guardar cada infomación de la casa en un objeto tipo Home y en una lista (list_home)
                         for (QueryDocumentSnapshot document : value) {
-
                             Home h = document.toObject(Home.class);
                              if(destiny.toLowerCase().equals(h.getProvince().toLowerCase())){
-
                                  String dir = h.getAddress().concat(", "+h.getPostal()+", "+h.getMunicipality()+", "+h.getProvince());
                                  Log.i("dir", dir);
                                  loadMarketFromDir(dir, h.getName(),h.getId());
                              }
-
                             Log.d("QUERY DB", document.getId() + " => " + document.getData());
                         }
-
-
-
-
-
-
                     }
                 });
-
-
     }
 
     private void loadFromFirebaseHouse(){
@@ -150,13 +133,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if(task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
                     if(doc.exists()){
-
                         // Recoger los datos de la casa
                         Home h = doc.toObject(Home.class);
                         String dir = h.getAddress().concat(", "+h.getPostal()+", "+h.getMunicipality()+", "+h.getProvince());
-
                         loadMarketFromDir(dir, h.getName(),h.getId());
-
                     }
                     else{
                         Log.i("ERROR USER NOT EXIST", task.getResult().toString());
@@ -197,7 +177,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
 
@@ -214,14 +193,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return false;
             }
         });
-
         if(!comoLlegar){
 
             loadFromFirebase();
         }else{
             loadFromFirebaseHouse();
         }
-
-
     }
 }

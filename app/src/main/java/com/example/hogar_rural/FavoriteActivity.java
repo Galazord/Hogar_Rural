@@ -80,8 +80,6 @@ public class FavoriteActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         if(b!=null){
             destiny = b.getString("destiny");
-
-
         }
         // Relaccionar las variables con la parte gráfica
         RLMain_Favorite = (RelativeLayout) findViewById(R.id.RLMain_Favorite);
@@ -148,44 +146,34 @@ public class FavoriteActivity extends AppCompatActivity {
     // Llamar a firebase para recoger los datos y mostrarlos
     private void loadFromFirebase(){
         mFirestore.collection("homes")
-
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
-
                         // Empezar con la lista vacía antes de mostrar
                         list_home.removeAll(list_home);
-
                         // Recorrer firebase y guardar cada infomación de la casa en un objeto tipo Home y en una lista (list_home)
                         for (QueryDocumentSnapshot document : value) {
 
                             Home h = document.toObject(Home.class);
                             // list_home.add(h);
                         }
-
                         // Cargar/ mostrar la información en el recyclerView
                         loadRecyclerView();
-
                     }
                 });
-
-
     }
 
     private void loadFavorite(){
         if(mAuth.getCurrentUser()!=null){
             String idUser = mAuth.getCurrentUser().getUid();
-
             mFirestore.collection("users").document(idUser).get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-
                             User user  = documentSnapshot.toObject(User.class);
                             if(user.getFavorites()!=null){
                                 List<DocumentReference> favoritesUser = user.getFavorites();
-
                                 for (DocumentReference docRef: favoritesUser
                                 ) {
                                     docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -197,21 +185,12 @@ public class FavoriteActivity extends AppCompatActivity {
                                             loadRecyclerView();
                                         }
                                     });
-
                                 }
-
-
-                            }else{
-
                             }
-
-
-
                         }
 
 
                     });
-
         }
     }
 

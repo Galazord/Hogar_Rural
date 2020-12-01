@@ -32,13 +32,7 @@ public class PagerControllerOutstanding extends FragmentPagerAdapter {
             default:
                 return null;
         }
-
-
     }
-
-
-
-
 
     @Override
     public int getCount() {

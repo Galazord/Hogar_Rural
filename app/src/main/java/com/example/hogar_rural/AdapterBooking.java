@@ -67,18 +67,7 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.ViewHold
         // Aqui se ponen los componentes(titulo, fecha e imagen)
         DocumentReference user = bookings.get(position).getUser();
         List<String> dateReserd = bookings.get(position).getDate_reserved_str();
-       /* Date date = new Date(dateReserd.toDate().getTime() + (1000 * 60 * 60 * 24));
-        //holder.txtBooking.setText(UtilMethod.getDate(dateReserd.toDate()));
-        holder.txtBooking.setText(UtilMethod.getDate(date));*/
 
-       //OPcion lista de fehcas
-        /*
-       String fechas = "";
-        for (String str: dateReserd
-             ) {
-            fechas = fechas.concat(str+"\n");
-        }
-        holder.txtBooking.setText(fechas);*/
         if(dateReserd.size()==0){
             holder.txtBooking.setText(dateReserd.get(0));
         }else{
@@ -89,7 +78,6 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.ViewHold
 
     }
     private void cargarUserInfo(DocumentReference user,final ImageView imageView, final TextView name){
-
                     user.get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -113,24 +101,14 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.ViewHold
 
 
                     });
-
-
-
-
-
     }
-
 
     @Override
     public int getItemCount() {
         return bookings.size();
     }
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder{
-
-
         public int getIndex() {
             return index;
         }
@@ -155,6 +133,4 @@ public class AdapterBooking extends RecyclerView.Adapter<AdapterBooking.ViewHold
         }
 
     }
-
-
 }

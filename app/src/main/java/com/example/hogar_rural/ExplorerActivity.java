@@ -313,22 +313,6 @@ public class ExplorerActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
     }
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-
-    if(resultCode ==RESULT_OK){
-          destiny =  data.getStringExtra("destine");
-          if(requestCode == 1001){
-              Filter filter =data.getParcelableExtra("filter");
-              if(filter!=null){
-                  Log.i("1",filter.getDateEntrace());
-              }
-          }
-
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
 
     // Menú superior: Resolver la búsqueda
     @Override
@@ -394,12 +378,7 @@ public class ExplorerActivity extends AppCompatActivity {
                 .setPositiveButton("Buscar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-
                                 strReturn[0] = userInput.getText().toString();
-                               /* Intent intentExplorer = new Intent (getApplicationContext(), ExplorerActivity.class);
-                                intentExplorer.putExtra("destiny", strReturn[0]);
-                                startActivity(intentExplorer);
-                                finish();*/
                                destiny = strReturn[0];
                                loadFromFirebase();
                             }

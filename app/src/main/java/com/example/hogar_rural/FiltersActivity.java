@@ -98,8 +98,8 @@ public class FiltersActivity extends AppCompatActivity {
         btnPlusValoration = (Button) findViewById(R.id.btnPlusValoration);
         btnPrice_less = (Button) findViewById(R.id.btnPrice_less);
         btnPrice_plus = (Button) findViewById(R.id.btnPrice_plus);
-        tbFilter_complete = (ToggleButton) findViewById(R.id.tbFilter_complete);
-        tbFilter_room = (ToggleButton) findViewById(R.id.tbFilter_room);
+        //tbFilter_complete = (ToggleButton) findViewById(R.id.tbFilter_complete);
+        //tbFilter_room = (ToggleButton) findViewById(R.id.tbFilter_room);
         sbFilter_priceSelector = (SeekBar) findViewById(R.id.sbFilter_priceSelector);
         soundError = MediaPlayer.create(this, R.raw.sound_error);
         cbFilter_cheaper = (CheckBox) findViewById(R.id.cbFilter_cheaper);
@@ -354,7 +354,7 @@ public class FiltersActivity extends AppCompatActivity {
 
     }
 
-    // Añadir - personas
+    // Añadir - valoración
     public void clickLessValoration(View view) {
 
         if(numValoration>0) {

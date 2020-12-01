@@ -52,9 +52,6 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <!-- Fechas -->
-
-
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

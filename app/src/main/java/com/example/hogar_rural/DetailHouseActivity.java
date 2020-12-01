@@ -120,6 +120,7 @@ public class DetailHouseActivity extends AppCompatActivity {
         etDetail_addComent = (EditText) findViewById(R.id.etDetail_addComent);
         DetailPlace = (TextView) findViewById(R.id.DetailPlace);
         DetailRental = (TextView) findViewById(R.id.DetailRental);
+        DetailRental.setVisibility(View.INVISIBLE);
         DetailPeople = (TextView) findViewById(R.id.DetailPeople);
         DetailPrice = (TextView) findViewById(R.id.DetailPrice);
         DetailNumOpinions = (TextView) findViewById(R.id.DetailNumOpinions);
@@ -188,7 +189,7 @@ public class DetailHouseActivity extends AppCompatActivity {
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UtilMethod.showToast(TypeToast.INFO,DetailHouseActivity.this,v.getTag().toString());
+                    //UtilMethod.showToast(TypeToast.INFO,DetailHouseActivity.this,v.getTag().toString());
                     // Cargar listado de valoraciones
                     loadValoration(Long.valueOf(v.getTag().toString()));
                 }
@@ -261,7 +262,7 @@ public class DetailHouseActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-private void updateValorationAVG(int media){
+    private void updateValorationAVG(int media){
     // Guarda la información del estado del favorito en la base de datos
     db.collection("homes").document(home.getId())
             .update("valoration",media).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -279,74 +280,47 @@ private void updateValorationAVG(int media){
 }
 
     private void calculateAVG(){
-
-
+        // Comprobar que haya comentarios
         db.collection("comments")
-
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
-
                         sum_valoration=0;
                         total_valorations = 0;
                         for (QueryDocumentSnapshot document : value) {
-
                             Comment comment = document.toObject(Comment.class);
-
                             if(comment.getId_homes().equals(home.getId())){
-
                                 sum_valoration += comment.getValoration();
                                 total_valorations++;
                             }
 
                         }
-
                         if(total_valorations!=0){
                             int media = sum_valoration/total_valorations;
                             updateValorationAVG(media);
                             sum_valoration=0;
                             total_valorations=0;
                         }
-                        // En el caso de que haya o no comentarios
-                     /*   if(comments.size()!=0){
-                            tvEmptyComment.setVisibility(View.INVISIBLE);
-                            tvEmptyComment.setText("");
-                            loadRecyclerView();
-                        }else{
-                            tvEmptyComment.setVisibility(View.VISIBLE);
-                            tvEmptyComment.setText("No hay comentarios");
-                            //recyclerView.setBackgroundResource(getDrawable(R.id.myHouse_recycler_view_my_houses));
-                        }*/
                     }
                 });
 
-
-
     }
+
     // Cargar los comentarios existentes en firebase sobre la vivienda seleccionada
     private void loadCommentFirestore(){
-
-
         db.collection("comments").orderBy("date", Query.Direction.DESCENDING)
-
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
                         comments.removeAll(comments);
-
                            for (QueryDocumentSnapshot document : value) {
-
                             Comment comment = document.toObject(Comment.class);
-
                             if(comment.getId_homes().equals(home.getId())){
                                 comments.add(comment);
                             }
-
                         }
-
-
                            // En el caso de que haya o no comentarios
                         if(comments.size()!=0){
                             tvEmptyComment.setVisibility(View.INVISIBLE);
@@ -359,39 +333,26 @@ private void updateValorationAVG(int media){
                         }
                     }
                 });
-
-
-
     }
+
     private void countComments(){
-
-        // inicializar el número de comentarios.
-
-
         db.collection("comments")
-
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
                                         @Nullable FirebaseFirestoreException e) {
-                          int cont = 0;
+                        int cont = 0;
                         for (QueryDocumentSnapshot document : value) {
-
                             Comment comment = document.toObject(Comment.class);
-
                             if(comment.getId_homes().equals(home.getId())){
                                 cont++;
                             }
-
                         }
                         DetailNumOpinions.setText(cont+" "+getResources().getString(R.string.house_nOpinion));
-
                     }
                 });
-
-
-
     }
+
     // Cargar/ mostrar la información en el recyclerView
     private void loadRecyclerView(){
         if(pagination>comments.size()){
@@ -400,16 +361,11 @@ private void updateValorationAVG(int media){
         List<Comment> comments_paginados = comments.subList(0,pagination);
         AdapterComment adapter = new AdapterComment(getApplicationContext(), comments_paginados);
         recyclerViewComments.setAdapter(adapter);
-
-
     }
 
     private void loadRecyclerViewServices(List<Service> services){
-
         AdapterService adapter = new AdapterService(getApplicationContext(), services);
         recyclerViewServices.setAdapter(adapter);
-
-
     }
 
     // Cargar y mostrar los datos del usuario logado en ese momento
@@ -514,16 +470,11 @@ private void updateValorationAVG(int media){
     private void loadValoration(Long val ){
         valoration_comment = val;
         for (int i = 0; i<val; i++){
-
             arrValoration[i].setBackgroundResource(R.drawable.ic_leaf_on);
         }
-
         for (int i = val.intValue(); i<arrValoration.length; i++){
-
             arrValoration[i].setBackgroundResource(R.drawable.ic_leaf_off);
         }
-
-
     }
 
     // Cargar los iconos activos de los servicios
@@ -823,7 +774,7 @@ private void updateValorationAVG(int media){
     public void clickSendComment(View view) {
 
         // Comprobar que hay al menos un comentario para poder enviarlo
-        if(!TextUtils.isEmpty(etDetail_addComent.getText())){
+        if(!TextUtils.isEmpty(etDetail_addComent.getText()) && valoration_comment > 0){
             String id_comment = UtilMethod.getUIID();
             String comment = etDetail_addComent.getText().toString();
             String id_user = user.getId();
@@ -835,10 +786,11 @@ private void updateValorationAVG(int media){
                 e.printStackTrace();
             }
             Comment c = new Comment(id_comment,id_homes,comment,id_user,name_user,valoration_comment,Timestamp.now());
+
             registerCommentFirestore(c);
 
         }else{
-          UtilMethod.showToast(TypeToast.INFO,this,"Debes de escribir un comentario");
+          UtilMethod.showToast(TypeToast.INFO,this,"Debes de escribir un comentario y dar una valoración.");
         }
 
     }

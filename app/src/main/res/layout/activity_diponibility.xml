@@ -20,18 +20,6 @@
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/green_dark"/>
 
-    <!-- Texto informativo 2 -->
-    <TextView
-        android:id="@+id/tv_dipo_info_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginVertical="10dp"
-        android:layout_below="@id/tv_dipo_info_1"
-        android:text="@string/disponibility_info2"
-        android:fontFamily="@font/roboto_medium"
-        android:textColor="@color/green_dark"/>
-
     <!-- Cuadrado rojo -->
     <ImageView
         android:id="@+id/iv_dispo_square_red"
@@ -41,7 +29,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginEnd="20dp"
         android:layout_marginVertical="10dp"
-        android:layout_below="@id/tv_dipo_info_2" />
+        android:layout_below="@id/tv_dipo_info_1" />
 
     <!-- Texto informativo 3 -->
     <TextView
@@ -50,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
         android:layout_marginVertical="15dp"
-        android:layout_below="@id/tv_dipo_info_2"
+        android:layout_below="@id/tv_dipo_info_1"
         android:text="@string/disponibility_info3"
         android:fontFamily="@font/roboto_medium"
         android:textColor="@color/green_dark"
@@ -69,7 +57,7 @@
     <ImageView
         android:id="@+id/iv_Calendar"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="350dp"
         android:visibility="invisible"
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="10dp"
@@ -95,9 +83,13 @@
         android:id="@+id/tvPrecio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="10dp"
         android:layout_below="@+id/btnConfirmDisponibility"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:gravity="left"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@color/green_dark"/>
 
 
 </RelativeLayout>

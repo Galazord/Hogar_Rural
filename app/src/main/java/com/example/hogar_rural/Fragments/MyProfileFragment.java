@@ -122,7 +122,7 @@ this.destine=destine;
             @Override
             public void onClick(View v) {
 
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(getContext(), R.style.DialogTheme)
                         .setIcon(android.R.drawable.ic_menu_close_clear_cancel)
                         .setTitle("Cerrar Sesión")
                         .setMessage("Estás seguro de cerrar sesion?")

@@ -157,7 +157,7 @@ public class DiponibilityActivity extends AppCompatActivity {
 
             tvPrecio.setText("");
         }else{
-            tvPrecio.setText(numberOfDay+" dia/s\nPrecio por : "+price+"€\nTotal: "+(price*numberOfDay)+"€");
+            tvPrecio.setText("Total de días: "+numberOfDay+"\nPrecio unitario: "+price+"€\nPrecio total: "+(price*numberOfDay)+"€");
         }
     }
     private void loadHomeFromDB(){

@@ -59,5 +59,4 @@ public class Available {
         this.users_reserved = users_reserved;
     }
 
-
 }

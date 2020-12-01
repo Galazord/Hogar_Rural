@@ -30,10 +30,10 @@
 
     <!-- Toast -->
     <color name="toast_background">#1B231B</color>
-    <color name="toast_green">#028c00</color>
-    <color name="toast_yellow">#E1DE2D</color>
-    <color name="toast_blue">#2DE1E1</color>
-    <color name="toast_red">#DC0404</color>
+    <color name="toast_green">#076506</color>
+    <color name="toast_yellow">#bd920e</color>
+    <color name="toast_blue">#1d9a9a</color>
+    <color name="toast_red">#a70202</color>
     <color name="toast_text">#DBE4DB</color>
 
 

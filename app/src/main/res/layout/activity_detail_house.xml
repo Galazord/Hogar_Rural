@@ -72,9 +72,9 @@
                     android:src="@drawable/hr_line_divider"
                     android:layout_below="@id/DetailPlace"/>
 
-                <!-- Tipo de renta: íntegra/ habitaciones -->
+                <!-- Número máximo de personas -->
                 <TextView
-                    android:id="@+id/DetailRental"
+                    android:id="@+id/DetailPeople"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -82,23 +82,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginVertical="3dp"
-                    android:paddingTop="5dp"
-                    android:text="@string/house_rental"
-                    android:fontFamily="@font/roboto_medium"
-                    android:textColor="@color/green_sub"
-                    android:textSize="14sp"
-                    tools:ignore="RtlHardcoded" />
-
-                <!-- Número máximo de personas -->
-                <TextView
-                    android:id="@+id/DetailPeople"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@id/DetailRental"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginVertical="3dp"
+                    android:paddingTop="7dp"
                     android:text="@string/house_nPerson"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_sub"
@@ -116,6 +100,23 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginVertical="3dp"
                     android:text="@string/house_nOpinion"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/green_sub"
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
+
+                <!-- Tipo de renta: íntegra/ habitaciones -->
+                <TextView
+                    android:id="@+id/DetailRental"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/DetailNumOpinions"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginVertical="3dp"
+                    android:paddingTop="5dp"
+                    android:text="@string/house_rental"
                     android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/green_sub"
                     android:textSize="14sp"
@@ -204,6 +205,7 @@
             </RelativeLayout>
 
             <!-- ************** MAPA Y DISPONIBILIDAD ************** -->
+            <!-- Mapa de cómo llegar -->
             <LinearLayout
                 android:id="@+id/DetailMapLinearLayout"
                 android:layout_width="match_parent"
@@ -227,11 +229,6 @@
                     android:onClick="clickGoToMap"
                     android:textColor="@color/white_text"
                     android:text="@string/house_arrive"/>
-                <!-- Titulo de cómo llegar -->
-
-
-                <!-- Mapa de cómo llegar -->
-
 
                 <!-- Botón disponibilidad -->
                 <Button
@@ -763,13 +760,7 @@
                     app:srcCompat="@drawable/ic_mail"
                     android:background="?android:attr/selectableItemBackground"
                     android:onClick="clickEmailOwner"/>
-
             </LinearLayout>
-
-
-
         </RelativeLayout>
-
     </ScrollView>
-
 </RelativeLayout>

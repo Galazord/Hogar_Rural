@@ -38,7 +38,6 @@ public class PagerControllerAccount extends FragmentPagerAdapter {
                 return null;
         }
 
-
     }
 
     @Override

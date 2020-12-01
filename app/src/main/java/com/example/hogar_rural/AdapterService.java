@@ -54,8 +54,6 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
         loadSelectedService();
     }
 
-
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -84,14 +82,7 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
              holder.txtName.setText(name);
              holder.imageAvatar.setBackgroundResource(resoruceIcon);
          }
-
-
-
-
     }
-
-
-
 
     @Override
     public int getItemCount() {
@@ -139,9 +130,6 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
                 public void onClick(View view) {
                     Service service = services.get(getAdapterPosition());
                     setCheckedService(service.getName(),service.getIcon_on(),service.getIcon());
-
-
-
                 }
             });
             index = 0;
@@ -163,13 +151,8 @@ public class AdapterService extends RecyclerView.Adapter<AdapterService.ViewHold
                         imageAvatar.setBackgroundResource(iconOn);
                     }
             Log.i("service",  selectedServices.size()+"");
-
-
         }
 
-
-
     }
-
 
 }

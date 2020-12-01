@@ -178,8 +178,4 @@ public class User {
     public void setFavorites(List<DocumentReference> listFav) {
         this.favorites = listFav;
     }
-
-
-
-
 }
