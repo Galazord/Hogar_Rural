@@ -597,6 +597,7 @@ public class HouseUpActivity extends AppCompatActivity {
             String address = etHouse_input_address.getText().toString();
             String municipality = etHouse_input_municipaly.getText().toString();
             String province = etHouse_input_province.getText().toString();
+            province = province.trim();
             String cp = etHouse_input_code.getText().toString();
             String features = etHouse_input_features.getText().toString();
             String activities = etHouse_input_activities.getText().toString();
