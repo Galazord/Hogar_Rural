@@ -566,7 +566,7 @@ public class LoginFormActivity extends AppCompatActivity {
     // Ir a la página para ver el documento legal de términos de uso de la apliación
     public void clickReadTermsUser(View view) {
 
-        Uri uri = Uri.parse("http://www.galanteartdesign.com/");
+        Uri uri = Uri.parse("https://plantillaterminosycondicionestiendaonline.com/");
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
     }
