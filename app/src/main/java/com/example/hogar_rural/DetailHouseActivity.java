@@ -70,7 +70,7 @@ public class DetailHouseActivity extends AppCompatActivity {
     private ImageView[] arrayValorationAVG;
     private ToggleButton tbFilterDetail_adapted, tbFilterDetail_air, tbFilterDetail_barbecue, tbFilterDetail_bath, tbFilterDetail_pool, tbFilterDetail_climatized, tbFilterDetail_garden, tbFilterDetail_heating, tbFilterDetail_jacuzzi, tbFilterDetail_kitchen, tbFilterDetail_mountain, tbFilterDetail_parking, tbFilterDetail_beach, tbFilterDetail_breakfast, tbFilterDetail_children, tbFilterDetail_fireplace, tbFilterDetail_pets, tbFilterDetail_spa, tbFilterDetail_tv, tbFilterDetail_wifi;
     private List<ToggleButton> servicesIcon;
-    private Button btnFavorite,btnShowMore1,btnShowMore2,btnShowMore3;
+    private Button btnFavorite,btnShowMore1,btnShowMore2,btnShowMore3, btnOKComent;
     private DbRetrofitApi dbRetrofitApi;
     private MediaPlayer soundError;
     private String idHouse, idProperty,destine;
@@ -138,6 +138,7 @@ public class DetailHouseActivity extends AppCompatActivity {
         tvPropertyUpdate = (TextView) findViewById(R.id.tvPropertyUpdate);
         tvPropertyUpdateData = (TextView) findViewById(R.id.tvPropertyUpdateData);
         btnFavorite = (Button) findViewById(R.id.btnFavorite);
+        btnOKComent = (Button) findViewById(R.id.btnOKComent);
         CardDetailImage = (ImageView) findViewById(R.id.CardDetailImage);
 
         CardDetailImage.setOnTouchListener(new View.OnTouchListener() {
@@ -775,6 +776,7 @@ public class DetailHouseActivity extends AppCompatActivity {
 
         // Comprobar que hay al menos un comentario para poder enviarlo
         if(!TextUtils.isEmpty(etDetail_addComent.getText()) && valoration_comment > 0){
+            btnOKComent.setEnabled(true); // Desactivar botón de comentarios mientras dure el proceso
             String id_comment = UtilMethod.getUIID();
             String comment = etDetail_addComent.getText().toString();
             String id_user = user.getId();
@@ -821,6 +823,9 @@ public class DetailHouseActivity extends AppCompatActivity {
                         Log.e("ERROR FIRESTORE USER: ", e.getMessage());
                     }
                 });
+
+        // Vovler a activar botón de comentarios
+        btnOKComent.setEnabled(false);
     }
     // Botón para llamar al propietario de la casa
     public void clickCallOwner(View view) {

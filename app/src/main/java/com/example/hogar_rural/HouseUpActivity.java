@@ -116,8 +116,6 @@ public class HouseUpActivity extends AppCompatActivity {
                 loadHomeFromDB();
             }
 
-
-
         }
 
     }
@@ -580,7 +578,7 @@ public class HouseUpActivity extends AppCompatActivity {
             UtilMethod.showToast(TypeToast.ERROR, HouseUpActivity.this, "ERROR: Debes rellenar todos los campos.");
 
         }else{
-
+            btnPublishHouse.setEnabled(true); // Desactivar botón mientras dure el proceso
 
             // Generar un ID para la casa
             String idHome = UtilMethod.getUIID();
@@ -611,6 +609,8 @@ public class HouseUpActivity extends AppCompatActivity {
 
 
             registerHomesFirestore(home);
+
+            btnPublishHouse.setEnabled(false); // Activar botón
 
             // Volver a mi perfil logueado (UserAccountActivity)
             Intent intent = new Intent (getApplicationContext(), UserAccountActivity.class);

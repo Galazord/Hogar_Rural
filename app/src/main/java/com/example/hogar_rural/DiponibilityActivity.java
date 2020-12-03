@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +59,7 @@ public class DiponibilityActivity extends AppCompatActivity {
     private List<DocumentReference> users_reserved;
     private List<DocumentReference> users_new_reserved;
     private List<Timestamp> dates_new_reserved;
+    private Button btnConfirmDisponibility;
     DocumentReference documentReferenceUser;
     TextView tvPrecio;
     MCalendarView calendar;
@@ -100,6 +102,7 @@ public class DiponibilityActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         // Relaccionar la parte gráfica con las variables
         tvPrecio = (TextView) findViewById(R.id.tvPrecio);
+        btnConfirmDisponibility = (Button) findViewById(R.id.btnConfirmDisponibility);
         calendar = (MCalendarView)findViewById(R.id.calendarView);
 
         limpiarCalendario();
@@ -253,7 +256,8 @@ public class DiponibilityActivity extends AppCompatActivity {
     //--> BOTONES
     // Confimar fechas seleccionadas en el calendario
     public void btnConfirmDisponibility(View view) {
+        btnConfirmDisponibility.setEnabled(true); // Desactivar botón mientras dure el proceso
         saveReserved();
-
+        btnConfirmDisponibility.setEnabled(false); // Activar botón
     }
 }

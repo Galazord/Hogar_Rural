@@ -473,6 +473,8 @@ public class LoginFormActivity extends AppCompatActivity {
             soundError.start();
         }else{
 
+            btnRegister.setEnabled(true); // Desactivar botón mientras dure el proceso
+
             // Si viene de registrarse, debe aceptar los terminos y condiciones de uso.
             if(typeFormUser.equals(Constant.BUNDLE_CREATE)){
 
@@ -517,6 +519,8 @@ public class LoginFormActivity extends AppCompatActivity {
                 }
 
             }
+
+            btnRegister.setEnabled(false); // Activar botón
 
         }
 

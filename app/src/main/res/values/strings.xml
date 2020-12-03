@@ -75,8 +75,8 @@
     <string name="house_place">Lugar de la casa</string>
     <string name="house_rental">Alquiler: tipo</string>
     <string name="house_nPerson">nº personas</string>
-    <string name="house_price">Precio €/día</string>
-    <string name="house_price2">Indica el coste por persona de la estancia por día (€/día)</string>
+    <string name="house_price">Precio €/noche</string>
+    <string name="house_price2">Indica el coste por persona de la estancia por noche (€/noche)</string>
     <string name="house_nOpinion"> opiniones</string>
     <string name="house_valoration">Valoraciones</string>
     <string name="house_arrive">Cómo llegar:</string>
@@ -161,7 +161,7 @@
     <string name="houseUp_txtPeople">Introduzca la capacidad máxima de inquilinos:</string>
     <string name="houseUp_nPersons">1 personas</string>
     <string name="houseUp_amount">Introduzca la capacidad máxima de inquilinos:</string>
-    <string name="houseUp_eurosDay">0 €/día</string>
+    <string name="houseUp_eurosDay">0 €/noche</string>
     <string name="houseUp_btnDateDisponibility">FECHAS DISPONIBLES \nPARA LA VIVIENDA</string>
     <string name="houseUp_features">Escribe una breve descripción de la casa y sus características principales:</string>
     <string name="houseUp_activities">Escribe las actividades que se pueden realizar en la casa y/o alrededores del lugar:</string>
@@ -174,7 +174,7 @@
     <string name="outstanding_lowprice">Bajan de precio</string>
 
     <!-- ADAPTER -->
-    <string name="adapter_price"> €/día</string>
+    <string name="adapter_price"> €/noche</string>
     <string name="adapter_people"> personas</string>
     <string name="adapter_comments"> opinones</string>
     <string name="adapter_rental_1">Íntegro</string>
@@ -183,7 +183,7 @@
     <!-- DIPONIBILIDAD DE FECHAS -->
     <string name="disponibility_info">Seleccione una fecha disponible y reserve plaza en el botón "Reservar en la fecha indicada".</string>
     <string name="disponibility_info2">Recuerde que necesita iniciar sesión de usuario para realizar reservas.</string>
-    <string name="disponibility_info3">Días ya ocupados o no disponibles.</string>
+    <string name="disponibility_info3">Noches ya ocupados o no disponibles.</string>
     <string name="disponibility_btnConfirm">Reservar en la fecha indicada</string>
 
     <!-- CUSTOM VIEW BOOKINGS -->
